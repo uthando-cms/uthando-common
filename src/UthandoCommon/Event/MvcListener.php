@@ -36,7 +36,7 @@ class MvcListener implements ListenerAggregateInterface
     {
     	$config = $event->getApplication()->getConfig();
     	
-    	if (false === $config['application']['ssl']) {
+    	if (false === $config['uthando-common']['ssl']) {
     		return;
     	}
     	

@@ -17,6 +17,15 @@ class Module
         
     }
     
+    public function getConfig()
+    {
+        return [
+            'uthando-common' => [
+                'ssl' => false
+            ]
+        ];
+    }
+    
     public function getServiceConfig()
     {
     	return include __DIR__ . '/config/service.config.php';

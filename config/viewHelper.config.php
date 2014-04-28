@@ -2,7 +2,7 @@
 
 return [
     'invokables' => [
-	    'FormatDate'   => 'Application\View\FormatDate',
-	    'Request'      => 'Application\View\Request',
+	    'FormatDate'   => 'UthandoCommon\View\FormatDate',
+	    'Request'      => 'UthandoCommon\View\Request',
     ],
 ];
