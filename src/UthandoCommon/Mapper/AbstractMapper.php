@@ -3,6 +3,7 @@ namespace UthandoCommon\Mapper;
 
 use UthandoCommon\Model\ModelInterface;
 use UthandoCommon\Mapper\DbAdapterAwareInterface;
+use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\Sql\Sql;
@@ -418,6 +419,11 @@ class AbstractMapper implements DbAdapterAwareInterface
 	 */
     public function getAdapter()
     {
+        // enable foreign key contraints on sqlite.
+        if ('sqlite' === $this->adapter->getDriver()->getConnection()->getDriverName()) {
+            $this->adapter->query('PRAGMA FOREIGN_KEYS = ON', Adapter::QUERY_MODE_EXECUTE);
+        }
+        
         return $this->adapter;
     }
     
