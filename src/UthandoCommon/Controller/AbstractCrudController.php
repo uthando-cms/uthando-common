@@ -18,38 +18,40 @@ abstract class AbstractCrudController extends AbstractActionController
     
     const FORM_ERROR		= 'There were one or more isues with your submission. Please correct them as indicated below.';
     
-    protected $searchDefaultParams;
+    protected $searchDefaultParams = [];
     protected $serviceName;
     protected $service = [];
     protected $route;
     
     use SetExceptionMessages;
     
+    public function getPaginatorResults($page, $params, $limit = 25)
+    {
+        return $this->getService()->usePaginator([
+			'limit'	=> $limit,
+			'page'	=> $page
+		])->search(array_merge($this->searchDefaultParams, $params));
+    }
+    
     public function indexAction()
     {
     	$page = $this->params()->fromRoute('page', 1);
     		
     	return new ViewModel([
-    		'models' => $this->getService()->usePaginator([
-    			'limit'	=> 25,
-    			'page'	=> $page
-    		])->search($this->getSearchDefaultParams())
+    		'models' => $this->getPaginatorResults($page, $this->getSearchDefaultParams()),
     	]);
     }
     
     public function listAction()
     {
     	if (!$this->getRequest()->isXmlHttpRequest()) {
-    		return $this->redirect()->toRoute($this->getRoute());
+    		return $this->redirect()->toRoute($this->getRoute(), $this->params()->fromRoute());
     	}
     		
     	$params = $this->params()->fromPost();
     		
     	$viewModel = new ViewModel([
-    		'models' => $this->getService()->usePaginator([
-    			'limit'	=> $params['count'],
-    			'page'	=> $params['page']
-    		])->search($params)
+    		'models' => $this->getPaginatorResults($params['page'], $params, $params['count']),
     	]);
     		
     	$viewModel->setTerminal(true);
@@ -71,7 +73,8 @@ abstract class AbstractCrudController extends AbstractActionController
 	    			$this->flashMessenger()->addInfoMessage(self::FORM_ERROR);
 	    
 	    			return new ViewModel([
-	    				'form' => $result
+	    				'form' => $result,
+	    			    'routeParams' => $this->params()->fromRoute(),
 	    			]);
 	    
 	    		} else {
@@ -82,18 +85,19 @@ abstract class AbstractCrudController extends AbstractActionController
 	    				$this->flashMessenger()->addErrorMessage(sprintf(self::ADD_ERROR, $tableName));
 	    			}
 	    
-	    			return $this->redirect()->toRoute($this->getRoute());
+	    			return $this->redirect()->toRoute($this->getRoute(), $this->params()->fromRoute());
 	    		}
     		} catch (Exception $e) {
 	    		$this->setExceptionMessages($e);
-	    		return $this->redirect()->toRoute($this->getRoute(), [
+	    		return $this->redirect()->toRoute($this->getRoute(), array_merge($this->params()->fromRoute(), [
 	    			'action' => 'list'
-	    		]);
+	    		]));
 	    	}
     	}
     
     	return new ViewModel([
     		'form' => $this->getService()->getForm(),
+    	    'routeParams' => $this->params()->fromRoute(),
     	]);
     }
     
@@ -101,9 +105,9 @@ abstract class AbstractCrudController extends AbstractActionController
     {
     	$id = (int) $this->params('id', 0);
     	if (!$id) {
-    		return $this->redirect()->toRoute($this->getRoute(), [
+    		return $this->redirect()->toRoute($this->getRoute(), array_merge($this->params()->fromRoute(),[
     			'action' => 'add'
-    		]);
+    		]));
     	}
     
     	try {
@@ -140,7 +144,7 @@ abstract class AbstractCrudController extends AbstractActionController
 	    				$this->flashMessenger()->addErrorMessage(sprintf(self::SAVE_ERROR, id, $tableName));
 	    			}
 	    
-	    			return $this->redirect()->toRoute($this->getRoute());
+	    			return $this->redirect()->toRoute($this->getRoute(), $this->params()->fromRoute());
 	    		}
 	    	}
 	    	
@@ -148,9 +152,9 @@ abstract class AbstractCrudController extends AbstractActionController
 	    	
     	} catch (Exception $e) {
     		$this->setExceptionMessages($e);
-    		return $this->redirect()->toRoute($this->getRoute(), [
+    		return $this->redirect()->toRoute($this->getRoute(), array_merge($this->params()->fromRoute(), [
     			'action' => 'list'
-    		]);
+    		]));
     	}
     
     	return new ViewModel([
@@ -168,7 +172,7 @@ abstract class AbstractCrudController extends AbstractActionController
     	$id = $request->getPost($pk);
     
     	if (!$id) {
-    		return $this->redirect()->toRoute($this->getRoute());
+    		return $this->redirect()->toRoute($this->getRoute(), $this->params()->fromRoute());
     	}
     
     	if ($request->isPost()) {
@@ -189,7 +193,7 @@ abstract class AbstractCrudController extends AbstractActionController
     		}
     	}
     
-    	return $this->redirect()->toRoute($this->getRoute());
+    	return $this->redirect()->toRoute($this->getRoute(), $this->params()->fromRoute());
     }
     
     protected function getServiceName()
