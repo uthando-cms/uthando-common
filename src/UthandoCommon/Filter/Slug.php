@@ -7,8 +7,8 @@ class Slug extends AbstractFilter
 {
 	public function filter($value)
     {
-        $find    = array('`', '&',   ' ', '"', "'");
-        $replace = array('',  'and', '-', '',  '',);
+        $find    = ['`', '&',   ' ', '"', "'"];
+        $replace = ['',  'and', '-', '',  '',];
         $new = str_replace($find, $replace,$value);
 
         $noalpha = 'ÁÉÍÓÚÝáéíóúýÂÊÎÔÛâêîôûÀÈÌÒÙàèìòùÄËÏÖÜäëïöüÿÃãÕõÅåÑñÇç@°ºª';

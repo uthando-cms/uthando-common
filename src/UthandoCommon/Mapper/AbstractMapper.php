@@ -98,7 +98,7 @@ class AbstractMapper implements DbAdapterAwareInterface
 	 */
 	public function getById($id)
 	{
-		$select = $this->getSelect()->where(array($this->getPrimaryKey() => $id));
+		$select = $this->getSelect()->where([$this->getPrimaryKey() => $id]);
 		$rowset = $this->fetchResult($select);
 		$row = $rowset->current();
 		return $row;
@@ -335,7 +335,7 @@ class AbstractMapper implements DbAdapterAwareInterface
 			$sort = explode(' ', $sort);
 		}
 		
-		$order = array();
+		$order = [];
 	
 		foreach ($sort as $column) {
 			if (strchr($column,'-')) {

@@ -29,12 +29,12 @@ abstract class AbstractCrudController extends AbstractActionController
     {
     	$page = $this->params()->fromRoute('page', 1);
     		
-    	return new ViewModel(array(
-    		'models' => $this->getService()->usePaginator(array(
+    	return new ViewModel([
+    		'models' => $this->getService()->usePaginator([
     			'limit'	=> 25,
     			'page'	=> $page
-    		))->search($this->getSearchDefaultParams())
-    	));
+    		])->search($this->getSearchDefaultParams())
+    	]);
     }
     
     public function listAction()
@@ -45,12 +45,12 @@ abstract class AbstractCrudController extends AbstractActionController
     		
     	$params = $this->params()->fromPost();
     		
-    	$viewModel = new ViewModel(array(
-    		'models' => $this->getService()->usePaginator(array(
+    	$viewModel = new ViewModel([
+    		'models' => $this->getService()->usePaginator([
     			'limit'	=> $params['count'],
     			'page'	=> $params['page']
-    		))->search($params)
-    	));
+    		])->search($params)
+    	]);
     		
     	$viewModel->setTerminal(true);
     		
@@ -70,9 +70,9 @@ abstract class AbstractCrudController extends AbstractActionController
 	    
 	    			$this->flashMessenger()->addInfoMessage(self::FORM_ERROR);
 	    
-	    			return new ViewModel(array(
+	    			return new ViewModel([
 	    				'form' => $result
-	    			));
+	    			]);
 	    
 	    		} else {
 	    			if ($result) {
@@ -86,24 +86,24 @@ abstract class AbstractCrudController extends AbstractActionController
 	    		}
     		} catch (Exception $e) {
 	    		$this->setExceptionMessages($e);
-	    		return $this->redirect()->toRoute($this->getRoute(), array(
+	    		return $this->redirect()->toRoute($this->getRoute(), [
 	    			'action' => 'list'
-	    		));
+	    		]);
 	    	}
     	}
     
-    	return new ViewModel(array(
+    	return new ViewModel([
     		'form' => $this->getService()->getForm(),
-    	));
+    	]);
     }
     
     public function editAction()
     {
     	$id = (int) $this->params('id', 0);
     	if (!$id) {
-    		return $this->redirect()->toRoute($this->getRoute(), array(
+    		return $this->redirect()->toRoute($this->getRoute(), [
     			'action' => 'add'
-    		));
+    		]);
     	}
     
     	try {
@@ -129,10 +129,10 @@ abstract class AbstractCrudController extends AbstractActionController
 	    
 	    			$this->flashMessenger()->addInfoMessage(self::FORM_ERROR);
 	    
-	    			return new ViewModel(array(
+	    			return new ViewModel([
 	    				'form'	=> $result,
 	    				'model'	=> $model,
-	    			));
+	    			]);
 	    		} else {
 	    			if ($result) {
 	    				$this->flashMessenger()->addSuccessMessage(sprintf(self::SAVE_SUCCESS, $id, $tableName));
@@ -148,15 +148,15 @@ abstract class AbstractCrudController extends AbstractActionController
 	    	
     	} catch (Exception $e) {
     		$this->setExceptionMessages($e);
-    		return $this->redirect()->toRoute($this->getRoute(), array(
+    		return $this->redirect()->toRoute($this->getRoute(), [
     			'action' => 'list'
-    		));
+    		]);
     	}
     
-    	return new ViewModel(array(
+    	return new ViewModel([
     		'form'	=> $form,
     		'model'	=> $model,
-    	));
+    	]);
     }
     
     public function deleteAction()

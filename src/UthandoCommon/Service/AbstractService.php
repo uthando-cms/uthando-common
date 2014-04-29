@@ -67,10 +67,10 @@ class AbstractService implements ServiceLocatorAwareInterface
 		$searches = array();
 		
 		foreach($post as $key => $value) {
-			$searches[] = array(
+			$searches[] = [
 				'searchString'	=> (string) $value,
 				'columns'		=> explode('-', $key),
-			);
+			];
 		}
 		 
 		$models = $this->getMapper()->search($searches, $sort);
@@ -148,7 +148,7 @@ class AbstractService implements ServiceLocatorAwareInterface
 			$result = $this->getMapper()->insert($data);
 		} else {
 			if ($this->getById($id)) {
-				$result = $this->getMapper()->update($data, array($pk => $id));
+				$result = $this->getMapper()->update($data, [$pk => $id]);
 			} else {
 				throw new ServiceException('ID ' . $id . ' does not exist');
 			}
@@ -165,9 +165,9 @@ class AbstractService implements ServiceLocatorAwareInterface
 	 */
 	public function delete($id)
 	{
-		$result = $this->getMapper()->delete(array(
+		$result = $this->getMapper()->delete([
 			$this->getMapper()->getPrimaryKey() => $id
-		));
+		]);
 		
 		return $result;
 	}

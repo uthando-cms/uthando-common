@@ -1,0 +1,31 @@
+<?php
+
+use Zend\Mvc\Controller\Plugin\FlashMessenger;
+
+$messageCloseString     = '</p></div>';
+$messageOpenFormat      = '<div%s><p>';
+$messageSeparatorString = '</p><p>';
+
+echo $this->flashMessenger()
+    ->setMessageOpenFormat($messageOpenFormat)
+    ->setMessageSeparatorString($messageSeparatorString)
+    ->setMessageCloseString($messageCloseString)
+    ->render(FlashMessenger::NAMESPACE_DEFAULT, ['alert', 'alert-warning']);
+
+echo $this->flashMessenger()
+    ->setMessageOpenFormat($messageOpenFormat)
+    ->setMessageSeparatorString($messageSeparatorString)
+    ->setMessageCloseString($messageCloseString)
+    ->render(FlashMessenger::NAMESPACE_SUCCESS, ['alert', 'alert-success']);
+
+echo $this->flashMessenger()
+    ->setMessageOpenFormat($messageOpenFormat)
+    ->setMessageSeparatorString($messageSeparatorString)
+    ->setMessageCloseString($messageCloseString)
+    ->render(FlashMessenger::NAMESPACE_ERROR, ['alert', 'alert-error']);
+
+echo $this->flashMessenger()
+    ->setMessageOpenFormat($messageOpenFormat)
+    ->setMessageSeparatorString($messageSeparatorString)
+    ->setMessageCloseString($messageCloseString)
+    ->render(FlashMessenger::NAMESPACE_INFO, ['alert', 'alert-info']);

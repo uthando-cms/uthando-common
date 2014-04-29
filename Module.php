@@ -22,7 +22,10 @@ class Module
         return [
             'uthando-common' => [
                 'ssl' => false
-            ]
+            ],
+            'view_manager' => [
+                'template_map' => include __DIR__  .'/template_map.php',
+            ],
         ];
     }
     

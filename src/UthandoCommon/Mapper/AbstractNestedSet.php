@@ -48,15 +48,15 @@ abstract class AbstractNestedSet extends AbstractMapper
     public function getFullTree()
     {   
         $select = $this->getSql()->select();
-        $select->from(array('child' => $this->getTable()))
-            ->columns(array(
+        $select->from(['child' => $this->getTable()])
+            ->columns([
                 Select::SQL_STAR,
                 'depth' => new Expression('(COUNT(parent.'.$this->getPrimaryKey().') - 1)')
-            ))
+            ])
             ->join(
-                array('parent' => $this->getTable()),
+                ['parent' => $this->getTable()],
                 'child.' . self::COLUMN_LEFT . ' BETWEEN parent.' . self::COLUMN_LEFT . ' AND parent.' . self::COLUMN_RIGHT,
-                array(),
+                [],
                 Select::JOIN_INNER
             )
             ->group('child.' . $this->getPrimaryKey())
@@ -74,15 +74,15 @@ abstract class AbstractNestedSet extends AbstractMapper
     {
     	
         $select = $this->getSql()->select();
-        $select->from(array('child' => $this->getTable()))
-        	->columns(array())
+        $select->from(['child' => $this->getTable()])
+        	->columns([])
             ->join(
-                array('parent' => $this->getTable()),
+                ['parent' => $this->getTable()],
                 'child.' . self::COLUMN_LEFT . ' BETWEEN parent.' . self::COLUMN_LEFT . ' AND parent.' . self::COLUMN_RIGHT, 
-                array(Select::SQL_STAR),
+                [Select::SQL_STAR],
                 Select::JOIN_INNER
             )
-            ->where(array('child.' . $this->getPrimaryKey() . ' = ?' => $id))
+            ->where(['child.' . $this->getPrimaryKey() . ' = ?' => $id])
             ->order('parent.' . self::COLUMN_LEFT);
         
         return $select;
@@ -111,43 +111,43 @@ abstract class AbstractNestedSet extends AbstractMapper
     public function getDecendentsByParentId($parentId, $immediate=true)
     {
         $subTree = $this->getSql()->select()
-            ->from(array('child' => $this->getTable()))
-            ->columns(array(
+            ->from(['child' => $this->getTable()])
+            ->columns([
             	$this->primary,
             	'depth' => new Expression('(COUNT(parent.' . $this->getPrimaryKey() . ') - 1)')
-            ))
+            ])
             ->join(
-                array('parent' => $this->getTable()),
+                ['parent' => $this->getTable()],
                 'child.' . self::COLUMN_LEFT . ' BETWEEN parent.' . self::COLUMN_LEFT . ' AND parent.' .self::COLUMN_RIGHT,
-                array(),
+                [],
                 Select::JOIN_INNER
             )
-            ->where(array('child.' . $this->getPrimaryKey() . ' = ?' => $parentId))
+            ->where(['child.' . $this->getPrimaryKey() . ' = ?' => $parentId])
             ->group('child.' . $this->getPrimaryKey())
             ->order('child.' . self::COLUMN_LEFT);
     
         $select = $this->getSql()->select()
-            ->from(array('child' => $this->getTable()))
-            ->columns(array(
+            ->from(['child' => $this->getTable()])
+            ->columns([
             	Select::SQL_STAR,
             	'depth' => new Expression('(COUNT(parent.' . $this->getPrimaryKey() . ') - (subTree.depth + 1))')
-            ))
+            ])
             ->join(
-                array('parent' => $this->getTable()),
+                ['parent' => $this->getTable()],
                 'child.' . self::COLUMN_LEFT . ' BETWEEN parent.' . self::COLUMN_LEFT . ' AND parent.' . self::COLUMN_RIGHT,
-                array(),
+                [],
                 Select::JOIN_INNER
             )
             ->join(
-                array('subParent' => $this->getTable()),
+                ['subParent' => $this->getTable()],
                 'child.' . self::COLUMN_LEFT . ' BETWEEN subParent.' . self::COLUMN_LEFT . ' AND subParent.' . self::COLUMN_RIGHT,
-                array(),
+                [],
                 Select::JOIN_INNER
             )
             ->join(
-                array('subTree' => $subTree),
+                ['subTree' => $subTree],
                 'subParent.' . $this->getPrimaryKey() . ' = subTree.' . $this->getPrimaryKey(),
-                array(),
+                [],
                 Select::JOIN_INNER
             )
             ->group('child.' . $this->getPrimaryKey())
@@ -172,15 +172,15 @@ abstract class AbstractNestedSet extends AbstractMapper
     	$lft = new Where;
     	$rgt = new Where;
     	
-    	$lftUpdate = $this->update(array(
+    	$lftUpdate = $this->update([
     		self::COLUMN_LEFT => new Expression(self::COLUMN_LEFT . $operator . $offset)
-    	), $lft->greaterThan(self::COLUMN_LEFT, $lft_rgt));
+    	], $lft->greaterThan(self::COLUMN_LEFT, $lft_rgt));
     	
-    	$rgtUpdate = $this->update(array(
+    	$rgtUpdate = $this->update([
     		self::COLUMN_RIGHT => new Expression(self::COLUMN_RIGHT . $operator . $offset)
-    	), $rgt->greaterThan(self::COLUMN_RIGHT, $lft_rgt));
+    	], $rgt->greaterThan(self::COLUMN_RIGHT, $lft_rgt));
     	
-    	return array($lftUpdate, $rgtUpdate);
+    	return [$lftUpdate, $rgtUpdate];
     }
     
     /**
@@ -191,11 +191,11 @@ abstract class AbstractNestedSet extends AbstractMapper
      */
     protected function getPosition($id)
     {
-        $cols = array(
+        $cols = [
         	self::COLUMN_LEFT,
         	self::COLUMN_RIGHT,
         	'width' => new Expression(self::COLUMN_RIGHT . ' - ' . self::COLUMN_LEFT  . ' + 1'),
-        );
+        ];
         
         $select = $this->getSelect();
         

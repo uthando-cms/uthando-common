@@ -20,7 +20,7 @@ class MvcListener implements ListenerAggregateInterface
      */
     public function attach(EventManagerInterface $events)
     {
-		$this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'requireSsl'), -10000);
+		$this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'requireSsl'], -10000);
     }
 
     public function detach(EventManagerInterface $events)
