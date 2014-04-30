@@ -8,7 +8,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class DbAdapterInitializer implements InitializerInterface
 {
-    protected $sqliteContraits = false;
+    protected $sqliteContraints = false;
     
 	public function initialize($instance, ServiceLocatorInterface $serviceLocator)
 	{
@@ -19,9 +19,9 @@ class DbAdapterInitializer implements InitializerInterface
 			$config = $serviceLocator->get('config');
 			
 			// enable foreign key contraints on sqlite.
-			if ($config['db']['sqlite_contraints'] && !$this->sqliteContraits) {
+			if ($config['db']['sqlite_contraints'] && !$this->sqliteContraints) {
 			    $dbAdapter->query('PRAGMA FOREIGN_KEYS = ON', Adapter::QUERY_MODE_EXECUTE);
-			    $this->sqliteContraits = true;
+			    $this->sqliteContraints = true;
 			}
 			
 			$instance->setDbAdapter($dbAdapter);
