@@ -50,7 +50,7 @@ class AbstractViewHelper extends AbstractHelper implements ServiceLocatorAwareIn
     protected function setConfig()
     {
         $this->config = $this->serviceLocator->getServiceLocator()
-            ->getServiceLocator()->get('config');
+            ->get('config');
         return $this;
     }
 }
