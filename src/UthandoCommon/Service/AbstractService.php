@@ -96,10 +96,10 @@ class AbstractService implements ServiceLocatorAwareInterface
 	 * @param array $post
 	 * @return int results from self::save()
 	 */
-	public function add(array $post)
+	public function add(array $post, Form $form = null)
 	{
 		$model = $this->getMapper()->getModel();
-		$form  = $this->getForm($model, $post, true, true);
+		$form  = ($form) ? $form : $this->getForm($model, $post, true, true);
 	
 		if (!$form->isValid()) {
 			return $form;
@@ -197,8 +197,9 @@ class AbstractService implements ServiceLocatorAwareInterface
 	public function getForm(ModelInterface $model=null, array $data=null, $useInputFilter=false, $useHydrator=false)
 	{
 		$sl = $this->getServiceLocator();
+		$formManager = $sl->get('FormElementManager');
 		/* @var $form \Zend\Form\Form */
-		$form = $sl->get($this->form);
+		$form = $formManager->get($this->form);
 		$form->init();
 		
 		if ($useInputFilter) {

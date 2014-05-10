@@ -31,12 +31,23 @@ class Module
     
     public function getServiceConfig()
     {
-    	return include __DIR__ . '/config/service.config.php';
+    	return [
+        	'initializers' => [
+            	'UthandoCommon\Service\DbAdapterInitializer' => 'UthandoCommon\Service\Initializer\DbAdapterInitializer',
+            ]
+        ];
     }
     
     public function getViewHelperConfig()
     {
-        return include __DIR__ . '/config/viewHelper.config.php';
+        return [
+            'invokables' => [
+        	    'FormatDate'       => 'UthandoCommon\View\FormatDate',
+        	    'Request'          => 'UthandoCommon\View\Request',
+        	    'tbAlert'          => 'UthandoCommon\View\Alert',
+        	    'tbFlashMessenger' => 'UthandoCommon\View\FlashMessenger',
+            ],
+        ];
     }
 
 	public function getAutoloaderConfig()
