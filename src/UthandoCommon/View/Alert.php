@@ -12,7 +12,7 @@ class Alert extends AbstractHelper
     /**
      * @var string
      */
-     protected $format = '<div class="alert %s"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</div>';
+     protected $format = '<div class="alert %s alert-dismissable"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</div>';
 
     /**
      * Display an Informational Alert
@@ -33,9 +33,9 @@ class Alert extends AbstractHelper
      * @param  bool   $isBlock
      * @return string
      */
-    public function error($alert, $isBlock = false)
+    public function danger($alert, $isBlock = false)
     {
-        return $this->render($alert, $isBlock, 'alert-error');
+        return $this->render($alert, $isBlock, 'alert-danger');
     }
 
     /**

@@ -32,7 +32,6 @@ return [
   
   'UthandoCommon\Service\AbstractService'                   => __DIR__ . '/src/UthandoCommon/Service/AbstractService.php',
   'UthandoCommon\Service\ServiceException'                  => __DIR__ . '/src/UthandoCommon/Service/ServiceException.php',
-  'UthandoCommon\Service\Factory\DbAdapterServiceFactory'   => __DIR__ . '/src/UthandoCommon/Service/Factory/DbAdapterServiceFactory.php',
   'UthandoCommon\Service\Initializer\DbAdapterInitializer'  => __DIR__ . '/src/UthandoCommon/Service/Initializer/DbAdapterInitializer.php',
   
   'UthandoCommon\View\AbstractViewHelper'                   => __DIR__ . '/src/UthandoCommon/View/AbstractViewHelper.php',

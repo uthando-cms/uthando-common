@@ -22,7 +22,7 @@ echo $this->flashMessenger()
     ->setMessageOpenFormat($messageOpenFormat)
     ->setMessageSeparatorString($messageSeparatorString)
     ->setMessageCloseString($messageCloseString)
-    ->render(FlashMessenger::NAMESPACE_ERROR, ['alert', 'alert-error']);
+    ->render(FlashMessenger::NAMESPACE_ERROR, ['alert', 'alert-danger']);
 
 echo $this->flashMessenger()
     ->setMessageOpenFormat($messageOpenFormat)
