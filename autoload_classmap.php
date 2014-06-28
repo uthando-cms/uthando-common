@@ -35,7 +35,7 @@ return [
   'UthandoCommon\Service\Initializer\DbAdapterInitializer'  => __DIR__ . '/src/UthandoCommon/Service/Initializer/DbAdapterInitializer.php',
   
   'UthandoCommon\View\AbstractViewHelper'                   => __DIR__ . '/src/UthandoCommon/View/AbstractViewHelper.php',
-  'UthandoCommon\View\Alert'                                => __DIR__ . '/src/uthandoCommon/View/Alert.php',
+  'UthandoCommon\View\Alert'                                => __DIR__ . '/src/UthandoCommon/View/Alert.php',
   'UthandoCommon\View\FlashMessenger'                       => __DIR__ . '/src/UthandoCommon/View/FlashMessenger.php',
   'UthandoCommon\View\FormatDate'                           => __DIR__ . '/src/UthandoCommon/View/FormatDate.php',
   'UthandoCommon\View\Request'                              => __DIR__ . '/src/UthandoCommon/View/Request.php',

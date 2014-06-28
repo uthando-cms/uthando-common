@@ -125,12 +125,14 @@ abstract class AbstractNestedSet extends AbstractMapper
             ->where(['child.' . $this->getPrimaryKey() . ' = ?' => $parentId])
             ->group('child.' . $this->getPrimaryKey())
             ->order('child.' . self::COLUMN_LEFT);
+        
+        $depth = new Expression('(COUNT(parent.' . $this->getPrimaryKey() . ') - (subTree.depth + 1))');
     
         $select = $this->getSql()->select()
             ->from(['child' => $this->getTable()])
             ->columns([
             	Select::SQL_STAR,
-            	'depth' => new Expression('(COUNT(parent.' . $this->getPrimaryKey() . ') - (subTree.depth + 1))')
+            	'depth' => $depth,
             ])
             ->join(
                 ['parent' => $this->getTable()],
@@ -154,7 +156,12 @@ abstract class AbstractNestedSet extends AbstractMapper
             ->order('child.' . self::COLUMN_LEFT);
     
         if (true === $immediate) {
-            $select->having('depth = 1');
+            // Hack for sqlite as having does not work otherwise.
+            if ('SQLite' === $this->getAdapter()->getPlatform()->getName()) {
+                $select->having($depth->getExpression() . ' = 1');
+            } else {
+                $select->having('depth = 1');
+            }
         }
     
         return $select;
