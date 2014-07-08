@@ -22,6 +22,7 @@ abstract class AbstractCrudController extends AbstractActionController
     protected $serviceName;
     protected $service = [];
     protected $route;
+    protected $addRouteParams = true;
     
     use SetExceptionMessages;
     
@@ -143,8 +144,10 @@ abstract class AbstractCrudController extends AbstractActionController
 	    			} else {
 	    				$this->flashMessenger()->addErrorMessage(sprintf(self::SAVE_ERROR, id, $tableName));
 	    			}
-	    
-	    			return $this->redirect()->toRoute($this->getRoute(), $this->params()->fromRoute());
+	    			
+	    			$params = ($this->addRouteParams) ? $this->params()->fromRoute() : [];
+	                
+	    			return $this->redirect()->toRoute($this->getRoute(), $params);
 	    		}
 	    	}
 	    	
@@ -213,7 +216,7 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     protected function getService($service = null)
     {
-        $service = (is_string($service)) ?: $this->getServiceName();
+        $service = (is_string($service)) ? $service : $this->getServiceName();
         
     	if (!isset($this->service[$service])) {
     		$sl = $this->getServiceLocator();
