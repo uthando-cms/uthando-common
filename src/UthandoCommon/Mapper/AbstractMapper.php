@@ -8,11 +8,11 @@ use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
 use Zend\Paginator\Paginator;
-use Zend\Paginator\Adapter\DbSelect;
+use Zend\Paginator\Adapter\Iterator as PaginatorIterator;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class AbstractMapper implements DbAdapterAwareInterface
+abstract class AbstractMapper implements DbAdapterAwareInterface
 {
     use AdapterAwareTrait;
     
@@ -250,15 +250,14 @@ class AbstractMapper implements DbAdapterAwareInterface
 	/**
 	 * Paginates the resultset
 	 *
-	 * @param ResultSet $resultSet
 	 * @param int $page
 	 * @param int $limit
 	 * @return Paginator
 	 */
-	public function paginate(Select $select, $resultSet=null)
+	public function paginate($resultSet=null)
 	{
 		$resultSet = $resultSet ?: $this->getResultSet();
-		$adapter = new DbSelect($select, $this->getAdapter(), $resultSet);
+		$adapter = new PaginatorIterator($resultSet);
 		$paginator = new Paginator($adapter);
 		
 		$options = $this->getPaginatorOptions();
@@ -285,17 +284,17 @@ class AbstractMapper implements DbAdapterAwareInterface
 	protected function fetchResult(Select $select, $resultSet=null)
 	{
 		$resultSet = $resultSet ?: $this->getResultSet();
+		
+		$statement = $this->getSql()->prepareStatementForSqlObject($select);
+		$result = $statement->execute();
+		$resultSet->initialize($result);
 		$resultSet->buffer();
 		
-		if($this->usePaginator) {
+		if ($this->usePaginator) {
 			$this->usePaginator = false;
-			$resultSet = $this->paginate($select, $resultSet);
-		} else {
-            $statement = $this->getSql()->prepareStatementForSqlObject($select);
-            $result = $statement->execute();
-            $resultSet->initialize($result);
+			$resultSet = $this->paginate($resultSet);
 		}
-	
+		
 		return $resultSet;
 	}
 	

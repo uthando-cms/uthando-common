@@ -4,16 +4,14 @@ namespace UthandoCommon\Event;
 use Exception;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
+use Zend\EventManager\ListenerAggregateTrait;
 use Zend\Http\Request;
 use Zend\Mvc\Application as MvcApplication;
 use Zend\Mvc\MvcEvent;
 
 class MvcListener implements ListenerAggregateInterface
 {
-    /**
-     * @var \Zend\Stdlib\CallbackHandler[]
-     */
-    protected $listeners = array();
+    use ListenerAggregateTrait;
 
     /**
      * {@inheritDoc}
@@ -21,15 +19,6 @@ class MvcListener implements ListenerAggregateInterface
     public function attach(EventManagerInterface $events)
     {
 		$this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'requireSsl'], -10000);
-    }
-
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
     }
     
     public function requireSsl(MvcEvent $event)

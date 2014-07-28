@@ -4,6 +4,7 @@ namespace UthandoCommon;
 
 use Exception;
 use UthandoCommon\Event\MvcListener;
+use UthandoCommon\Event\ServiceListener;
 use Zend\Mvc\MvcEvent;
 
 class Module
@@ -13,7 +14,8 @@ class Module
         $app                 = $event->getApplication();
         $eventManager        = $app->getEventManager();
         
-        $eventManager->attach(new MvcListener());
+        $eventManager->attachAggregate(new MvcListener());
+        $eventManager->attachAggregate(new ServiceListener());
         
     }
     
@@ -33,7 +35,8 @@ class Module
     {
     	return [
         	'initializers' => [
-            	'UthandoCommon\Service\DbAdapterInitializer' => 'UthandoCommon\Service\Initializer\DbAdapterInitializer',
+                'UthandoCommon\Service\CacheStorageInitializer' => 'UthandoCommon\Service\Initializer\CacheStorageInitializer',
+                'UthandoCommon\Service\DbAdapterInitializer'    => 'UthandoCommon\Service\Initializer\DbAdapterInitializer',
             ],
         ];
     }

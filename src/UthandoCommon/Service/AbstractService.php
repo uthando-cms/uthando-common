@@ -1,15 +1,26 @@
 <?php
 namespace UthandoCommon\Service;
 
+use UthandoCommon\Cache\CacheStorageAwareInterface;
+use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Model\ModelInterface;
 use UthandoCommon\Service\ServiceException;
+use Zend\EventManager\EventManagerAwareInterface;
+use Zend\EventManager\EventManagerAwareTrait;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-class AbstractService implements ServiceLocatorAwareInterface
+abstract class AbstractService implements 
+ServiceLocatorAwareInterface,
+EventManagerAwareInterface,
+CacheStorageAwareInterface
 {
     use ServiceLocatorAwareTrait;
+    
+    use EventManagerAwareTrait;
+    
+    use CacheTrait;
 	
 	/**
 	 * @var \Application\Mapper\AbstractMapper
@@ -40,7 +51,15 @@ class AbstractService implements ServiceLocatorAwareInterface
 	public function getById($id)
 	{
 		$id = (int) $id;
-		return $this->getMapper()->getById($id);
+		
+		$model = $this->getCacheItem($id);
+        
+		if (!$model) {
+		    $model = $this->getMapper()->getById($id);
+		    $this->setCacheItem($id, $model);
+		}
+		
+		return $model;
 	}
 	
 	/**
@@ -97,15 +116,26 @@ class AbstractService implements ServiceLocatorAwareInterface
 	 * @return int results from self::save()
 	 */
 	public function add(array $post, Form $form = null)
-	{
+	{   
 		$model = $this->getMapper()->getModel();
 		$form  = ($form) ? $form : $this->getForm($model, $post, true, true);
+		
+		$argv = compact('post', 'form');
+		$argv = $this->getEventManager()->prepareArgs($argv);
+		$this->getEventManager()->trigger('pre.add', $this, $argv);
+		$post = $argv['post'];
 	
 		if (!$form->isValid()) {
 			return $form;
 		}
 	
-		return $this->save($form->getData());
+		$saved = $this->save($form->getData());
+		
+		if ($saved) {
+		    $this->getEventManager()->trigger('post.add', $this, $argv);
+		}
+		
+		return $saved;
 	}
 	
 	/**
@@ -117,14 +147,25 @@ class AbstractService implements ServiceLocatorAwareInterface
 	 * @return int results from self::save()
 	 */
 	public function edit(ModelInterface $model, array $post, Form $form = null)
-	{
+	{   
 		$form  = ($form) ? $form : $this->getForm($model, $post, true, true);
+		
+		$argv = compact('model', 'post', 'form');
+		$argv = $this->getEventManager()->prepareArgs($argv);
+		$this->getEventManager()->trigger('pre.edit', $this, $argv);
+		$post = $argv['post'];
 		
 		if (!$form->isValid()) {
 			return $form;
 		}
+
+		$saved = $this->save($form->getData());
 		
-		return $this->save($form->getData());
+		if ($saved) {
+		    $this->getEventManager()->trigger('post.edit', $this, $argv);
+		}
+		
+		return $saved;
 	}
 	
 	/**
@@ -136,6 +177,10 @@ class AbstractService implements ServiceLocatorAwareInterface
 	 */
 	public function save($data)
 	{
+	    $argv = compact('data');
+	    $argv = $this->getEventManager()->prepareArgs($argv);
+	    $this->getEventManager()->trigger('pre.save', $this, $argv);
+	    
 		if ($data instanceof ModelInterface) {
 			$data = $this->getMapper()->extract($data);
 		}
@@ -149,6 +194,7 @@ class AbstractService implements ServiceLocatorAwareInterface
 		} else {
 			if ($this->getById($id)) {
 				$result = $this->getMapper()->update($data, [$pk => $id]);
+				$this->removeCacheItem($id);
 			} else {
 				throw new ServiceException('ID ' . $id . ' does not exist');
 			}
@@ -168,6 +214,8 @@ class AbstractService implements ServiceLocatorAwareInterface
 		$result = $this->getMapper()->delete([
 			$this->getMapper()->getPrimaryKey() => $id
 		]);
+		
+		$this->removeCacheItem($id);
 		
 		return $result;
 	}
@@ -202,6 +250,10 @@ class AbstractService implements ServiceLocatorAwareInterface
 		$form = $formManager->get($this->form);
 		$form->init();
 		
+		$argv = compact('form', 'model', 'data');
+		
+		$this->getEventManager()->trigger('form.init', $this, $this->prepareEventArguments($argv));
+		
 		if ($useInputFilter) {
 			$form->setInputFilter($sl->get($this->inputFilter));
 			$form->getInputFilter()->init();
@@ -220,6 +272,18 @@ class AbstractService implements ServiceLocatorAwareInterface
 		}
 	
 		return $form;
+	}
+	
+	/**
+	 * Prepares arguments for event
+	 * 
+	 * @param array $argv
+	 * @return unknown
+	 */
+	public function prepareEventArguments($argv)
+	{
+	    $argv = $this->getEventManager()->prepareArgs($argv);
+	    return $argv;
 	}
 	
 	/**
