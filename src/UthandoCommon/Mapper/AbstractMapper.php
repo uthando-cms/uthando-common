@@ -8,11 +8,11 @@ use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
 use Zend\Paginator\Paginator;
-use Zend\Paginator\Adapter\Iterator as PaginatorIterator;
+use Zend\Paginator\Adapter\DbSelect;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
-abstract class AbstractMapper implements DbAdapterAwareInterface
+class AbstractMapper implements DbAdapterAwareInterface
 {
     use AdapterAwareTrait;
     
@@ -222,10 +222,10 @@ abstract class AbstractMapper implements DbAdapterAwareInterface
 	 * @param array $paginatorOptions
 	 * @return \Application\Mapper\AbstractMapper
 	 */
-	public function usePaginator(array $paginatorOptions = array())
+	public function usePaginator(array $paginatorOptions)
 	{
 		$this->usePaginator = true;
-		$this->paginatorOptions = $paginatorOptions;
+		$this->setPaginatorOptions($paginatorOptions);
 		return $this;
 	}
 	
@@ -241,7 +241,7 @@ abstract class AbstractMapper implements DbAdapterAwareInterface
 	 * @param array $paginatorOptions
 	 * @return \UthandoCommon\Mapper\AbstractMapper
 	 */
-	public function setPaginatorOptions($paginatorOptions)
+	public function setPaginatorOptions(array $paginatorOptions)
 	{
 		$this->paginatorOptions = $paginatorOptions;
 		return $this;
@@ -250,14 +250,15 @@ abstract class AbstractMapper implements DbAdapterAwareInterface
 	/**
 	 * Paginates the resultset
 	 *
+	 * @param ResultSet $resultSet
 	 * @param int $page
 	 * @param int $limit
 	 * @return Paginator
 	 */
-	public function paginate($resultSet=null)
+	public function paginate(Select $select, $resultSet=null)
 	{
 		$resultSet = $resultSet ?: $this->getResultSet();
-		$adapter = new PaginatorIterator($resultSet);
+		$adapter = new DbSelect($select, $this->getAdapter(), $resultSet);
 		$paginator = new Paginator($adapter);
 		
 		$options = $this->getPaginatorOptions();
@@ -284,17 +285,17 @@ abstract class AbstractMapper implements DbAdapterAwareInterface
 	protected function fetchResult(Select $select, $resultSet=null)
 	{
 		$resultSet = $resultSet ?: $this->getResultSet();
-		
-		$statement = $this->getSql()->prepareStatementForSqlObject($select);
-		$result = $statement->execute();
-		$resultSet->initialize($result);
 		$resultSet->buffer();
 		
-		if ($this->usePaginator) {
+		if($this->usePaginator) {
 			$this->usePaginator = false;
-			$resultSet = $this->paginate($resultSet);
+			$resultSet = $this->paginate($select, $resultSet);
+		} else {
+            $statement = $this->getSql()->prepareStatementForSqlObject($select);
+            $result = $statement->execute();
+            $resultSet->initialize($result);
 		}
-		
+	
 		return $resultSet;
 	}
 	

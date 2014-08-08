@@ -255,8 +255,7 @@ CacheStorageAwareInterface
 		$this->getEventManager()->trigger('form.init', $this, $this->prepareEventArguments($argv));
 		
 		if ($useInputFilter) {
-			$form->setInputFilter($sl->get($this->inputFilter));
-			$form->getInputFilter()->init();
+			$form->setInputFilter($this->getInputFilter());
 		}
 		
 		if ($useHydrator) {
@@ -272,6 +271,18 @@ CacheStorageAwareInterface
 		}
 	
 		return $form;
+	}
+	
+	/**
+	 * Gets the default input filter
+	 * @return \Zend\InputFilter\InputFilter
+	 */
+	public function getInputFilter()
+	{
+	    $sl = $this->getServiceLocator();
+	    $inputFilter = $sl->get($this->inputFilter);
+	    $inputFilter->init();
+	    return $inputFilter;
 	}
 	
 	/**
