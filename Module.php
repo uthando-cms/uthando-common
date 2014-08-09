@@ -17,7 +17,6 @@ class Module
         
         $eventManager->attachAggregate(new MvcListener());
         $eventManager->attachAggregate(new ServiceListener());
-    
     }
 
     public function getConfig()

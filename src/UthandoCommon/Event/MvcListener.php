@@ -40,8 +40,8 @@ class MvcListener implements ListenerAggregateInterface
         	return;
         }
     
-    	$match          = $event->getRouteMatch();
-    	$params         = $match->getParams();
+    	$match     = $event->getRouteMatch();
+    	$params    = $match->getParams();
     	
     	/**
     	 * If we have a route tht defines 'force-ssl' prefer that instruction above
