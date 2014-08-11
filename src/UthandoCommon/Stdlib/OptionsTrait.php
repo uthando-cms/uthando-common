@@ -16,8 +16,8 @@ trait OptionsTrait
      */
     public function getOption($name)
     {
-        if (!$this->has($name)) {
-            return;
+        if (!$this->hasOption($name)) {
+            return null;
         }
         
         $getter = 'get' . ucfirst($name);
@@ -31,17 +31,13 @@ trait OptionsTrait
      * @param string $prop
      * @return boolean
      */
-    public function has($prop)
+    public function hasOption($prop)
     {
         $prop = (string) $prop;
         
         if (is_object($this->options)) {
             $getter = 'get' . ucfirst($prop);
             return method_exists($this->options, $getter);
-        }
-        
-        if (is_array($this->options)) {
-            return (isset($this->options[$prop])) ? $this->options[$prop] : false;
         }
         
         return false;
