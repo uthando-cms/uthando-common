@@ -9,7 +9,6 @@ use Zend\Mvc\MvcEvent;
 
 class Module
 {
-
     public function onBootstrap(MvcEvent $event)
     {
         $app = $event->getApplication();
@@ -27,7 +26,13 @@ class Module
             ],
             'view_manager' => [
                 'template_map' => include __DIR__ . '/template_map.php'
-            ]
+            ],
+            'service_manager' => [
+                'factories' => [
+                    'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
+                    'Zend\Cache\Service\StorageCacheFactory' => 'Zend\Cache\Service\StorageCacheFactory',
+                ],
+            ],
         ];
     }
 

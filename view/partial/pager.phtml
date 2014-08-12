@@ -1,0 +1,9 @@
+<?php $routeParams = (is_array($this->routeParams)) ? $this->routeParams : []; ?>
+<ul class="pager">
+    <li class="previous<?php if (!isset($this->previous)) echo " disabled"; ?>">
+        <a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $this->previous])); ?>">&larr; Newer</a>
+    </li>
+    <li class="next<?php if (!isset($this->next)) echo " disabled"; ?>">
+        <a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $this->next])); ?>">Older &rarr;</a>
+    </li>
+</ul>
