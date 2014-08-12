@@ -2,8 +2,11 @@
 namespace UthandoCommon\Model;
 
 use UthandoCommon\Model\CollectionException;
+use Iterator;
+use Countable;
+use ArrayAccess;
 
-trait Collection
+abstract class Collection implements Iterator, Countable, ArrayAccess
 {
     /**
      * collection of entities.
