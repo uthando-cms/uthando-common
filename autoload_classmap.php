@@ -37,4 +37,5 @@ return array(
     'UthandoCommon\View\FlashMessenger'                         => __DIR__ . '/src/UthandoCommon/View/FlashMessenger.php',
     'UthandoCommon\View\FormatDate'                             => __DIR__ . '/src/UthandoCommon/View/FormatDate.php',
     'UthandoCommon\View\Request'                                => __DIR__ . '/src/UthandoCommon/View/Request.php',
+    'UthandoCommon\View\ViewHelperConfigTrait'                  => __DIR__ . '/src/UthandoCommon/View/ViewHelperConfigTrait.php',
 );
