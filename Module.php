@@ -21,16 +21,30 @@ class Module
     public function getConfig()
     {
         return [
-            'uthando-common' => [
-                'ssl' => false
+            'uthando_common' => [
+                'ssl' => false,
             ],
+            'cache' => [
+                'adapter' => [
+                    'name' => 'filesystem',
+                    'options' => [
+                        'ttl'                   => 60*60, // one hour
+                        'dirLevel'              => 0,
+                        'cacheDir'              => './data/cache/db',
+                        'dirPermission'         => 0700,
+                        'filePermission'        => 0600,
+                        'namespaceSeparator'    => '-db-'
+            		],
+        		],
+        		'plugins' => ['Serializer'],
+    		],
             'view_manager' => [
                 'template_map' => include __DIR__ . '/template_map.php'
             ],
             'service_manager' => [
                 'factories' => [
-                    'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
-                    'Zend\Cache\Service\StorageCacheFactory' => 'Zend\Cache\Service\StorageCacheFactory',
+                    'Zend\Db\Adapter\Adapter'                   => 'Zend\Db\Adapter\AdapterServiceFactory',
+                    'Zend\Cache\Service\StorageCacheFactory'    => 'Zend\Cache\Service\StorageCacheFactory',
                 ],
             ],
         ];
