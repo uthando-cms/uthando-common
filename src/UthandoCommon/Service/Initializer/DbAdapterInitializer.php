@@ -18,8 +18,8 @@ class DbAdapterInitializer implements InitializerInterface
 			
 			$config = $serviceLocator->get('config');
 			
-			// enable foreign key contraints on sqlite.
-			if (isset($config['db']['sqlite_contraints']) && !$this->sqliteContraints) {
+			// enable foreign key constraints on sqlite.
+			if (isset($config['db']['sqlite_constraints']) && !$this->sqliteContraints) {
 			    $dbAdapter->query('PRAGMA FOREIGN_KEYS = ON', Adapter::QUERY_MODE_EXECUTE);
 			    $this->sqliteContraints = true;
 			}

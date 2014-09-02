@@ -23,7 +23,7 @@ CacheStorageAwareInterface
     use CacheTrait;
 	
 	/**
-	 * @var \Application\Mapper\AbstractMapper
+	 * @var \UthandoCommon\Mapper\AbstractMapper
 	 */
 	protected $mapper;
 	
@@ -221,7 +221,7 @@ CacheStorageAwareInterface
 	}
 	
 	/**
-	 * @return \Application\Mapper\AbstractMapper
+	 * @return \UthandoCommon\Mapper\AbstractMapper
 	 */
 	public function getMapper()
 	{
