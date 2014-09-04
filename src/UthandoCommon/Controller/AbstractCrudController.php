@@ -79,8 +79,9 @@ abstract class AbstractCrudController extends AbstractActionController
 	    			]);
 	    
 	    		} else {
+                    $tableName = $this->getService()->getMapper()->getTable();
+
 	    			if ($result) {
-	    				$tableName = $this->getService()->getMapper()->getTable();
 	    				$this->flashMessenger()->addSuccessMessage(sprintf(self::ADD_SUCCESS, $result, $tableName));
 	    			} else {
 	    				$this->flashMessenger()->addErrorMessage(sprintf(self::ADD_ERROR, $tableName));
@@ -212,7 +213,7 @@ abstract class AbstractCrudController extends AbstractActionController
     
     /**
      * @param string $service
-     * @return \Application\Service\AbstractService
+     * @return \UthandoCommon\Service\AbstractService
      */
     protected function getService($service = null)
     {

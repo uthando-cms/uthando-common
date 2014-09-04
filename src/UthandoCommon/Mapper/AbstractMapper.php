@@ -99,8 +99,8 @@ class AbstractMapper implements DbAdapterAwareInterface
 	public function getById($id)
 	{
 		$select = $this->getSelect()->where([$this->getPrimaryKey() => $id]);
-		$rowset = $this->fetchResult($select);
-		$row = $rowset->current();
+		$rowSet = $this->fetchResult($select);
+		$row = $rowSet->current();
 		return $row;
 	}
 	
@@ -220,7 +220,7 @@ class AbstractMapper implements DbAdapterAwareInterface
 	
 	/**
 	 * @param array $paginatorOptions
-	 * @return \Application\Mapper\AbstractMapper
+	 * @return \UthandoCommon\Mapper\AbstractMapper
 	 */
 	public function usePaginator(array $paginatorOptions)
 	{
