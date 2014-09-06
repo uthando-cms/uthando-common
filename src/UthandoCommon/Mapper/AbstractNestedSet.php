@@ -2,7 +2,6 @@
 
 namespace UthandoCommon\Mapper;
 
-use UthandoCommon\Mapper\AbstractMapper;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Where;
@@ -14,11 +13,11 @@ abstract class AbstractNestedSet extends AbstractMapper
 	const INSERT_CHILD	= 'insertSub';
 	const COLUMN_LEFT	= 'lft';
 	const COLUMN_RIGHT	= 'rgt';
-	
+
     /**
      * Gets all items in tree.
-     * 
-     * @see \Zend\Db\ResultSet\ResultSet
+     *
+     * @return \Zend\Db\ResultSet\HydratingResultSet|ResultSet|\Zend\Paginator\Paginator
      */
     public function fetchAll()
     {
@@ -39,11 +38,11 @@ abstract class AbstractNestedSet extends AbstractMapper
         	
         return $this->fetchResult($select);
     }
-    
+
     /**
      * Gets the full tree from database
-     * 
-     * @return \Zend\Db\ResultSet\ResultSet
+     *
+     * @return Select
      */
     public function getFullTree()
     {   
@@ -67,8 +66,9 @@ abstract class AbstractNestedSet extends AbstractMapper
 
     /**
      * Get the pathway of of the child by its id.
-     * 
+     *
      * @param int $id
+     * @return \Zend\Db\Sql\Select
      */
     public function getPathwayByChildId($id)
     {
@@ -87,26 +87,11 @@ abstract class AbstractNestedSet extends AbstractMapper
         
         return $select;
     }
-    
+
     /**
-     *  
-        SELECT `child`.*, (COUNT(`parent`.`productCategoryId`) - (`subTree`.`depth` + 1)) AS `depth` 
-		FROM `productCategory` AS `child` 
-		INNER JOIN `productCategory` AS `parent` ON `child`.`lft` BETWEEN `parent`.`lft` AND `parent`.`rgt` 
-		INNER JOIN `productCategory` AS `subParent` ON `child`.`lft` BETWEEN `subParent`.`lft` AND `subParent`.`rgt` 
-		INNER JOIN (
-			SELECT `child`.`productCategoryId`, (COUNT(`parent`.`productCategoryId`) - 1) AS `depth` 
-		        FROM `productCategory` AS `child` 
-		        INNER JOIN `productCategory` AS `parent` ON `child`.`lft` BETWEEN `parent`.`lft` AND `parent`.`rgt` 
-		        WHERE `child`.`productCategoryId` = '2' 
-		        GROUP BY `child`.`productCategoryId` 
-		        ORDER BY `child`.`lft` ASC
-		) AS `subTree` ON `subParent`.`productCategoryId` = `subTree`.`productCategoryId` 
-		GROUP BY `child`.`productCategoryId` 
-		ORDER BY `child`.`lft` ASC
-     * 
-     * @param int $parentId
-     * @param string $immediate
+     * @param $parentId
+     * @param bool $immediate
+     * @return Select
      */
     public function getDecendentsByParentId($parentId, $immediate=true)
     {
@@ -166,13 +151,15 @@ abstract class AbstractNestedSet extends AbstractMapper
     
         return $select;
     }
-    
+
     /**
      * Updates left and right values of tree
      *
-     * @param int $left_rgt
+     * @param $lft_rgt
      * @param string $operator
      * @param int $offset
+     * @return array
+     * @internal param int $left_rgt
      */
     protected function updateTree($lft_rgt, $operator, $offset)
     {
@@ -194,7 +181,7 @@ abstract class AbstractNestedSet extends AbstractMapper
      * Get the position of a child in the tree
      * 
      * @param int $id
-     * @return array
+     * @return \UthandoCommon\Model\NestedSetInterface $row
      */
     protected function getPosition($id)
     {
@@ -209,17 +196,17 @@ abstract class AbstractNestedSet extends AbstractMapper
         $where = new Where;
         $where->equalTo($this->getPrimaryKey(), $id);
         $select->columns($cols)->where($where);
-        
-        $row = $this->fetchResult($select, new ResultSet())->current();
+
+        $row = $this->fetchResult($select)->current();
         
         return $row;
     }
-    
+
     /**
      * Insert a row into tree
-     * 
+     *
      * @param array $data
-     * @param number $position
+     * @param int|number $position
      * @param string $insertType
      * @return int
      */
@@ -229,7 +216,7 @@ abstract class AbstractNestedSet extends AbstractMapper
         
         if ($num && $position) {
         	$row = $this->getPosition($position);
-        	$lft_rgt = ($insertType === self::INSERT_NODE) ? $row->{self::COLUMN_RIGHT} : $row->{self::COLUMN_LEFT};
+        	$lft_rgt = ($insertType === self::INSERT_NODE) ? $row->getRgt() : $row->getLft();
         } else {
         	$lft_rgt = 0;
         }
@@ -262,12 +249,12 @@ abstract class AbstractNestedSet extends AbstractMapper
         $row = $this->getPosition($pk);
         
         $where = new Where;
-        $where->between(self::COLUMN_LEFT, $row->{self::COLUMN_LEFT}, $row->{self::COLUMN_RIGHT});
-        
+        $where->between(self::COLUMN_LEFT, $row->getLft(), $row->getRgt());
+
         $result = parent::delete($where, $table);
         
         if ($result) {
-            $this->updateTree($row->{self::COLUMN_RIGHT}, '-', $row->width);
+            $this->updateTree($row->getRgt(), '-', $row->getWidth());
         }
         
         return $result;

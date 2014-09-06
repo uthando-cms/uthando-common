@@ -2,8 +2,8 @@
 namespace UthandoCommon\Mapper;
 
 use UthandoCommon\Model\ModelInterface;
-use UthandoCommon\Mapper\DbAdapterAwareInterface;
 use Zend\Db\Adapter\AdapterAwareTrait;
+use Zend\Db\ResultSet\AbstractResultSet;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
@@ -89,27 +89,27 @@ class AbstractMapper implements DbAdapterAwareInterface
 	
 		return clone $this->resultSetProtype;
 	}
-	
-	/**
-	 * Gets one row by its id
-	 *
-	 * @param int $id
-	 * @return AbstractModel|null
-	 */
-	public function getById($id)
+
+    /**
+     * Gets one row by its id
+     *
+     * @param $id
+     * @return array|\ArrayObject|null|object
+     */
+    public function getById($id)
 	{
 		$select = $this->getSelect()->where([$this->getPrimaryKey() => $id]);
 		$rowSet = $this->fetchResult($select);
 		$row = $rowSet->current();
 		return $row;
 	}
-	
-	/**
-	 * Fetches all rows from database table.
-	 *
-	 * @return ResultSet
-	 */
-	public function fetchAll()
+
+    /**
+     * Fetches all rows from database table.
+     *
+     * @return HydratingResultSet|\Zend\Db\ResultSet\ResultSet|Paginator
+     */
+    public function fetchAll()
 	{
 		$select = $this->getSelect();
 		$resultSet = $this->fetchResult($select);
@@ -179,7 +179,7 @@ class AbstractMapper implements DbAdapterAwareInterface
 	 * Updates a database row/s.
 	 *
 	 * @param array $data
-	 * @param string|array|Where $where
+	 * @param string|array|\Zend\Db\Sql\Where $where
 	 * @param string $table
 	 * @return int number of affected rows
 	 */
@@ -201,7 +201,7 @@ class AbstractMapper implements DbAdapterAwareInterface
 	 * Deletes a row/s in the database returns number
 	 * of rows affacted
 	 *
-	 * @param string|array|Where $where
+	 * @param string|array|\Zend\Db\Sql\Where $where
 	 * @param string $table
 	 * @return int
 	 */
@@ -247,15 +247,14 @@ class AbstractMapper implements DbAdapterAwareInterface
 		return $this;
 	}
 
-	/**
-	 * Paginates the resultset
-	 *
-	 * @param ResultSet $resultSet
-	 * @param int $page
-	 * @param int $limit
-	 * @return Paginator
-	 */
-	public function paginate(Select $select, $resultSet=null)
+    /**
+     * Paginates the result set
+     *
+     * @param Select $select
+     * @param AbstractResultSet $resultSet
+     * @return Paginator
+     */
+    public function paginate(Select $select, AbstractResultSet $resultSet=null)
 	{
 		$resultSet = $resultSet ?: $this->getResultSet();
 		$adapter = new DbSelect($select, $this->getAdapter(), $resultSet);
@@ -280,9 +279,10 @@ class AbstractMapper implements DbAdapterAwareInterface
 	 * Fetches the result of select from database
 	 *
 	 * @param Select $select
+     * @param AbstractResultSet $resultSet
 	 * @return \Zend\Db\ResultSet\ResultSet|Paginator|HydratingResultSet
 	 */
-	protected function fetchResult(Select $select, $resultSet=null)
+	protected function fetchResult(Select $select, AbstractResultSet $resultSet=null)
 	{
 		$resultSet = $resultSet ?: $this->getResultSet();
 		$resultSet->buffer();
@@ -352,7 +352,7 @@ class AbstractMapper implements DbAdapterAwareInterface
 	
 	/**
 	 * 
-	 * @param AbstractModel|array $dataOrModel
+	 * @param \UthandoCommon\Model\\UthandoCommon\Model\AbstractModel|array $dataOrModel
 	 * @param HydratorInterface $hydrator
 	 * @throws \InvalidArgumentException
 	 * @return array
@@ -383,12 +383,13 @@ class AbstractMapper implements DbAdapterAwareInterface
 			return new ClassMethods();
 		}
 	}
-	
-	/**
-	 * @param array $data
-	 * @return model
-	 */
-	public function getModel(array $data = null)
+
+    /**
+     * @param array $data
+     * @return object
+     * @throws \RuntimeException
+     */
+    public function getModel(array $data = null)
 	{
 		if (is_string($this->model) && class_exists($this->model)) {
 			if ($data) {
@@ -428,9 +429,9 @@ class AbstractMapper implements DbAdapterAwareInterface
     {
     	return $this->table;
     }
-    
+
     /**
-     * @return $primary
+     * @return string
      */
     public function getPrimaryKey()
     {
