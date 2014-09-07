@@ -143,7 +143,7 @@ abstract class AbstractCrudController extends AbstractActionController
 	    			if ($result) {
 	    				$this->flashMessenger()->addSuccessMessage(sprintf(self::SAVE_SUCCESS, $id, $tableName));
 	    			} else {
-	    				$this->flashMessenger()->addErrorMessage(sprintf(self::SAVE_ERROR, id, $tableName));
+	    				$this->flashMessenger()->addErrorMessage(sprintf(self::SAVE_ERROR, $id, $tableName));
 	    			}
 	    			
 	    			$params = ($this->addRouteParams) ? $this->params()->fromRoute() : [];

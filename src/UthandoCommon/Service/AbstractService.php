@@ -1,10 +1,7 @@
 <?php
 namespace UthandoCommon\Service;
 
-use UthandoCommon\Cache\CacheStorageAwareInterface;
-use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Model\ModelInterface;
-use UthandoCommon\Service\ServiceException;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerAwareTrait;
 use Zend\Form\Form;
@@ -13,14 +10,11 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 abstract class AbstractService implements 
 ServiceLocatorAwareInterface,
-EventManagerAwareInterface,
-CacheStorageAwareInterface
+EventManagerAwareInterface
 {
     use ServiceLocatorAwareTrait;
     
     use EventManagerAwareTrait;
-    
-    use CacheTrait;
 	
 	/**
 	 * @var \UthandoCommon\Mapper\AbstractMapper
@@ -41,23 +35,17 @@ CacheStorageAwareInterface
 	 * @var string
 	 */
 	protected $mapperClass;
-	
-	/**
-	 * return just one record from database
-	 * 
-	 * @param int $id
-	 * @return AbstractModel|null
-	 */
-	public function getById($id)
+
+    /**
+     * return just one record from database
+     *
+     * @param $id
+     * @return array|\ArrayObject|mixed|null|object
+     */
+    public function getById($id)
 	{
 		$id = (int) $id;
-		
-		$model = $this->getCacheItem($id);
-        
-		if (!$model) {
-		    $model = $this->getMapper()->getById($id);
-		    $this->setCacheItem($id, $model);
-		}
+        $model = $this->getMapper()->getById($id);
 		
 		return $model;
 	}
@@ -96,34 +84,22 @@ CacheStorageAwareInterface
 		 
 		return $models;
 	}
-	
-	/**
-	 * override this to populate relational records.
-	 * 
-	 * @param AbstractModel $model
-	 * @param string $children
-	 * @return AbstractModel $model
-	 */
-	public function populate($model, $children = false)
-	{
-		return $model;
-	}
-	
-	/**
-	 * prepare data to be inserted into database
-	 * 
-	 * @param array $post
-	 * @return int results from self::save()
-	 */
-	public function add(array $post, Form $form = null)
+
+    /**
+     * prepare and return form
+     *
+     * @param array $post
+     * @param Form $form
+     * @return int|Form
+     */
+    public function add(array $post, Form $form = null)
 	{   
 		$model = $this->getMapper()->getModel();
 		$form  = ($form) ? $form : $this->getForm($model, $post, true, true);
 		
 		$argv = compact('post', 'form');
-		$argv = $this->getEventManager()->prepareArgs($argv);
+		$argv = $this->prepareEventArguments($argv);
 		$this->getEventManager()->trigger('pre.add', $this, $argv);
-		$post = $argv['post'];
 	
 		if (!$form->isValid()) {
 			return $form;
@@ -151,9 +127,8 @@ CacheStorageAwareInterface
 		$form  = ($form) ? $form : $this->getForm($model, $post, true, true);
 		
 		$argv = compact('model', 'post', 'form');
-		$argv = $this->getEventManager()->prepareArgs($argv);
+		$argv = $this->prepareEventArguments($argv);
 		$this->getEventManager()->trigger('pre.edit', $this, $argv);
-		$post = $argv['post'];
 		
 		if (!$form->isValid()) {
 			return $form;
@@ -173,12 +148,12 @@ CacheStorageAwareInterface
 	 * 
 	 * @param array|ModelInterface $data
 	 * @throws ServiceException
-	 * @return int $reults number of rows affected or insertId
+	 * @return int $results number of rows affected or insertId
 	 */
 	public function save($data)
 	{
 	    $argv = compact('data');
-	    $argv = $this->getEventManager()->prepareArgs($argv);
+	    $argv = $this->prepareEventArguments($argv);
 	    $this->getEventManager()->trigger('pre.save', $this, $argv);
 	    
 		if ($data instanceof ModelInterface) {
@@ -194,7 +169,7 @@ CacheStorageAwareInterface
 		} else {
 			if ($this->getById($id)) {
 				$result = $this->getMapper()->update($data, [$pk => $id]);
-				$this->removeCacheItem($id);
+                $this->getMapper()->removeCacheItem($id);
 			} else {
 				throw new ServiceException('ID ' . $id . ' does not exist');
 			}
@@ -214,16 +189,16 @@ CacheStorageAwareInterface
 		$result = $this->getMapper()->delete([
 			$this->getMapper()->getPrimaryKey() => $id
 		]);
-		
-		$this->removeCacheItem($id);
+
+        $this->getMapper()->removeCacheItem($id);
 		
 		return $result;
 	}
-	
-	/**
-	 * @return \UthandoCommon\Mapper\AbstractMapper
-	 */
-	public function getMapper()
+
+    /**
+     * @return \UthandoCommon\Mapper\AbstractMapper
+     */
+    public function getMapper()
 	{
 		if (!$this->mapper) {
 			$sl = $this->getServiceLocator();
@@ -275,6 +250,7 @@ CacheStorageAwareInterface
 	
 	/**
 	 * Gets the default input filter
+     *
 	 * @return \Zend\InputFilter\InputFilter
 	 */
 	public function getInputFilter()
@@ -284,16 +260,16 @@ CacheStorageAwareInterface
 	    $inputFilter->init();
 	    return $inputFilter;
 	}
-	
-	/**
-	 * Prepares arguments for event
-	 * 
-	 * @param array $argv
-	 * @return unknown
-	 */
-	public function prepareEventArguments($argv)
+
+    /**
+     * @param $argv
+     * @return \ArrayObject
+     */
+    public function prepareEventArguments($argv)
 	{
-	    $argv = $this->getEventManager()->prepareArgs($argv);
+        /* @var $em \Zend\EventManager\EventManager */
+        $em = $this->getEventManager();
+	    $argv = $em->prepareArgs($argv);
 	    return $argv;
 	}
 	

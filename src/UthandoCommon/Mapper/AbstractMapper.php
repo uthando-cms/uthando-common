@@ -1,6 +1,8 @@
 <?php
 namespace UthandoCommon\Mapper;
 
+use UthandoCommon\Cache\CacheStorageAwareInterface;
+use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Model\ModelInterface;
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Db\ResultSet\AbstractResultSet;
@@ -12,9 +14,11 @@ use Zend\Paginator\Adapter\DbSelect;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class AbstractMapper implements DbAdapterAwareInterface
+class AbstractMapper implements DbAdapterAwareInterface, CacheStorageAwareInterface
 {
     use AdapterAwareTrait;
+
+    use CacheTrait;
     
 	/**
 	 * Name of table
@@ -91,17 +95,29 @@ class AbstractMapper implements DbAdapterAwareInterface
 	}
 
     /**
-     * Gets one row by its id
+     * Gets one row or rows by its id
      *
      * @param $id
-     * @return array|\ArrayObject|null|object
+     * @return array|\ArrayObject|null|object|HydratingResultSet|\Zend\Db\ResultSet\ResultSet|Paginator
      */
     public function getById($id)
 	{
-		$select = $this->getSelect()->where([$this->getPrimaryKey() => $id]);
-		$rowSet = $this->fetchResult($select);
-		$row = $rowSet->current();
-		return $row;
+        $rowSet = $this->getCacheItem($id);
+
+        if (!$rowSet) {
+            $select = $this->getSelect()->where([$this->getPrimaryKey() => $id]);
+            $resultSet = $this->fetchResult($select);
+
+            if (1 == $resultSet->count()) {
+                $rowSet = $resultSet->current();
+            } else {
+                $rowSet = $resultSet->toArray();
+            }
+
+            $this->setCacheItem($id, $rowSet);
+        }
+
+        return $rowSet;
 	}
 
     /**
@@ -386,7 +402,7 @@ class AbstractMapper implements DbAdapterAwareInterface
 
     /**
      * @param array $data
-     * @return object
+     * @return object|\UthandoCommon\Model\ModelInterface
      * @throws \RuntimeException
      */
     public function getModel(array $data = null)
