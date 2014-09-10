@@ -1,8 +1,6 @@
 <?php
 namespace UthandoCommon\Mapper;
 
-use UthandoCommon\Cache\CacheStorageAwareInterface;
-use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Model\ModelInterface;
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Db\ResultSet\AbstractResultSet;
@@ -14,11 +12,9 @@ use Zend\Paginator\Adapter\DbSelect;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class AbstractMapper implements DbAdapterAwareInterface, CacheStorageAwareInterface
+class AbstractMapper implements DbAdapterAwareInterface
 {
     use AdapterAwareTrait;
-
-    use CacheTrait;
     
 	/**
 	 * Name of table
@@ -54,7 +50,7 @@ class AbstractMapper implements DbAdapterAwareInterface, CacheStorageAwareInterf
 	/**
 	 * @var HydratingResultSet
 	 */
-	protected $resultSetProtype;
+	protected $resultSetPrototype;
 	
 	/**
 	 * @var boolean
@@ -84,37 +80,36 @@ class AbstractMapper implements DbAdapterAwareInterface, CacheStorageAwareInterf
 	 */
 	protected function getResultSet()
 	{
-		if (!$this->resultSetProtype instanceof HydratingResultSet) {
+		if (!$this->resultSetPrototype instanceof HydratingResultSet) {
 			$resultSetPrototype = new HydratingResultSet;
 			$resultSetPrototype->setHydrator($this->getHydrator());
 			$resultSetPrototype->setObjectPrototype(new $this->model());
-			$this->resultSetProtype = $resultSetPrototype;
+			$this->resultSetPrototype = $resultSetPrototype;
 		}
 	
-		return clone $this->resultSetProtype;
+		return clone $this->resultSetPrototype;
 	}
 
     /**
-     * Gets one row or rows by its id
+     * Gets one or more rows by its id
      *
      * @param $id
-     * @return array|\ArrayObject|null|object|HydratingResultSet|\Zend\Db\ResultSet\ResultSet|Paginator
+     * @return array|ModelInterface
      */
     public function getById($id)
 	{
-        $rowSet = $this->getCacheItem($id);
+        $select = $this->getSelect()->where([$this->getPrimaryKey() => $id]);
+        $resultSet = $this->fetchResult($select);
 
-        if (!$rowSet) {
-            $select = $this->getSelect()->where([$this->getPrimaryKey() => $id]);
-            $resultSet = $this->fetchResult($select);
-
-            if (1 == $resultSet->count()) {
-                $rowSet = $resultSet->current();
-            } else {
-                $rowSet = $resultSet->toArray();
+        if ($resultSet->count() > 1) {
+            $rowSet = [];
+            foreach ($resultSet as $row) {
+                $rowSet[] = $row;
             }
-
-            $this->setCacheItem($id, $rowSet);
+        } elseif ($resultSet->count() === 1) {
+            $rowSet = $resultSet->current();
+        } else {
+            $rowSet = $this->getModel();
         }
 
         return $rowSet;

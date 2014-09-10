@@ -33,7 +33,6 @@ class Module
                         'cacheDir'              => './data/cache/db',
                         'dirPermission'         => 0700,
                         'filePermission'        => 0600,
-                        'namespaceSeparator'    => '-db-'
             		],
         		],
         		'plugins' => ['Serializer'],

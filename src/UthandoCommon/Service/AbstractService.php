@@ -1,25 +1,30 @@
 <?php
 namespace UthandoCommon\Service;
 
+use UthandoCommon\Cache\CacheStorageAwareInterface;
+use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Model\ModelInterface;
+use UthandoCommon\UthandoException;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerAwareTrait;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-abstract class AbstractService implements 
-ServiceLocatorAwareInterface,
-EventManagerAwareInterface
+abstract class AbstractService implements
+    ServiceLocatorAwareInterface,
+    EventManagerAwareInterface,
+    CacheStorageAwareInterface,
+    ServiceInterface
 {
-    use ServiceLocatorAwareTrait;
-    
-    use EventManagerAwareTrait;
+    use ServiceLocatorAwareTrait,
+        EventManagerAwareTrait,
+        CacheTrait;
 	
 	/**
-	 * @var \UthandoCommon\Mapper\AbstractMapper
+	 * @var array
 	 */
-	protected $mapper;
+	protected $mappers = [];
 	
 	/**
 	 * @var string
@@ -37,16 +42,22 @@ EventManagerAwareInterface
 	protected $mapperClass;
 
     /**
-     * return just one record from database
+     * return one or more records from database by id
      *
      * @param $id
-     * @return array|\ArrayObject|mixed|null|object
+     * @return array|mixed|ModelInterface
      */
     public function getById($id)
 	{
 		$id = (int) $id;
-        $model = $this->getMapper()->getById($id);
-		
+
+        $model = $this->getCacheItem($id);
+
+        if (!$model) {
+            $model = $this->getMapper()->getById($id);
+            $this->setCacheItem($id, $model);
+        }
+
 		return $model;
 	}
 	
@@ -169,7 +180,7 @@ EventManagerAwareInterface
 		} else {
 			if ($this->getById($id)) {
 				$result = $this->getMapper()->update($data, [$pk => $id]);
-                $this->getMapper()->removeCacheItem($id);
+                $this->removeCacheItem($id);
 			} else {
 				throw new ServiceException('ID ' . $id . ' does not exist');
 			}
@@ -190,23 +201,44 @@ EventManagerAwareInterface
 			$this->getMapper()->getPrimaryKey() => $id
 		]);
 
-        $this->getMapper()->removeCacheItem($id);
+        $this->removeCacheItem($id);
 		
 		return $result;
 	}
 
     /**
+     * gets the mapper class for this service
+     *
      * @return \UthandoCommon\Mapper\AbstractMapper
      */
     public function getMapper()
-	{
-		if (!$this->mapper) {
-			$sl = $this->getServiceLocator();
-			$this->mapper = $sl->get($this->mapperClass);
-		}
-		
-		return $this->mapper;
-	}
+    {
+        if (!array_key_exists($this->mapperClass, $this->mappers)) {
+            $this->setMapper($this->mapperClass);
+        }
+
+        return $this->mappers[$this->mapperClass];
+    }
+
+    /**
+     * Sets mapper in mapper array for reuse.
+     *
+     * @param string $mapper
+     * @return $this
+     * @throws \UthandoCommon\UthandoException
+     */
+    public function setMapper($mapper)
+    {
+        $sl = $this->getServiceLocator();
+
+        if (!$sl->has($mapper)) {
+            throw new UthandoException($mapper . ' is not found in the service manager');
+        }
+
+        $this->mappers[$mapper] = $sl->get($mapper);
+
+        return $this;
+    }
 	
 	/**
 	 * Gets the default form for the service.
@@ -279,7 +311,7 @@ EventManagerAwareInterface
 	 * @param string $key
 	 * @return array $config
 	 */
-	protected function getConfig($key)
+	public function getConfig($key)
 	{
 		$config = $this->getServiceLocator()->get('config');
 		return $config[$key];

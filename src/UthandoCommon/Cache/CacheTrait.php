@@ -33,7 +33,7 @@ trait CacheTrait
     public function getCacheKey($id)
     {
         $id = (string) $id;
-        $key = md5(get_class($this) . '-' . $id);
+        $key = str_replace('\\', '-', get_class($this)) . '-' . md5($id);
         return $key;
     }
     
@@ -44,7 +44,16 @@ trait CacheTrait
     
     public function setCache(AbstractAdapter $cache)
     {
+        $reflector = new \ReflectionClass($this);
+
+        $options = $cache->getOptions();
+        $options->setNamespace(str_replace('\\', '-', $reflector->getNamespaceName()));
+        $options->setNamespaceSeparator(':');
+
+        $cache->setOptions($options);
+
         $this->cache = $cache;
+
         return $this;
     }
 }

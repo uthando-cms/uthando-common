@@ -1,7 +1,7 @@
 <?php
 namespace UthandoCommon\Service;
 
-use Zend\Db\ResultSet\AbstractResultSet;
+use UthandoCommon\Mapper\AbstractMapper;
 
 abstract class RelationalService extends AbstractService
 {
@@ -14,17 +14,16 @@ abstract class RelationalService extends AbstractService
      * populate relational records.
      *
      * @param $model \UthandoCommon\Model\Model
-     * @param bool $children
+     * @param bool|array $children
      * @return mixed
      */
-    public function populate($model, $children = false)
+    public function populate($model, $children)
     {
         $allChildren = ($children === true) ? true : false;
         $children = (is_array($children)) ? $children : [];
 
         foreach ($this->getReferenceMap() as $name => $options) {
             if ($allChildren || in_array($name, $children)) {
-
                 $sl = $this->getServiceLocator();
                 /* @var $service \UthandoCommon\Service\AbstractService */
                 $service = $sl->get($options['refClass']);
@@ -33,12 +32,6 @@ abstract class RelationalService extends AbstractService
                 $setMethod = 'set' . ucfirst($name);
 
                 $childModel = $service->getById($model->$getIdMethod());
-
-                if ($childModel instanceof AbstractResultSet) {
-                    $childModel = $childModel->toArray();
-                } elseif (is_array($childModel)) {
-                    $childModel = $service->getMapper()->getModel($childModel);
-                }
 
                 $model->$setMethod($childModel);
             }
@@ -49,7 +42,7 @@ abstract class RelationalService extends AbstractService
 
     /**
      * @param $name
-     * @return object
+     * @return AbstractMapper
      * @throws ServiceException
      */
     public function getRelatedService($name)
@@ -60,9 +53,11 @@ abstract class RelationalService extends AbstractService
             throw new ServiceException($name . ' is not related service');
         }
 
-        $sl = $this->getServiceLocator();
+        if (!array_key_exists($name, $this->mappers)) {
+            $this->setMapper($map[$name]['refClass']);
+        }
 
-        return $sl->get($map[$name]['refClass']);
+        return $this->mappers[$map[$name]['refClass']];
     }
 
     /**
