@@ -1,8 +1,6 @@
 <?php
 namespace UthandoCommon\Service;
 
-use UthandoCommon\Mapper\AbstractMapper;
-
 abstract class RelationalService extends AbstractService
 {
     /**
@@ -24,9 +22,8 @@ abstract class RelationalService extends AbstractService
 
         foreach ($this->getReferenceMap() as $name => $options) {
             if ($allChildren || in_array($name, $children)) {
-                $sl = $this->getServiceLocator();
-                /* @var $service \UthandoCommon\Service\AbstractService */
-                $service = $sl->get($options['refClass']);
+
+                $service = $this->getRelatedService($name);
 
                 $getIdMethod = 'get' .  ucfirst($options['refCol']);
                 $setMethod = 'set' . ucfirst($name);
@@ -42,7 +39,7 @@ abstract class RelationalService extends AbstractService
 
     /**
      * @param $name
-     * @return AbstractMapper
+     * @return AbstractService
      * @throws ServiceException
      */
     public function getRelatedService($name)
@@ -53,11 +50,7 @@ abstract class RelationalService extends AbstractService
             throw new ServiceException($name . ' is not related service');
         }
 
-        if (!array_key_exists($name, $this->mappers)) {
-            $this->setMapper($map[$name]['refClass']);
-        }
-
-        return $this->mappers[$map[$name]['refClass']];
+        return $this->getService($map[$name]['service']);
     }
 
     /**

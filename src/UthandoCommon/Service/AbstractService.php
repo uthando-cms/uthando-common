@@ -25,6 +25,11 @@ abstract class AbstractService implements
 	 * @var array
 	 */
 	protected $mappers = [];
+
+    /**
+     * @var array
+     */
+    protected $services = [];
 	
 	/**
 	 * @var string
@@ -236,6 +241,28 @@ abstract class AbstractService implements
         }
 
         $this->mappers[$mapper] = $sl->get($mapper);
+
+        return $this;
+    }
+
+    public function getService($service)
+    {
+        if (!array_key_exists($service, $this->services)) {
+            $this->setService($service);
+        }
+
+        return $this->services[$service];
+    }
+
+    public function setService($service)
+    {
+        $sl = $this->getServiceLocator();
+
+        if (!$sl->has($service)) {
+            throw new UthandoException($service . ' is not found in the service manager');
+        }
+
+        $this->services[$service] = $sl->get($service);
 
         return $this;
     }

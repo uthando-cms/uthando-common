@@ -73,7 +73,7 @@ interface ServiceInterface
     public function delete($id);
 
     /**
-     * Gets the mapper class
+     * Gets mapper class
      *
      * @return AbstractMapper
      */
@@ -86,6 +86,22 @@ interface ServiceInterface
      * @return $this
      */
     public function setMapper($mapper);
+
+    /**
+     * Gets Service Class
+     *
+     * @param $service
+     * @return AbstractService
+     */
+    public function getService($service);
+
+    /**
+     * Sets Service Class
+     *
+     * @param $service
+     * @return $this
+     */
+    public function setService($service);
 
     /**
      * Gets the default form for the service.
