@@ -54,7 +54,7 @@ class Module
         return [
             'initializers' => [
                 'UthandoCommon\Service\CacheStorageInitializer' => 'UthandoCommon\Service\Initializer\CacheStorageInitializer',
-                'UthandoCommon\Service\DbAdapterInitializer' => 'UthandoCommon\Service\Initializer\DbAdapterInitializer'
+                'UthandoCommon\Service\DbAdapterInitializer'    => 'UthandoCommon\Service\Initializer\DbAdapterInitializer'
             ]
         ];
     }
@@ -63,10 +63,10 @@ class Module
     {
         return [
             'invokables' => [
-                'FormatDate' => 'UthandoCommon\View\FormatDate',
-                'Request' => 'UthandoCommon\View\Request',
-                'tbAlert' => 'UthandoCommon\View\Alert',
-                'tbFlashMessenger' => 'UthandoCommon\View\FlashMessenger'
+                'FormatDate'        => 'UthandoCommon\View\FormatDate',
+                'Request'           => 'UthandoCommon\View\Request',
+                'tbAlert'           => 'UthandoCommon\View\Alert',
+                'tbFlashMessenger'  => 'UthandoCommon\View\FlashMessenger'
             ]
         ];
     }
