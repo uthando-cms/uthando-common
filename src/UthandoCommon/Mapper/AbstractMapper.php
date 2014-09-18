@@ -12,7 +12,7 @@ use Zend\Paginator\Adapter\DbSelect;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class AbstractMapper implements DbAdapterAwareInterface
+class AbstractMapper implements MapperInterface, DbAdapterAwareInterface
 {
     use AdapterAwareTrait;
     

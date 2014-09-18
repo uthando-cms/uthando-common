@@ -4,7 +4,6 @@ namespace UthandoCommon\Service;
 use UthandoCommon\Cache\CacheStorageAwareInterface;
 use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Model\ModelInterface;
-use UthandoCommon\UthandoException;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerAwareTrait;
 use Zend\Form\Form;
@@ -20,231 +19,22 @@ abstract class AbstractService implements
     use ServiceLocatorAwareTrait,
         EventManagerAwareTrait,
         CacheTrait;
-	
-	/**
-	 * @var array
-	 */
-	protected $mappers = [];
 
     /**
      * @var array
      */
     protected $services = [];
-	
-	/**
-	 * @var string
-	 */
-	protected $form;
-	
-	/**
-	 * @var string
-	 */
-	protected $inputFilter;
-	
-	/**
-	 * @var string
-	 */
-	protected $mapperClass;
 
     /**
-     * return one or more records from database by id
-     *
-     * @param $id
-     * @return array|mixed|ModelInterface
+     * @var string
      */
-    public function getById($id)
-	{
-		$id = (int) $id;
-
-        $model = $this->getCacheItem($id);
-
-        if (!$model) {
-            $model = $this->getMapper()->getById($id);
-            $this->setCacheItem($id, $model);
-        }
-
-		return $model;
-	}
-	
-	/**
-	 * fetch all records form database
-	 * 
-	 * @return \Zend\Db\ResultSet\ResultSet|\Zend\Paginator\Paginator|\Zend\Db\ResultSet\HydratingResultSet
-	 */
-	public function fetchAll()
-	{
-		return $this->getMapper()->fetchAll();
-	}
-	
-	/**
-	 * basic search on database
-	 * 
-	 * @param array $post
-	 * @return \Zend\Db\ResultSet\ResultSet|\Zend\Paginator\Paginator|\Zend\Db\ResultSet\HydratingResultSet
-	 */
-	public function search(array $post)
-	{
-		$sort = (isset($post['sort'])) ? (string) $post['sort'] : '';
-		unset($post['sort'], $post['count'], $post['offset'], $post['page']);
-		
-		$searches = array();
-		
-		foreach($post as $key => $value) {
-			$searches[] = [
-				'searchString'	=> (string) $value,
-				'columns'		=> explode('-', $key),
-			];
-		}
-		 
-		$models = $this->getMapper()->search($searches, $sort);
-		 
-		return $models;
-	}
+    protected $serviceAlias;
 
     /**
-     * prepare and return form
-     *
-     * @param array $post
-     * @param Form $form
-     * @return int|Form
+     * @param $service
+     * @return AbstractService
+     * @throws ServiceException
      */
-    public function add(array $post, Form $form = null)
-	{   
-		$model = $this->getMapper()->getModel();
-		$form  = ($form) ? $form : $this->getForm($model, $post, true, true);
-		
-		$argv = compact('post', 'form');
-		$argv = $this->prepareEventArguments($argv);
-		$this->getEventManager()->trigger('pre.add', $this, $argv);
-	
-		if (!$form->isValid()) {
-			return $form;
-		}
-	
-		$saved = $this->save($form->getData());
-		
-		if ($saved) {
-		    $this->getEventManager()->trigger('post.add', $this, $argv);
-		}
-		
-		return $saved;
-	}
-	
-	/**
-	 * prepare data to be updated and saved into database.
-	 * 
-	 * @param ModelInterface $model
-	 * @param array $post
-	 * @param Form $form
-	 * @return int results from self::save()
-	 */
-	public function edit(ModelInterface $model, array $post, Form $form = null)
-	{   
-		$form  = ($form) ? $form : $this->getForm($model, $post, true, true);
-		
-		$argv = compact('model', 'post', 'form');
-		$argv = $this->prepareEventArguments($argv);
-		$this->getEventManager()->trigger('pre.edit', $this, $argv);
-		
-		if (!$form->isValid()) {
-			return $form;
-		}
-
-		$saved = $this->save($form->getData());
-		
-		if ($saved) {
-		    $this->getEventManager()->trigger('post.edit', $this, $argv);
-		}
-		
-		return $saved;
-	}
-	
-	/**
-	 * updates a row if id is supplied else insert a new row
-	 * 
-	 * @param array|ModelInterface $data
-	 * @throws ServiceException
-	 * @return int $results number of rows affected or insertId
-	 */
-	public function save($data)
-	{
-	    $argv = compact('data');
-	    $argv = $this->prepareEventArguments($argv);
-	    $this->getEventManager()->trigger('pre.save', $this, $argv);
-	    
-		if ($data instanceof ModelInterface) {
-			$data = $this->getMapper()->extract($data);
-		}
-		
-		$pk = $this->getMapper()->getPrimaryKey();
-		$id = $data[$pk];
-		unset($data[$pk]);
-		
-		if (0 === $id || null === $id || '' === $id) {
-			$result = $this->getMapper()->insert($data);
-		} else {
-			if ($this->getById($id)) {
-				$result = $this->getMapper()->update($data, [$pk => $id]);
-                $this->removeCacheItem($id);
-			} else {
-				throw new ServiceException('ID ' . $id . ' does not exist');
-			}
-		}
-		
-		return $result;
-	}
-	
-	/**
-	 * delete row from database
-	 * 
-	 * @param int $id
-	 * @return int $result number of rows affected
-	 */
-	public function delete($id)
-	{
-		$result = $this->getMapper()->delete([
-			$this->getMapper()->getPrimaryKey() => $id
-		]);
-
-        $this->removeCacheItem($id);
-		
-		return $result;
-	}
-
-    /**
-     * gets the mapper class for this service
-     *
-     * @return \UthandoCommon\Mapper\AbstractMapper
-     */
-    public function getMapper()
-    {
-        if (!array_key_exists($this->mapperClass, $this->mappers)) {
-            $this->setMapper($this->mapperClass);
-        }
-
-        return $this->mappers[$this->mapperClass];
-    }
-
-    /**
-     * Sets mapper in mapper array for reuse.
-     *
-     * @param string $mapper
-     * @return $this
-     * @throws \UthandoCommon\UthandoException
-     */
-    public function setMapper($mapper)
-    {
-        $sl = $this->getServiceLocator();
-
-        if (!$sl->has($mapper)) {
-            throw new UthandoException($mapper . ' is not found in the service manager');
-        }
-
-        $this->mappers[$mapper] = $sl->get($mapper);
-
-        return $this;
-    }
-
     public function getService($service)
     {
         if (!array_key_exists($service, $this->services)) {
@@ -254,35 +44,41 @@ abstract class AbstractService implements
         return $this->services[$service];
     }
 
+    /**
+     * @param $service
+     * @return $this
+     * @throws ServiceException
+     */
     public function setService($service)
     {
         $sl = $this->getServiceLocator();
 
         if (!$sl->has($service)) {
-            throw new UthandoException($service . ' is not found in the service manager');
+            throw new ServiceException($service . ' is not found in the service manager');
         }
 
         $this->services[$service] = $sl->get($service);
 
         return $this;
     }
-	
-	/**
-	 * Gets the default form for the service.
-	 * 
-	 * @param ModelInterface $model
-	 * @param array $data
-	 * @param bool $useInputFilter
-	 * @param bool $useHydrator
-	 * @return Form $form
-	 */
+
+    /**
+     * Gets the default form for the service.
+     *
+     * @param ModelInterface $model
+     * @param array $data
+     * @param array $options
+     * @param bool $useInputFilter
+     * @param bool $useHydrator
+     * @return Form
+     */
 	public function getForm(ModelInterface $model=null, array $data=null, $useInputFilter=false, $useHydrator=false)
 	{
 		$sl = $this->getServiceLocator();
-		$formManager = $sl->get('FormElementManager');
+        /* @var $formElementManager \Zend\Form\FormElementManager */
+		$formElementManager = $sl->get('FormElementManager');
 		/* @var $form \Zend\Form\Form */
-		$form = $formManager->get($this->form);
-		$form->init();
+		$form = $formElementManager->get($this->serviceAlias);
 		
 		$argv = compact('form', 'model', 'data');
 		
@@ -293,7 +89,7 @@ abstract class AbstractService implements
 		}
 		
 		if ($useHydrator) {
-			$form->setHydrator($this->getMapper()->getHydrator());
+			$form->setHydrator($this->getHydrator());
 		}
 		 
 		if ($model) {
@@ -308,17 +104,32 @@ abstract class AbstractService implements
 	}
 	
 	/**
-	 * Gets the default input filter
+	 * Gets the default input filter from InputFilterManager
      *
 	 * @return \Zend\InputFilter\InputFilter
 	 */
 	public function getInputFilter()
 	{
 	    $sl = $this->getServiceLocator();
-	    $inputFilter = $sl->get($this->inputFilter);
-	    $inputFilter->init();
+        /* @var $inputFilterManager \Zend\InputFilter\InputFilterPluginManager */
+        $inputFilterManager = $sl->get('InputFilterManager');
+        $inputFilter = $inputFilterManager->get($this->serviceAlias);
+
 	    return $inputFilter;
 	}
+
+    /**
+     * @return \Zend\Stdlib\Hydrator\HydratorInterface
+     */
+    public function getHydrator()
+    {
+        $sl = $this->getServiceLocator();
+        /* @var $hydratorManager \Zend\Stdlib\Hydrator\HydratorPluginManager */
+        $hydratorManager = $sl->get('HydratorManager');
+        $hydrator = $hydratorManager->get($this->serviceAlias);
+
+        return $hydrator;
+    }
 
     /**
      * @param $argv
@@ -342,11 +153,5 @@ abstract class AbstractService implements
 	{
 		$config = $this->getServiceLocator()->get('config');
 		return $config[$key];
-	}
-	
-	public function usePaginator($options = [])
-	{
-		$this->getMapper()->usePaginator($options);
-		return $this;
 	}
 }

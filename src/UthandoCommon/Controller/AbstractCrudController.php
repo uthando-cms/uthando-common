@@ -2,7 +2,6 @@
 namespace UthandoCommon\Controller;
 
 use Exception;
-use UthandoCommon\Controller\SetExceptionMessages;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -16,13 +15,14 @@ abstract class AbstractCrudController extends AbstractActionController
     const SAVE_ERROR		= 'row %s could not be saved to table %s due to a database error.';
     const SAVE_SUCCESS		= self::ADD_SUCCESS;
     
-    const FORM_ERROR		= 'There were one or more isues with your submission. Please correct them as indicated below.';
+    const FORM_ERROR		= 'There were one or more issues with your submission. Please correct them as indicated below.';
     
     protected $searchDefaultParams = [];
     protected $serviceName;
     protected $service = [];
     protected $route;
     protected $addRouteParams = true;
+    protected $formOptions = [];
     
     use SetExceptionMessages;
     
@@ -119,8 +119,8 @@ abstract class AbstractCrudController extends AbstractActionController
 	    
 	    	if ($request->isPost()) {
 	    		
-	    		// primary key ids must match. If not throw eception.
-	    		$pk = $this->getService()->getMapper()->getPrimaryKey();
+	    		// primary key ids must match. If not throw exception.
+                $pk = $this->getService()->getMapper()->getPrimaryKey();
 	    		$tableName = $this->getService()->getMapper()->getTable();
 	    		$modelMethod = 'get' . ucwords($pk);
 	    		$post = $this->params()->fromPost();

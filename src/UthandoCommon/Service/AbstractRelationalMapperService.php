@@ -1,7 +1,7 @@
 <?php
 namespace UthandoCommon\Service;
 
-abstract class RelationalService extends AbstractService
+abstract class AbstractRelationalMapperService extends AbstractMapperService
 {
     /**
      * @var array
@@ -27,8 +27,9 @@ abstract class RelationalService extends AbstractService
 
                 $getIdMethod = 'get' .  ucfirst($options['refCol']);
                 $setMethod = 'set' . ucfirst($name);
+                $getMethod = (isset($options['getMethod'])) ? $options['getMethod'] : 'getById';
 
-                $childModel = $service->getById($model->$getIdMethod());
+                $childModel = $service->$getMethod($model->$getIdMethod());
 
                 $model->$setMethod($childModel);
             }

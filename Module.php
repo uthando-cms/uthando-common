@@ -5,10 +5,30 @@ namespace UthandoCommon;
 use Exception;
 use UthandoCommon\Event\MvcListener;
 use UthandoCommon\Event\ServiceListener;
+use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\MvcEvent;
 
 class Module
 {
+    public function init(ModuleManager $moduleManager)
+    {
+        $sm = $moduleManager->getEvent()->getParam('ServiceManager');
+        $serviceListener = $sm->get('ServiceListener');
+        $serviceListener->addServiceManager(
+            'UthandoMapperManager',
+            'uthando_mappers',
+            'UthandoCommon\Mapper\MapperInterface',
+            'getUthandoMapperConfig'
+        );
+
+        $serviceListener->addServiceManager(
+            'UthandoModelManager',
+            'uthando_models',
+            'UthandoCommon\Model\ModelInterface',
+            'getUthandoModelConfig'
+        );
+    }
+
     public function onBootstrap(MvcEvent $event)
     {
         $app = $event->getApplication();
@@ -20,55 +40,22 @@ class Module
 
     public function getConfig()
     {
-        return [
-            'uthando_common' => [
-                'ssl' => false,
-            ],
-            'cache' => [
-                'adapter' => [
-                    'name' => 'filesystem',
-                    'options' => [
-                        'ttl'                   => 60*60, // one hour
-                        'dirLevel'              => 0,
-                        'cacheDir'              => './data/cache/db',
-                        'dirPermission'         => 0700,
-                        'filePermission'        => 0600,
-            		],
-        		],
-        		'plugins' => ['Serializer'],
-    		],
-            'view_manager' => [
-                'template_map' => include __DIR__ . '/template_map.php'
-            ],
-            'service_manager' => [
-                'factories' => [
-                    'Zend\Db\Adapter\Adapter'                   => 'Zend\Db\Adapter\AdapterServiceFactory',
-                    'Zend\Cache\Service\StorageCacheFactory'    => 'Zend\Cache\Service\StorageCacheFactory',
-                ],
-            ],
-        ];
+        return include __DIR__ . '/config/config.php';
+    }
+
+    public function getFilterConfig()
+    {
+        return include __DIR__ . '/config/filter.config.php';
     }
 
     public function getServiceConfig()
     {
-        return [
-            'initializers' => [
-                'UthandoCommon\Service\CacheStorageInitializer' => 'UthandoCommon\Service\Initializer\CacheStorageInitializer',
-                'UthandoCommon\Service\DbAdapterInitializer'    => 'UthandoCommon\Service\Initializer\DbAdapterInitializer'
-            ]
-        ];
+        return include __DIR__ . '/config/service.config.php';
     }
 
     public function getViewHelperConfig()
     {
-        return [
-            'invokables' => [
-                'FormatDate'        => 'UthandoCommon\View\FormatDate',
-                'Request'           => 'UthandoCommon\View\Request',
-                'tbAlert'           => 'UthandoCommon\View\Alert',
-                'tbFlashMessenger'  => 'UthandoCommon\View\FlashMessenger'
-            ]
-        ];
+        return include __DIR__ . '/config/viewHelper.config.php';
     }
 
     public function getAutoloaderConfig()
@@ -77,11 +64,6 @@ class Module
             'Zend\Loader\ClassMapAutoloader' => [
                 __DIR__ . '/autoload_classmap.php'
             ],
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__
-                )
-            )
         ];
     }
 }
