@@ -1,8 +1,6 @@
 <?php
 namespace UthandoCommon\Service;
 
-use UthandoCommon\Cache\CacheStorageAwareInterface;
-use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Model\ModelInterface;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerAwareTrait;
@@ -13,12 +11,10 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 abstract class AbstractService implements
     ServiceLocatorAwareInterface,
     EventManagerAwareInterface,
-    CacheStorageAwareInterface,
     ServiceInterface
 {
     use ServiceLocatorAwareTrait,
-        EventManagerAwareTrait,
-        CacheTrait;
+        EventManagerAwareTrait;
 
     /**
      * @var array

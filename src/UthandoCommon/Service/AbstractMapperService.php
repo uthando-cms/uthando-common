@@ -2,12 +2,18 @@
 
 namespace UthandoCommon\Service;
 
+use UthandoCommon\Cache\CacheStorageAwareInterface;
+use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Model\ModelInterface;
 use UthandoCommon\UthandoException;
 use Zend\Form\Form;
 
-class AbstractMapperService extends AbstractService implements MapperServiceInterface
+class AbstractMapperService extends AbstractService implements
+    MapperServiceInterface,
+    CacheStorageAwareInterface
 {
+    use CacheTrait;
+
     /**
      * @var array
      */
@@ -174,6 +180,10 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      */
     public function delete($id)
     {
+        $argv = compact('id');
+        $argv = $this->prepareEventArguments($argv);
+        $this->getEventManager()->trigger('pre.delete', $this, $argv);
+
         $result = $this->getMapper()->delete([
             $this->getMapper()->getPrimaryKey() => $id
         ]);
