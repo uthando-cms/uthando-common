@@ -2,10 +2,13 @@
 
 namespace UthandoCommon\Mapper;
 
+use UthandoCommon\Model\ModelAwareInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Mvc\Exception\InvalidPluginException;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ConfigInterface;
+use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Stdlib\Hydrator\HydratorAwareInterface;
 
 class MapperManager extends AbstractPluginManager
 {
@@ -21,18 +24,20 @@ class MapperManager extends AbstractPluginManager
     {
         parent::__construct($configuration);
 
-        $this->addInitializer(array($this, 'injectDbAdapter'));
+        $this->addInitializer([$this, 'injectDbAdapter']);
+        $this->addInitializer([$this, 'injectHydrator']);
+        $this->addInitializer([$this, 'injectModel']);
     }
 
     /**
      * @param $mapper
-     * @return void
      */
     public function injectDbAdapter($mapper)
     {
         if ($mapper instanceof DbAdapterAwareInterface) {
             /* @var $dbAdapter Adapter */
-            $dbAdapter = $this->serviceLocator->get('Zend\Db\Adapter\Adapter');
+            $dbAdapter = (isset($this->creationOptions['dbAdapter'])) ? $this->creationOptions['dbAdapter'] :
+                $this->serviceLocator->get('Zend\Db\Adapter\Adapter');
             $config = $this->serviceLocator->get('config');
 
             // enable foreign key constraints on sqlite.
@@ -46,13 +51,40 @@ class MapperManager extends AbstractPluginManager
     }
 
     /**
+     * @param $mapper
+     */
+    public function injectHydrator($mapper)
+    {
+        if ($mapper instanceof HydratorAwareInterface) {
+            if (isset($this->creationOptions['hydrator'])) {
+                $hydratorManager = $this->serviceLocator->get('HydratorManager');
+                $mapper->setHydrator($hydratorManager->get($this->creationOptions['hydrator']));
+            } else {
+                $mapper->setHydrator(new ClassMethods());
+            }
+        }
+    }
+
+    /**
+     * @param $mapper
+     */
+    public function injectModel($mapper)
+    {
+        if ($mapper instanceof ModelAwareInterface) {
+            if (isset($this->creationOptions['model'])) {
+                $modelManager = $this->serviceLocator->get('UthandoModelManager');
+                $mapper->setModel($modelManager->get($this->creationOptions['model']));
+            }
+        }
+    }
+
+    /**
      * Validate the plugin
      *
      * Checks that the mapper is an instance of MapperInterface
      *
      * @param  mixed $plugin
      * @throws InvalidPluginException
-     * @return void
      */
     public function validatePlugin($plugin)
     {

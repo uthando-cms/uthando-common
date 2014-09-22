@@ -23,8 +23,4 @@ interface MapperInterface
     public function delete($where, $table = null);
 
     public function extract($dataOrModel, HydratorInterface $hydrator = null);
-
-    public function getHydrator();
-
-    public function getModel(array $data = null);
 } 

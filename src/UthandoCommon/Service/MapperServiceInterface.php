@@ -71,17 +71,19 @@ interface MapperServiceInterface
      * Gets mapper class
      *
      * @param string $mapperClass
+     * @param array $options
      * @return AbstractMapper
      */
-    public function getMapper($mapperClass = null);
+    public function getMapper($mapperClass = null, array $options = []);
 
     /**
      * Sets mapper class.
      *
      * @param $mapperClass
+     * @param array $options
      * @return $this
      */
-    public function setMapper($mapperClass);
+    public function setMapper($mapperClass, array $options = []);
 
     /**
      * @param array $options

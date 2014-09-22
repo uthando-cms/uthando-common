@@ -1,6 +1,8 @@
 <?php
 namespace UthandoCommon\Mapper;
 
+use UthandoCommon\Model\ModelAwareInterface;
+use UthandoCommon\Model\ModelAwareTrait;
 use UthandoCommon\Model\ModelInterface;
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Db\ResultSet\AbstractResultSet;
@@ -9,12 +11,19 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
 use Zend\Paginator\Paginator;
 use Zend\Paginator\Adapter\DbSelect;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Stdlib\Hydrator\HydratorAwareInterface;
+use Zend\Stdlib\Hydrator\HydratorAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class AbstractMapper implements MapperInterface, DbAdapterAwareInterface
+class AbstractMapper implements
+    MapperInterface,
+    DbAdapterAwareInterface,
+    HydratorAwareInterface,
+    ModelAwareInterface
 {
-    use AdapterAwareTrait;
+    use AdapterAwareTrait,
+        HydratorAwareTrait,
+        ModelAwareTrait;
     
 	/**
 	 * Name of table
@@ -31,21 +40,9 @@ class AbstractMapper implements MapperInterface, DbAdapterAwareInterface
 	protected $primary;
 	
 	/**
-	 * name of model class
-	 *
-	 * @var string
-	 */
-	protected $model;
-	
-	/**
 	 * @var Sql
 	 */
 	protected $sql;
-	
-	/**
-	 * @var string
-	 */
-	protected $hydrator;
 	
 	/**
 	 * @var HydratingResultSet
@@ -65,10 +62,10 @@ class AbstractMapper implements MapperInterface, DbAdapterAwareInterface
 	/**
 	 * return an instance of Select
 	 * 
-	 * @param string $tableName
+	 * @param string|null $tableName
 	 * @return Select
 	 */
-	public function getSelect($tableName=null)
+	public function getSelect($tableName = null)
 	{
 		return $this->getSql()->select($tableName ?: $this->getTable());
 	}
@@ -381,36 +378,6 @@ class AbstractMapper implements MapperInterface, DbAdapterAwareInterface
 		$hydrator = $hydrator ?: $this->getHydrator();
 		
 		return $hydrator->extract($dataOrModel);
-	}
-	
-	/**
-	 * @return ClassMethods
-	 */
-	public function getHydrator()
-	{
-		if (is_string($this->hydrator) && class_exists($this->hydrator)) {
-			return new $this->hydrator();
-		} else {
-			return new ClassMethods();
-		}
-	}
-
-    /**
-     * @param array $data
-     * @return object|\UthandoCommon\Model\ModelInterface
-     * @throws \RuntimeException
-     */
-    public function getModel(array $data = null)
-	{
-		if (is_string($this->model) && class_exists($this->model)) {
-			if ($data) {
-				$hydrator = $this->getHydrator();
-				return $hydrator->hydrate($data, new $this->model);
-			}
-			return new $this->model;
-		} else {
-			throw new \RuntimeException('could not instantiate model - ' . $this->model);
-		}
 	}
 	
 	/**

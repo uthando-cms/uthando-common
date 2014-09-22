@@ -5,7 +5,6 @@ namespace UthandoCommon\Service;
 use UthandoCommon\Cache\CacheStorageAwareInterface;
 use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Model\ModelInterface;
-use UthandoCommon\UthandoException;
 use Zend\Form\Form;
 
 class AbstractMapperService extends AbstractService implements
@@ -18,11 +17,6 @@ class AbstractMapperService extends AbstractService implements
      * @var array
      */
     protected $mappers = [];
-
-    /**
-     * @var string
-     */
-    protected $mapperClass;
 
     /**
      * return one or more records from database by id
@@ -197,15 +191,15 @@ class AbstractMapperService extends AbstractService implements
      * gets the mapper class for this service
      *
      * @param null|string $mapperClass
+     * @param array $options
      * @return \UthandoCommon\Mapper\AbstractMapper
-     * @throws UthandoException
      */
-    public function getMapper($mapperClass = null)
+    public function getMapper($mapperClass = null, array $options = [])
     {
         $mapperClass = ($mapperClass) ?: $this->serviceAlias;
 
         if (!array_key_exists($mapperClass, $this->mappers)) {
-            $this->setMapper($mapperClass);
+            $this->setMapper($mapperClass, $options);
         }
 
         return $this->mappers[$mapperClass];
@@ -215,15 +209,23 @@ class AbstractMapperService extends AbstractService implements
      * Sets mapper in mapper array for reuse.
      *
      * @param string $mapperClass
-     * @throws UthandoException
+     * @param array $options
      * @return $this
      */
-    public function setMapper($mapperClass)
+    public function setMapper($mapperClass, array $options = [])
     {
         $sl = $this->getServiceLocator();
         /* @var $mapperManager \UthandoCommon\Mapper\MapperManager */
         $mapperManager = $sl->get('UthandoMapperManager');
-        $mapper = $mapperManager->get($mapperClass);
+
+        $defaultOptions = [
+            'model'     => $this->serviceAlias,
+            'hydrator'  => $this->serviceAlias,
+        ];
+
+        $options = array_merge($defaultOptions, $options);
+
+        $mapper = $mapperManager->get($mapperClass, $options);
 
         $this->mappers[$mapperClass] = $mapper;
 

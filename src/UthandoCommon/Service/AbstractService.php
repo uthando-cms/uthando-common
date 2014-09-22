@@ -98,6 +98,21 @@ abstract class AbstractService implements
 	
 		return $form;
 	}
+
+    /**
+     * Gets the default model from ModelManager
+     *
+     * @return \UthandoCommon\Model\ModelInterface
+     */
+    public function getModel()
+    {
+        $sl = $this->getServiceLocator();
+        /* @var $modelManager \UthandoCommon\Model\ModelManager */
+        $modelManager = $sl->get('UthandoModelManager');
+        $model = $modelManager->get($this->serviceAlias);
+
+        return $model;
+    }
 	
 	/**
 	 * Gets the default input filter from InputFilterManager
@@ -115,6 +130,8 @@ abstract class AbstractService implements
 	}
 
     /**
+     * Gets the default hydrator from HydratorManager
+     *
      * @return \Zend\Stdlib\Hydrator\HydratorInterface
      */
     public function getHydrator()

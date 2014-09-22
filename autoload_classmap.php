@@ -27,6 +27,8 @@ return array(
     'UthandoCommon\Model\DateCreatedTrait'                      => __DIR__ . '/src/UthandoCommon/Model/DateCreatedTrait.php',
     'UthandoCommon\Model\DateModifiedTrait'                     => __DIR__ . '/src/UthandoCommon/Model/DateModifiedTrait.php',
     'UthandoCommon\Model\Model'                                 => __DIR__ . '/src/UthandoCommon/Model/Model.php',
+    'UthandoCommon\Model\ModelAwareInterface'                   => __DIR__ . '/src/UthandoCommon/Model/ModelAwareInterface.php',
+    'UthandoCommon\Model\ModelAwareTrait'                       => __DIR__ . '/src/UthandoCommon/Model/ModelAwareTrait.php',
     'UthandoCommon\Model\ModelInterface'                        => __DIR__ . '/src/UthandoCommon/Model/ModelInterface.php',
     'UthandoCommon\Model\ModelManager'                          => __DIR__ . '/src/UthandoCommon/Model/ModelManager.php',
     'UthandoCommon\Model\NestedSet'                             => __DIR__ . '/src/UthandoCommon/Model/NestedSet.php',

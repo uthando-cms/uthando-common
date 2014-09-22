@@ -11,7 +11,7 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
     /**
      * populate relational records.
      *
-     * @param $model \UthandoCommon\Model\Model
+     * @param \UthandoCommon\Model\Model $model
      * @param bool|array $children
      * @return mixed
      */
@@ -39,7 +39,7 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return AbstractService
      * @throws ServiceException
      */
@@ -63,7 +63,7 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
     }
 
     /**
-     * @param $referenceMap
+     * @param string|array $referenceMap
      * @return $this
      */
     public function setReferenceMap($referenceMap)
