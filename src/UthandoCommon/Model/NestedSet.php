@@ -97,7 +97,7 @@ abstract class NestedSet
     /**
      * returns true if there are children
      *
-     * @return boolean
+     * @return bool
      */
     public function hasChildren()
     {

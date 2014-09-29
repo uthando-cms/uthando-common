@@ -12,17 +12,14 @@ use Zend\Db\Sql\Select;
 use Zend\Paginator\Paginator;
 use Zend\Paginator\Adapter\DbSelect;
 use Zend\Stdlib\Hydrator\HydratorAwareInterface;
-use Zend\Stdlib\Hydrator\HydratorAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class AbstractMapper implements
+class AbstractDbMapper implements
     MapperInterface,
     DbAdapterAwareInterface,
     HydratorAwareInterface,
     ModelAwareInterface
 {
     use AdapterAwareTrait,
-        HydratorAwareTrait,
         ModelAwareTrait;
     
 	/**
@@ -356,28 +353,6 @@ class AbstractMapper implements
 		}
 	
 		return $select->order($order);
-	}
-	
-	/**
-	 * 
-	 * @param \UthandoCommon\Model\\UthandoCommon\Model\AbstractModel|array $dataOrModel
-	 * @param HydratorInterface $hydrator
-	 * @throws \InvalidArgumentException
-	 * @return array
-	 */
-	public function extract($dataOrModel, HydratorInterface $hydrator = null)
-	{
-		if (is_array($dataOrModel)) {
-			return $dataOrModel;
-		}
-		
-		if (!$dataOrModel instanceOf ModelInterface) {
-			throw new \InvalidArgumentException('need instance of AbstractModel or AbstractOptions  got: ' . getType($dataOrModel));
-		}
-		
-		$hydrator = $hydrator ?: $this->getHydrator();
-		
-		return $hydrator->extract($dataOrModel);
 	}
 	
 	/**

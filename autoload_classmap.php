@@ -16,7 +16,7 @@ return array(
     'UthandoCommon\Hydrator\Strategy\Null'                      => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/Null.php',
     'UthandoCommon\Hydrator\Strategy\Serialize'                 => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/Serialize.php',
     'UthandoCommon\Hydrator\Strategy\TrueFalse'                 => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/TrueFalse.php',
-    'UthandoCommon\Mapper\AbstractMapper'                       => __DIR__ . '/src/UthandoCommon/Mapper/AbstractMapper.php',
+    'UthandoCommon\Mapper\AbstractDbMapper'                     => __DIR__ . '/src/UthandoCommon/Mapper/AbstractDbMapper.php',
     'UthandoCommon\Mapper\AbstractNestedSet'                    => __DIR__ . '/src/UthandoCommon/Mapper/AbstractNestedSet.php',
     'UthandoCommon\Mapper\DbAdapterAwareInterface'              => __DIR__ . '/src/UthandoCommon/Mapper/DbAdapterAwareInterface.php',
     'UthandoCommon\Mapper\MapperException'                      => __DIR__ . '/src/UthandoCommon/Mapper/MapperException.php',

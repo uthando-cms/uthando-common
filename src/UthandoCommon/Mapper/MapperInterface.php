@@ -1,14 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: shaun
- * Date: 15/09/2014
- * Time: 18:35
- */
 
 namespace UthandoCommon\Mapper;
-
-use Zend\Stdlib\Hydrator\HydratorInterface;
 
 interface MapperInterface
 {
@@ -21,6 +13,4 @@ interface MapperInterface
     public function update(array $data, $where, $table = null);
 
     public function delete($where, $table = null);
-
-    public function extract($dataOrModel, HydratorInterface $hydrator = null);
 } 

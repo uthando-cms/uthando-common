@@ -1,10 +1,9 @@
 <?php
 namespace UthandoCommon\Model;
 
-use UthandoCommon\Model\CollectionException;
-use Iterator;
-use Countable;
 use ArrayAccess;
+use Countable;
+use Iterator;
 
 abstract class Collection implements Iterator, Countable, ArrayAccess
 {
@@ -21,9 +20,11 @@ abstract class Collection implements Iterator, Countable, ArrayAccess
      * @var string
      */
     protected $entityClass;
-    
+
     /**
      * Constructor
+     *
+     * @param array $entities
      */
     public function init(array $entities = [])
     {
@@ -33,12 +34,12 @@ abstract class Collection implements Iterator, Countable, ArrayAccess
         
         $this->rewind();
     }
-    
+
     /**
-     * adds an entity to the colection
-     * 
-     * @param class $entity
-     * @return \Application\Model\AbstractCollection
+     * adds an entity to the collection
+     *
+     * @param object $entity
+     * @return $this
      */
     public function add($entity)
     {   
@@ -65,7 +66,7 @@ abstract class Collection implements Iterator, Countable, ArrayAccess
     }
      
     /**
-     * @return the $entityClass
+     * @return object $entityClass
      */
     public function getEntityClass()
     {
@@ -74,6 +75,8 @@ abstract class Collection implements Iterator, Countable, ArrayAccess
 
 	/**
      * @param string $entityClass
+     *
+     * @return void
      */
     public function setEntityClass($entityClass)
     {
@@ -82,68 +85,71 @@ abstract class Collection implements Iterator, Countable, ArrayAccess
 
 	/**
      * Clear the collection
+     *
+     * @return void
      */
     public function clear()
     {
         $this->entities = [];
     }
-    
+
     /**
-     * Reset the collection (implementation required by Iterator Interface)
+     * Reset the collection
+     *
+     * @return void
      */
     public function rewind()
     {
         reset($this->entities);
     }
-     
+
     /**
-     * Get the current entity in the collection 
-     * (implementation required by Iterator Interface)
+     * @return mixed
      */
     public function current()
     {
         return current($this->entities);
     }
-     
+
     /**
-     * Move to the next entity in the collection 
-     * (implementation required by Iterator Interface)
+     * @return void
      */
     public function next()
     {
         next($this->entities);
     }
-     
+
     /**
-     * Get the key of the current entity in the collection 
-     * (implementation required by Iterator Interface)
+     * @return mixed
      */
     public function key()
     {
         return key($this->entities);
     }
-     
+
     /**
-     * Check if there're more entities in the collection 
-     * (implementation required by Iterator Interface)
+     * @return bool
      */
     public function valid()
     {
         return ($this->current() !== false);
     }
-     
+
     /**
-     * Count the number of entities in the collection 
-     * (implementation required by Countable Interface)
+     * @return int
      */
     public function count()
     {
         return count($this->entities);
     }
-     
+
     /**
-     * Add an entity to the collection 
-     * (implementation required by ArrayAccess interface)
+     * Add an entity to the collection
+     *
+     * @param mixed $key
+     * @param mixed $entity
+     * @return bool|void
+     * @throws CollectionException
      */
     public function offsetSet($key, $entity)
     {
@@ -159,10 +165,12 @@ abstract class Collection implements Iterator, Countable, ArrayAccess
             'The specified entity is not allowed for this collection.'
         );
     }
-     
+
     /**
-     * Remove an entity from the collection 
-     * (implementation required by ArrayAccess interface)
+     * Remove an entity from the collection
+     *
+     * @param mixed $key
+     * @return bool|void
      */
     public function offsetUnset($key)
     {
@@ -183,10 +191,12 @@ abstract class Collection implements Iterator, Countable, ArrayAccess
         
         return false;
     }
-     
+
     /**
-     * Get the specified entity in the collection 
-     * (implementation required by ArrayAccess interface)
+     * Get the specified entity in the collection
+     *
+     * @param mixed $key
+     * @return mixed|null
      */
     public function offsetGet($key)
     {
@@ -194,20 +204,23 @@ abstract class Collection implements Iterator, Countable, ArrayAccess
             $this->entities[$key] :
             null;
     }
-     
+
     /**
-     * Check if the specified entity exists in the collection 
-     * (implementation required by ArrayAccess interface)
+     * Check if the specified entity exists in the collection
+     *
+     * @param mixed $key
+     * @return bool
      */
     public function offsetExists($key)
     {
         return isset($this->entities[$key]);
     }
-    
+
     /**
      * Seek to the given index.
      *
-     * @param int $index seek index
+     * @param int $index
+     * @throws CollectionException
      */
     public function seek($index)
     {

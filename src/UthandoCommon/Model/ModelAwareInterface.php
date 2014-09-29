@@ -2,6 +2,8 @@
 
 namespace UthandoCommon\Model;
 
+use Zend\Stdlib\Hydrator\HydratorInterface;
+
 interface ModelAwareInterface
 {
     /**
@@ -15,4 +17,11 @@ interface ModelAwareInterface
      * @return ModelInterface
      */
     public function setModel(ModelInterface $model);
+
+    /**
+     * @param $dataOrModel
+     * @param HydratorInterface $hydrator
+     * @return array
+     */
+    public function extract($dataOrModel, HydratorInterface $hydrator = null);
 } 

@@ -7,7 +7,7 @@ use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Where;
 use Zend\Db\Sql\Expression;
 
-abstract class AbstractNestedSet extends AbstractMapper
+abstract class AbstractNestedSet extends AbstractDbMapper
 {
 	const INSERT_NODE	= 'insert';
 	const INSERT_CHILD	= 'insertSub';

@@ -27,6 +27,11 @@ abstract class AbstractService implements
     protected $serviceAlias;
 
     /**
+     * @var array
+     */
+    protected $formOptions = [];
+
+    /**
      * @param $service
      * @return AbstractService
      * @throws ServiceException
@@ -63,22 +68,21 @@ abstract class AbstractService implements
      *
      * @param ModelInterface $model
      * @param array $data
-     * @param array $options
      * @param bool $useInputFilter
      * @param bool $useHydrator
      * @return Form
      */
 	public function getForm(ModelInterface $model=null, array $data=null, $useInputFilter=false, $useHydrator=false)
 	{
+        $argv = compact('model', 'data');
+
+        $this->getEventManager()->trigger('pre.form', $this, $this->prepareEventArguments($argv));
+
 		$sl = $this->getServiceLocator();
         /* @var $formElementManager \Zend\Form\FormElementManager */
 		$formElementManager = $sl->get('FormElementManager');
 		/* @var $form \Zend\Form\Form */
-		$form = $formElementManager->get($this->serviceAlias);
-		
-		$argv = compact('form', 'model', 'data');
-		
-		$this->getEventManager()->trigger('form.init', $this, $this->prepareEventArguments($argv));
+		$form = $formElementManager->get($this->serviceAlias, $this->formOptions);
 		
 		if ($useInputFilter) {
 			$form->setInputFilter($this->getInputFilter());
@@ -95,9 +99,29 @@ abstract class AbstractService implements
 		if ($data) {
 			$form->setData($data);
 		}
+
+        $argv = compact('form', 'model', 'data');
+
+        $this->getEventManager()->trigger('form.init', $this, $this->prepareEventArguments($argv));
 	
 		return $form;
 	}
+
+    /**
+     * @return array
+     */
+    public function getFormOptions()
+    {
+        return $this->formOptions;
+    }
+
+    /**
+     * @param array $formOptions
+     */
+    public function setFormOptions($formOptions)
+    {
+        $this->formOptions = $formOptions;
+    }
 
     /**
      * Gets the default model from ModelManager
