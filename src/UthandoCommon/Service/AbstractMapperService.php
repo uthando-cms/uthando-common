@@ -2,16 +2,12 @@
 
 namespace UthandoCommon\Service;
 
-use UthandoCommon\Cache\CacheStorageAwareInterface;
-use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Model\ModelInterface;
 use Zend\Form\Form;
 
 class AbstractMapperService extends AbstractService implements
-    MapperServiceInterface,
-    CacheStorageAwareInterface
+    MapperServiceInterface
 {
-    use CacheTrait;
 
     /**
      * @var array
@@ -28,12 +24,7 @@ class AbstractMapperService extends AbstractService implements
     {
         $id = (int) $id;
 
-        $model = $this->getCacheItem($id);
-
-        if (!$model) {
-            $model = $this->getMapper()->getById($id);
-            $this->setCacheItem($id, $model);
-        }
+        $model = $this->getMapper()->getById($id);
 
         return $model;
     }
@@ -157,7 +148,6 @@ class AbstractMapperService extends AbstractService implements
         } else {
             if ($this->getById($id)) {
                 $result = $this->getMapper()->update($data, [$pk => $id]);
-                $this->removeCacheItem($id);
             } else {
                 throw new ServiceException('ID ' . $id . ' does not exist');
             }
@@ -182,8 +172,6 @@ class AbstractMapperService extends AbstractService implements
             $this->getMapper()->getPrimaryKey() => $id
         ]);
 
-        $this->removeCacheItem($id);
-
         return $result;
     }
 
@@ -192,7 +180,7 @@ class AbstractMapperService extends AbstractService implements
      *
      * @param null|string $mapperClass
      * @param array $options
-     * @return \UthandoCommon\Mapper\AbstractMapper
+     * @return \UthandoCommon\Mapper\MapperInterface
      */
     public function getMapper($mapperClass = null, array $options = [])
     {
