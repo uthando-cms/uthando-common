@@ -9,6 +9,21 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
     protected $referenceMap;
 
     /**
+     * @param array $post
+     * @return \Zend\Db\ResultSet\HydratingResultSet|\Zend\Db\ResultSet\ResultSet|\Zend\Paginator\Paginator
+     */
+    public function search(array $post)
+    {
+        $models = parent::search($post);
+
+        foreach ($models as $model) {
+            $this->populate($model, true);
+        }
+
+        return $models;
+    }
+
+    /**
      * populate relational records.
      *
      * @param \UthandoCommon\Model\Model $model

@@ -53,21 +53,33 @@ abstract class AbstractCrudController extends AbstractActionController
      * @var array
      */
     protected $formOptions = [];
+
+    /**
+     * @var bool
+     */
+    protected $paginate = true;
     
     use SetExceptionMessages;
 
     /**
-     * @param $page
-     * @param $params
-     * @param int $limit
      * @return \Zend\Db\ResultSet\HydratingResultSet|\Zend\Db\ResultSet\ResultSet|\Zend\Paginator\Paginator
      */
-    public function getPaginatorResults($page, $params, $limit = 25)
+    public function getPaginatorResults()
     {
-        return $this->getService()->usePaginator([
-			'limit'	=> $limit,
-			'page'	=> $page
-		])->search(array_merge($this->searchDefaultParams, $params));
+        $params = $this->params()->fromPost();
+        $limit = $this->params()->fromPost('count', 25);
+        $page = (!isset($params['page'])) ? $this->params('page', 1) : $this->params()->fromPost('page', 1);
+
+        $service = $this->getService();
+
+        if ($this->paginate) {
+            $service->usePaginator([
+                'limit'	=> $limit,
+                'page'	=> $page
+            ]);
+        }
+
+        return $service->search(array_merge($this->searchDefaultParams, $params));
     }
 
     /**
@@ -75,10 +87,8 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     public function indexAction()
     {
-    	$page = $this->params()->fromRoute('page', 1);
-    		
     	$viewModel = new ViewModel([
-    		'models' => $this->getPaginatorResults($page, $this->getSearchDefaultParams()),
+    		'models' => $this->getPaginatorResults(),
     	]);
 
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -97,10 +107,8 @@ abstract class AbstractCrudController extends AbstractActionController
     		return $this->redirect()->toRoute($this->getRoute(), $this->params()->fromRoute());
     	}
     		
-    	$params = $this->params()->fromPost();
-    		
     	$viewModel = new ViewModel([
-    		'models' => $this->getPaginatorResults($params['page'], $params, $params['count']),
+    		'models' => $this->getPaginatorResults(),
     	]);
     		
     	$viewModel->setTerminal(true);
