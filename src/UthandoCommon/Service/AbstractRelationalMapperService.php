@@ -1,6 +1,8 @@
 <?php
 namespace UthandoCommon\Service;
 
+use Zend\Db\ResultSet\HydratingResultSet;
+
 abstract class AbstractRelationalMapperService extends AbstractMapperService
 {
     /**
@@ -45,6 +47,16 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
                 $getMethod = (isset($options['getMethod'])) ? $options['getMethod'] : 'getById';
 
                 $childModel = $service->$getMethod($model->$getIdMethod());
+
+                if ($childModel instanceof HydratingResultSet) {
+                    $childModelObjects = [];
+
+                    foreach ($childModel as $row) {
+                        $childModelObjects[] = $row;
+                    }
+
+                    $childModel = $childModelObjects;
+                }
 
                 $model->$setMethod($childModel);
             }
