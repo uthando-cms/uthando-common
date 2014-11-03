@@ -99,7 +99,7 @@ abstract class AbstractCrudController extends AbstractActionController
     }
 
     /**
-     * @return ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function listAction()
     {
@@ -117,7 +117,7 @@ abstract class AbstractCrudController extends AbstractActionController
     }
 
     /**
-     * @return ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function addAction()
     {
@@ -189,11 +189,12 @@ abstract class AbstractCrudController extends AbstractActionController
     }
 
     /**
-     * @return ViewModel
+     * @return \Zend\Http\Response|JsonModel|ViewModel
      */
     public function editAction()
     {
     	$id = (int) $this->params('id', 0);
+
     	if (!$id) {
     		return $this->redirect()->toRoute($this->getRoute(), array_merge($this->params()->fromRoute(),[
     			'action' => 'add'
@@ -209,16 +210,19 @@ abstract class AbstractCrudController extends AbstractActionController
         }
     
     	try {
-    		$model = $this->getService()->getById($id);
-	    
+
+            $pk = $this->getService()->getMapper()->getPrimaryKey();
+            $tableName = $this->getService()->getMapper()->getTable();
+            $modelMethod = 'get' . ucwords($pk);
+
+            $model = $this->getService()->getById($id);
+
 	    	if ($request->isPost()) {
 	    		
 	    		// primary key ids must match. If not throw exception.
-                $pk = $this->getService()->getMapper()->getPrimaryKey();
-	    		$tableName = $this->getService()->getMapper()->getTable();
-	    		$modelMethod = 'get' . ucwords($pk);
+
 	    		$post = $this->params()->fromPost();
-	    		
+
 	    		if ($post[$pk] != $model->$modelMethod()) {
 	    			throw new Exception('Primary keys do not match.');
 	    		}
@@ -255,6 +259,10 @@ abstract class AbstractCrudController extends AbstractActionController
 	    			return $this->redirect()->toRoute($this->getRoute(), $params);
 	    		}
 	    	}
+
+            if (!$model->$modelMethod()) {
+                throw new Exception('No records match key: ' . $id);
+            }
 	    	
 	    	$form = $this->getService()->getForm($model);
 	    	
@@ -279,7 +287,7 @@ abstract class AbstractCrudController extends AbstractActionController
     }
 
     /**
-     * @return \Zend\Http\Response
+     * @return \Zend\Http\Response|JsonModel
      */
     public function deleteAction()
     {
