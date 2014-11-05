@@ -23,7 +23,6 @@ class AbstractMapperService extends AbstractService implements
     public function getById($id)
     {
         $id = (int) $id;
-
         $model = $this->getMapper()->getById($id);
 
         return $model;
@@ -164,13 +163,20 @@ class AbstractMapperService extends AbstractService implements
      */
     public function delete($id)
     {
-        $argv = compact('id');
+        $model = $this->getById($id);
+
+        $argv = compact('id', 'model');
         $argv = $this->prepareEventArguments($argv);
+
         $this->getEventManager()->trigger('pre.delete', $this, $argv);
 
         $result = $this->getMapper()->delete([
             $this->getMapper()->getPrimaryKey() => $id
         ]);
+
+        if ($result) {
+            $this->getEventManager()->trigger('post.delete', $this, $argv);
+        }
 
         return $result;
     }
