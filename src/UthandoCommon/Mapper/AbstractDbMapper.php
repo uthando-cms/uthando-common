@@ -395,7 +395,7 @@ class AbstractDbMapper implements
      * @param Select $select
      * @return string $sqlString
      */
-    public function getSqlString(Select $select)
+    public function getSqlString($select)
     {
     	$adapterPlatform	= $this->getAdapter()->getPlatform();
     	$sqlString			= $select->getSqlString($adapterPlatform);

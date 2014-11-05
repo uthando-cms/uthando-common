@@ -86,6 +86,8 @@ class AbstractMapperService extends AbstractService implements
         $saved = $this->save($form->getData());
 
         if ($saved) {
+            $argv = compact('post', 'form', 'saved');
+            $argv = $this->prepareEventArguments($argv);
             $this->getEventManager()->trigger('post.add', $this, $argv);
         }
 

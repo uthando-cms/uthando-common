@@ -41,7 +41,7 @@ class MapperManager extends AbstractPluginManager
             $config = $this->serviceLocator->get('config');
 
             // enable foreign key constraints on sqlite.
-            if (isset($config['db']['sqlite_constraints']) && !$this->sqliteConstraints) {
+            if (isset($config['db']['sqlite_constraints']) && $config['db']['sqlite_constraints']  && !$this->sqliteConstraints) {
                 $dbAdapter->query('PRAGMA FOREIGN_KEYS = ON', Adapter::QUERY_MODE_EXECUTE);
                 $this->sqliteConstraints = true;
             }

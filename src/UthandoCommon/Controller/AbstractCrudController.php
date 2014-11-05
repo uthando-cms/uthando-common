@@ -181,7 +181,7 @@ abstract class AbstractCrudController extends AbstractActionController
         $form = $this->getService()->getForm();
         $argv = $this->getEventManager()->prepareArgs(compact('form'));
         $this->getEventManager()->trigger('add.action', $this, $argv);
-    
+
     	return $viewModel->setVariables([
     		'form' => $form,
     	    'routeParams' => $this->params()->fromRoute(),
@@ -275,11 +275,12 @@ abstract class AbstractCrudController extends AbstractActionController
             }
 
     		$this->setExceptionMessages($e);
+
     		return $this->redirect()->toRoute($this->getRoute(), array_merge($this->params()->fromRoute(), [
     			'action' => 'list'
     		]));
     	}
-    
+
     	return $viewModel->setVariables([
     		'form'	=> $form,
     		'model'	=> $model,
