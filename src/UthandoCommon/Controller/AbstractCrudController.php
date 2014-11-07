@@ -161,7 +161,18 @@ abstract class AbstractCrudController extends AbstractActionController
                         $this->flashMessenger()->addErrorMessage(sprintf(self::ADD_ERROR, $tableName));
                     }
 
-                    return $this->redirect()->toRoute($this->getRoute(), $this->params()->fromRoute());
+                    $routeParams = $this->params()->fromRoute();
+                    $route = $this->getRoute();
+
+                    if ('1' == $this->params()->fromPost('redirectToEdit', null)) {
+                        $routeParams = array_merge($routeParams, [
+                            'action'    => 'edit',
+                            'id'        => $result,
+                        ]);
+                        $route = $route . '/edit';
+                    }
+
+                    return $this->redirect()->toRoute($route, $routeParams);
 	    		}
     		} catch (Exception $e) {
                 if ($request->isXmlHttpRequest()) {
