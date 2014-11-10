@@ -144,6 +144,13 @@ class AbstractMapperService extends AbstractService implements
         $id = $data[$pk];
         unset($data[$pk]);
 
+        // if values not set then don't save them.
+        foreach ($data as $key => $value) {
+            if (null === $value || '' === $value) {
+                unset($data[$key]);
+            }
+        }
+
         if (0 === $id || null === $id || '' === $id) {
             $result = $this->getMapper()->insert($data);
         } else {

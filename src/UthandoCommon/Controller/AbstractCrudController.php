@@ -45,6 +45,11 @@ abstract class AbstractCrudController extends AbstractActionController
     protected $route;
 
     /**
+     * @var array
+     */
+    protected $routes = [];
+
+    /**
      * @var bool
      */
     protected $addRouteParams = true;
@@ -104,7 +109,7 @@ abstract class AbstractCrudController extends AbstractActionController
     public function listAction()
     {
     	if (!$this->getRequest()->isXmlHttpRequest()) {
-    		return $this->redirect()->toRoute($this->getRoute(), $this->params()->fromRoute());
+    		return $this->redirect()->toRoute($this->getRoute('list'), $this->params()->fromRoute());
     	}
     		
     	$viewModel = new ViewModel([
@@ -162,7 +167,7 @@ abstract class AbstractCrudController extends AbstractActionController
                     }
 
                     $routeParams = $this->params()->fromRoute();
-                    $route = $this->getRoute();
+                    $route = $this->getRoute('add');
 
                     if ('1' == $this->params()->fromPost('redirectToEdit', null)) {
                         $routeParams = array_merge($routeParams, [
@@ -267,7 +272,7 @@ abstract class AbstractCrudController extends AbstractActionController
 	    			
 	    			$params = ($this->addRouteParams) ? $this->params()->fromRoute() : [];
 	                
-	    			return $this->redirect()->toRoute($this->getRoute(), $params);
+	    			return $this->redirect()->toRoute($this->getRoute('edit'), $params);
 	    		}
 	    	}
 
@@ -287,7 +292,7 @@ abstract class AbstractCrudController extends AbstractActionController
 
     		$this->setExceptionMessages($e);
 
-    		return $this->redirect()->toRoute($this->getRoute(), array_merge($this->params()->fromRoute(), [
+    		return $this->redirect()->toRoute($this->getRoute('edit'), array_merge($this->params()->fromRoute(), [
     			'action' => 'list'
     		]));
     	}
@@ -347,7 +352,7 @@ abstract class AbstractCrudController extends AbstractActionController
     		}
     	}
     
-    	return $this->redirect()->toRoute($this->getRoute(), $this->params()->fromRoute());
+    	return $this->redirect()->toRoute($this->getRoute('delete'), $this->params()->fromRoute());
     }
 
     /**
@@ -403,11 +408,18 @@ abstract class AbstractCrudController extends AbstractActionController
     }
 
     /**
+     * @param null $route
      * @return string
      */
-    public function getRoute()
+    public function getRoute($route = null)
     {
-    	return $this->route;
+        if ($route && isset($this->routes[$route])) {
+            $route = $this->routes['route'];
+        } else {
+            $route = $this->route;
+        }
+
+    	return $route;
     }
 
     /**
