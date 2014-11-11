@@ -75,8 +75,9 @@ abstract class AbstractService implements
 	public function getForm(ModelInterface $model=null, array $data=null, $useInputFilter=false, $useHydrator=false)
 	{
         $argv = compact('model', 'data');
-
-        $this->getEventManager()->trigger('pre.form', $this, $this->prepareEventArguments($argv));
+        $argv = $this->prepareEventArguments($argv);
+        $this->getEventManager()->trigger('pre.form', $this, $argv);
+        $data = $argv['data'];
 
 		$sl = $this->getServiceLocator();
         /* @var $formElementManager \Zend\Form\FormElementManager */
