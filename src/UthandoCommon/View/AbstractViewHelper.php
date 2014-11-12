@@ -18,11 +18,12 @@ class AbstractViewHelper extends AbstractHelper implements ServiceLocatorAwareIn
      * @var array
      */
     protected $config;
-    
+
     /**
      * Gets the config options as an array, if a key is supplied then that keys options is returned.
-     * 
+     *
      * @param string $key
+     * @return array|null
      * @throws array|InvalidArgumentException
      */
     protected function getConfig($key=null)
@@ -41,11 +42,11 @@ class AbstractViewHelper extends AbstractHelper implements ServiceLocatorAwareIn
         
         return $this->config[$key];
     }
-    
+
     /**
      * Sets the config array.
-     * 
-     * @return \Application\View\AbstractHelper
+     *
+     * @return $this
      */
     protected function setConfig()
     {
