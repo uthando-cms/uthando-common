@@ -173,6 +173,8 @@ class AbstractDbMapper implements
 		$insert = $sql->insert($table);
 	
 		$insert->values($data);
+
+        \FB::info($this->getSqlString($insert));
 	
 		$statement = $sql->prepareStatementForSqlObject($insert);
 		$result = $statement->execute();

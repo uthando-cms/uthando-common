@@ -145,9 +145,10 @@ class AbstractMapperService extends AbstractService implements
         unset($data[$pk]);
 
         // if values not set then don't save them.
+        // doesn't work so allow null values.
         foreach ($data as $key => $value) {
-            if (null === $value || '' === $value) {
-                unset($data[$key]);
+            if ('' === $value) {
+                $data[$key] = null;
             }
         }
 
