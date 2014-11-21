@@ -1,7 +1,15 @@
 <?php
+/**
+ * Uthando CMS (http://www.shaunfreeman.co.uk/)
+ *
+ * @package   UthandoCommon\Event
+ * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
+ * @link      https://github.com/uthando-cms for the canonical source repository
+ * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
+ * @license   see LICENSE.txt
+ */
 namespace UthandoCommon\Event;
 
-use Exception;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
@@ -9,18 +17,26 @@ use Zend\Http\Request;
 use Zend\Mvc\Application as MvcApplication;
 use Zend\Mvc\MvcEvent;
 
+/**
+ * Class MvcListener
+ * @package UthandoCommon\Event
+ */
 class MvcListener implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
 
     /**
-     * {@inheritDoc}
+     * @param EventManagerInterface $events
      */
     public function attach(EventManagerInterface $events)
     {
 		$this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'requireSsl'], -10000);
     }
-    
+
+    /**
+     * @param MvcEvent $event
+     * @return mixed
+     */
     public function requireSsl(MvcEvent $event)
     {
     	$config = $event->getApplication()->getConfig();
@@ -69,7 +85,12 @@ class MvcListener implements ListenerAggregateInterface
     	
     	return;
     }
-    
+
+    /**
+     * @param $uri
+     * @param $response
+     * @return mixed
+     */
     private function redirect($uri, $response)
     {
         $response->getHeaders()->addHeaderLine('Location', $uri->toString());

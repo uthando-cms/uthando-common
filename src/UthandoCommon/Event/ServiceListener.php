@@ -1,4 +1,13 @@
 <?php
+/**
+ * Uthando CMS (http://www.shaunfreeman.co.uk/)
+ *
+ * @package   UthandoCommon\Event
+ * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
+ * @link      https://github.com/uthando-cms for the canonical source repository
+ * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
+ * @license   see LICENSE.txt
+ */
 namespace UthandoCommon\Event;
 
 use Zend\EventManager\Event;
@@ -6,12 +15,16 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 
+/**
+ * Class ServiceListener
+ * @package UthandoCommon\Event
+ */
 class ServiceListener implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
 
     /**
-     * {@inheritDoc}
+     * @param EventManagerInterface $events
      */
     public function attach(EventManagerInterface $events)
     {
@@ -19,7 +32,10 @@ class ServiceListener implements ListenerAggregateInterface
         
 		$this->listeners[] = $events->attach('UthandoCommon\Service\AbstractService', 'pre.edit', [$this, 'edit']);
     }
-    
+
+    /**
+     * @param Event $e
+     */
     public function edit(Event $e)
     {
         /* @var $model \UthandoCommon\Model\ModelInterface */

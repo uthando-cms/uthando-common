@@ -2,7 +2,7 @@
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
  *
- * @package   UthandoCommon
+ * @package   UthandoCommon\Controller
  * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
  * @link      https://github.com/uthando-cms for the canonical source repository
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
@@ -11,6 +11,7 @@
 namespace UthandoCommon\Controller;
 
 use Exception;
+use Zend\EventManager\EventManager;
 use Zend\Form\Form;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -20,7 +21,9 @@ use Zend\View\Model\ViewModel;
 /**
  * Class AbstractCrudController
  *
+ * @package UthandoCommon\Controller
  * @method Request getRequest()
+ * @method EventManager getEventManager()
  */
 abstract class AbstractCrudController extends AbstractActionController
 {   
