@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Uthando CMS (http://www.shaunfreeman.co.uk/)
+ *
+ * @package   UthandoCommon
+ * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
+ * @link      https://github.com/uthando-cms for the canonical source repository
+ * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
+ * @license   see LICENSE.txt
+ */
 namespace UthandoCommon\Mapper;
 
 use Zend\Db\ResultSet\ResultSet;
@@ -7,6 +15,10 @@ use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Where;
 use Zend\Db\Sql\Expression;
 
+/**
+ * Class AbstractNestedSet
+ * @package UthandoCommon\Mapper
+ */
 abstract class AbstractNestedSet extends AbstractDbMapper
 {
 	const INSERT_NODE	= 'insert';
