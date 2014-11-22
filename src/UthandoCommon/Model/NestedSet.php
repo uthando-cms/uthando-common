@@ -32,11 +32,6 @@ abstract class NestedSet
     protected $depth;
 
     /**
-     * @var int
-     */
-    protected $width;
-
-    /**
      * @return int
      */
     public function getLft()
@@ -91,19 +86,11 @@ abstract class NestedSet
     }
 
     /**
-     * @param int $width
-     */
-    public function setWidth($width)
-    {
-        $this->width = $width;
-    }
-
-    /**
      * @return int
      */
-    public function getWidth()
+    public function width()
     {
-        return $this->width;
+        return ($this->getRgt() - $this->getLft()) + 1;
     }
 
     /**

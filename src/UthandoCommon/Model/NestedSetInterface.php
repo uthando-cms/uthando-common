@@ -52,13 +52,7 @@ interface NestedSetInterface
     /**
      * @return int
      */
-    public function getWidth();
-
-    /**
-     * @param int $width
-     * @return $this
-     */
-    public function setWidth($width);
+    public function width();
 
     /**
      * @return bool

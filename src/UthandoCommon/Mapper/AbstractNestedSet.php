@@ -10,6 +10,7 @@
  */
 namespace UthandoCommon\Mapper;
 
+use UthandoCommon\Hydrator\NestedSetInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Where;
@@ -18,6 +19,7 @@ use Zend\Db\Sql\Expression;
 /**
  * Class AbstractNestedSet
  * @package UthandoCommon\Mapper
+ * @method NestedSetInterface getHydrator()
  */
 abstract class AbstractNestedSet extends AbstractDbMapper
 {
@@ -242,6 +244,73 @@ abstract class AbstractNestedSet extends AbstractDbMapper
         
         return $insertId;
     }
+
+    /**
+     * Move node and/or it's children
+     *
+     * @param array $data
+     * @param int $position
+     * @param string $insertType
+     * @return int
+     */
+    public function move(array $data, $position = 0, $insertType = self::INSERT_NODE)
+    {
+        // get key of node we are moving.
+        $id = $data[$this->getPrimaryKey()];
+
+        $this->getHydrator()->addDepth();
+
+        // node and it's children
+        $select = $this->getDecendentsByParentId($id, false);
+        $nodes = $this->fetchResult($select);
+
+        $width = $nodes->current()->width();
+
+        // take out the left and right values of list from database.
+        $where = new Where();
+        $where->between(self::COLUMN_LEFT, $nodes->current()->getLft(), $nodes->current()->getRgt());
+        $result = $this->update([
+            'lft' => null,
+            'rgt' => null,
+        ], $where);
+
+        // update left and right values.
+        $this->updateTree($nodes->current()->getRgt(), '-', $width);
+
+        // get the new parent and it's children.
+        // make room for moved node
+        if ($position != 0) {
+            /* @var $parent \UthandoCommon\Model\NestedSet */
+            $parent = $this->getById($position);
+            $lft_rgt = ($insertType === self::INSERT_NODE) ? $parent->getRgt() : $parent->getLft();
+        } else {
+            $lft_rgt = -1;
+        }
+
+        $this->updateTree($lft_rgt, '+', $width);
+
+        // insert moved category.
+        $reduce = $nodes->current()->getRgt() - $width;
+        $getter = 'get' . ucfirst($this->getPrimaryKey());
+
+        /* @var $row \UthandoCommon\Model\NestedSet */
+        foreach ($nodes as $row) {
+            $lft = ($row->getLft() - $reduce);
+            $rgt = ($row->getRgt() - $reduce);
+
+            if ($position != 0) {
+                $rgt += $lft_rgt;
+                $lft += $lft_rgt;
+            }
+
+            $result = $this->update([
+                'rgt' => $rgt,
+                'lft' => $lft,
+            ], [$this->getPrimaryKey() => $row->$getter()]);
+        }
+
+        return $result;
+    }
     
     /**
      * Deletes a row from tree.
@@ -266,7 +335,7 @@ abstract class AbstractNestedSet extends AbstractDbMapper
         $result = parent::delete($where, $table);
         
         if ($result) {
-            $this->updateTree($row->getRgt(), '-', $row->getWidth());
+            $this->updateTree($row->getRgt(), '-', $row->width());
         }
         
         return $result;
