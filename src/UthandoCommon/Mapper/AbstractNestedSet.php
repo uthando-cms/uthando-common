@@ -284,7 +284,7 @@ abstract class AbstractNestedSet extends AbstractDbMapper
             $parent = $this->getById($position);
             $lft_rgt = ($insertType === self::INSERT_NODE) ? $parent->getRgt() : $parent->getLft();
         } else {
-            $lft_rgt = -1;
+            $lft_rgt = 0;
         }
 
         $this->updateTree($lft_rgt, '+', $width);
