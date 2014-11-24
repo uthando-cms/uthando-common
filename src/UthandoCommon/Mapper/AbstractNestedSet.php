@@ -264,6 +264,7 @@ abstract class AbstractNestedSet extends AbstractDbMapper
         $select = $this->getDecendentsByParentId($id, false);
         $nodes = $this->fetchResult($select);
 
+        // get the width of the node.
         $width = $nodes->current()->width();
 
         // take out the left and right values of list from database.
@@ -277,8 +278,8 @@ abstract class AbstractNestedSet extends AbstractDbMapper
         // update left and right values.
         $this->updateTree($nodes->current()->getRgt(), '-', $width);
 
-        // get the new parent and it's children.
-        // make room for moved node
+        // get the new parent and it's children
+        // and make room for moved node
         if ($position != 0) {
             /* @var $parent \UthandoCommon\Model\NestedSet */
             $parent = $this->getById($position);
@@ -287,6 +288,7 @@ abstract class AbstractNestedSet extends AbstractDbMapper
             $lft_rgt = 0;
         }
 
+        // update left and right values
         $this->updateTree($lft_rgt, '+', $width);
 
         // insert moved category.
