@@ -25,9 +25,10 @@ interface MapperServiceInterface
      * return one or more records from database by id
      *
      * @param $id
+     * @param $col
      * @return array|mixed|ModelInterface
      */
-    public function getById($id);
+    public function getById($id, $col);
 
     /**
      * fetch all records form database

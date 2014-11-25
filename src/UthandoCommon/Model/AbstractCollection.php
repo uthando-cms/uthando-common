@@ -13,12 +13,13 @@ namespace UthandoCommon\Model;
 use ArrayAccess;
 use Countable;
 use Iterator;
+use SeekableIterator;
 
 /**
  * Class Collection
  * @package UthandoCommon\Model
  */
-abstract class Collection implements Iterator, Countable, ArrayAccess
+abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, SeekableIterator
 {
     /**
      * collection of entities.

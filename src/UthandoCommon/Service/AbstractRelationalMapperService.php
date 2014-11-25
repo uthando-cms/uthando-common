@@ -59,7 +59,7 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
                 $setMethod = 'set' . ucfirst($name);
                 $getMethod = (isset($options['getMethod'])) ? $options['getMethod'] : 'getById';
 
-                $childModel = $service->$getMethod($model->$getIdMethod());
+                $childModel = $service->$getMethod($model->$getIdMethod(), $options['refCol']);
 
                 if ($childModel instanceof HydratingResultSet) {
                     $childModelObjects = [];

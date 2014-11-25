@@ -10,6 +10,8 @@
  */
 namespace UthandoCommon\Service;
 
+use UthandoCommon\Cache\CacheStorageAwareInterface;
+use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Model\ModelInterface;
 use Zend\Form\Form;
 
@@ -17,9 +19,9 @@ use Zend\Form\Form;
  * Class AbstractMapperService
  * @package UthandoCommon\Service
  */
-class AbstractMapperService extends AbstractService implements
-    MapperServiceInterface
+class AbstractMapperService extends AbstractService implements MapperServiceInterface, CacheStorageAwareInterface
 {
+    use CacheTrait;
 
     /**
      * @var array
@@ -30,12 +32,18 @@ class AbstractMapperService extends AbstractService implements
      * return one or more records from database by id
      *
      * @param $id
+     * @param null $col
      * @return array|mixed|ModelInterface
      */
-    public function getById($id)
+    public function getById($id, $col = null)
     {
         $id = (int) $id;
-        $model = $this->getMapper()->getById($id);
+        $model = $this->getCacheItem($id);
+
+        if (!$model) {
+            $model = $this->getMapper()->getById($id, $col);
+            $this->setCacheItem($id, $model);
+        }
 
         return $model;
     }
@@ -58,15 +66,15 @@ class AbstractMapperService extends AbstractService implements
      */
     public function search(array $post)
     {
-        $sort = (isset($post['sort'])) ? (string) $post['sort'] : '';
+        $sort = (isset($post['sort'])) ? (string)$post['sort'] : '';
         unset($post['sort'], $post['count'], $post['offset'], $post['page']);
 
         $searches = array();
 
-        foreach($post as $key => $value) {
+        foreach ($post as $key => $value) {
             $searches[] = [
-                'searchString'	=> (string) $value,
-                'columns'		=> explode('-', $key),
+                'searchString' => (string)$value,
+                'columns'      => explode('-', $key),
             ];
         }
 
@@ -159,7 +167,7 @@ class AbstractMapperService extends AbstractService implements
         // if values not set then don't save them.
         // doesn't work so allow null values.
         foreach ($data as $key => $value) {
-            if ('' == $value) {
+            if ('' === $value) {
                 $data[$key] = null;
             }
         }
@@ -173,6 +181,8 @@ class AbstractMapperService extends AbstractService implements
                 throw new ServiceException('ID ' . $id . ' does not exist');
             }
         }
+
+        $this->getCache()->clearByNamespace($this->getCache()->getOptions()->getNamespace());
 
         return $result;
     }
@@ -197,6 +207,7 @@ class AbstractMapperService extends AbstractService implements
         ]);
 
         if ($result) {
+            $this->removeCacheItem($id);
             $this->getEventManager()->trigger('post.delete', $this, $argv);
         }
 
@@ -254,7 +265,10 @@ class AbstractMapperService extends AbstractService implements
      */
     public function usePaginator($options = [])
     {
-        $this->getMapper()->usePaginator($options);
+        $this->getMapper()
+            ->setUsePaginator(true)
+            ->setPaginatorOptions($options);
+
         return $this;
     }
 } 

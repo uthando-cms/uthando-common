@@ -284,7 +284,7 @@ abstract class AbstractCrudController extends AbstractActionController
 	    			
 	    			$params = ($this->addRouteParams) ? $this->params()->fromRoute() : [];
 	                
-	    			return $this->redirect()->toRoute($this->getRoute('edit'), $params);
+	    			//return $this->redirect()->toRoute($this->getRoute('edit'), $params);
 	    		}
 	    	}
 

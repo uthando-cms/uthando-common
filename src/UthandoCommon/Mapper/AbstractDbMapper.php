@@ -62,12 +62,12 @@ class AbstractDbMapper implements
 	/**
 	 * @var boolean
 	 */
-	protected $usePaginator;
+	protected $usePaginator = false;
 	
 	/**
 	 * @var array
 	 */
-	protected $paginatorOptions;
+	protected $paginatorOptions = [];
 	
 	/**
 	 * return an instance of Select
@@ -101,11 +101,13 @@ class AbstractDbMapper implements
      * Gets one or more rows by its id
      *
      * @param $id
+     * @param null|string $col
      * @return array|ModelInterface
      */
-    public function getById($id)
+    public function getById($id, $col = null)
 	{
-        $select = $this->getSelect()->where([$this->getPrimaryKey() => $id]);
+        $col = ($col) ?: $this->getPrimaryKey();
+        $select = $this->getSelect()->where([$col => $id]);
         $resultSet = $this->fetchResult($select);
 
         if ($resultSet->count() > 1) {
@@ -235,17 +237,24 @@ class AbstractDbMapper implements
 	
 		return $statement->execute();
 	}
-	
-	/**
-	 * @param array $paginatorOptions
-	 * @return \UthandoCommon\Mapper\AbstractMapper
-	 */
-	public function usePaginator(array $paginatorOptions)
+
+    /**
+     * @param $use
+     * @return $this
+     */
+	public function setUsePaginator($use)
 	{
-		$this->usePaginator = true;
-		$this->setPaginatorOptions($paginatorOptions);
+		$this->usePaginator = $use;
 		return $this;
 	}
+
+    /**
+     * @return bool
+     */
+    public function usePaginator()
+    {
+        return $this->usePaginator;
+    }
 	
 	/**
 	 * @return array
@@ -257,7 +266,7 @@ class AbstractDbMapper implements
 
 	/**
 	 * @param array $paginatorOptions
-	 * @return \UthandoCommon\Mapper\AbstractMapper
+	 * @return $this
 	 */
 	public function setPaginatorOptions(array $paginatorOptions)
 	{
@@ -277,7 +286,7 @@ class AbstractDbMapper implements
 		$resultSet = $resultSet ?: $this->getResultSet();
 		$adapter = new DbSelect($select, $this->getAdapter(), $resultSet);
 		$paginator = new Paginator($adapter);
-		
+
 		$options = $this->getPaginatorOptions();
 		
 		if (isset($options['limit'])) {
@@ -287,7 +296,7 @@ class AbstractDbMapper implements
 		if (isset($options['page'])) {
 		    $paginator->setCurrentPageNumber($options['page']);
 		}
-	
+
 		$paginator->setPageRange(5);
 	
 		return $paginator;
@@ -304,16 +313,16 @@ class AbstractDbMapper implements
 	{
 		$resultSet = $resultSet ?: $this->getResultSet();
 		$resultSet->buffer();
-		
-		if($this->usePaginator) {
-			$this->usePaginator = false;
+
+		if($this->usePaginator()) {
+			$this->setUsePaginator(false);
 			$resultSet = $this->paginate($select, $resultSet);
 		} else {
             $statement = $this->getSql()->prepareStatementForSqlObject($select);
             $result = $statement->execute();
             $resultSet->initialize($result);
 		}
-	
+
 		return $resultSet;
 	}
 	
