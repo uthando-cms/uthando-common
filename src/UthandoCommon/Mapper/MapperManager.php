@@ -52,6 +52,10 @@ class MapperManager extends AbstractPluginManager
                 $this->serviceLocator->get('Zend\Db\Adapter\Adapter');
             $config = $this->serviceLocator->get('config');
 
+            if (class_exists('FB')) {
+                \FB::info(get_class($mapper), __METHOD__);
+            }
+
             // enable foreign key constraints on sqlite.
             if (isset($config['db']['sqlite_constraints']) && $config['db']['sqlite_constraints']  && !$this->sqliteConstraints) {
                 $dbAdapter->query('PRAGMA FOREIGN_KEYS = ON', Adapter::QUERY_MODE_EXECUTE);

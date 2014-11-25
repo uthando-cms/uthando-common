@@ -60,7 +60,7 @@ class MvcListener implements ListenerAggregateInterface
     	$params    = $match->getParams();
     	
     	/**
-    	 * If we have a route tht defines 'force-ssl' prefer that instruction above
+    	 * If we have a route that defines 'force-ssl' prefer that instruction above
     	 * anything else and redirect if appropriate
     	 *
     	 * Possible values of 'force-ssl' param are:
