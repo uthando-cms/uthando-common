@@ -10,11 +10,11 @@
  */
 namespace UthandoCommon\Service;
 
-use UthandoCommon\Cache\CacheStorageAwareInterface;
 use Zend\Mvc\Exception\InvalidPluginException;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ConfigInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager as ZendServiceManager;
 use Zend\Stdlib\InitializableInterface;
@@ -32,6 +32,8 @@ class ServiceManager extends ZendServiceManager implements ServiceLocatorAwareIn
      */
     protected $serviceLocator;
 
+    use ServiceLocatorAwareTrait;
+
     /**
      * @param ConfigInterface $config
      */
@@ -44,6 +46,8 @@ class ServiceManager extends ZendServiceManager implements ServiceLocatorAwareIn
     }
 
     /**
+     * Sets the service locator in service.
+     *
      * @param $service
      */
     public function injectServiceLocator($service)
@@ -109,28 +113,6 @@ class ServiceManager extends ZendServiceManager implements ServiceLocatorAwareIn
         }
         parent::setService($name, $service, $shared);
         return $this;
-    }
-
-    /**
-     * Set the main service locator so factories can have access to it to pull deps
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return AbstractPluginManager
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-        return $this;
-    }
-
-    /**
-     * Get the main plugin manager. Useful for fetching dependencies from within factories.
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
     }
 
     /**
