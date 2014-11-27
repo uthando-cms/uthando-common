@@ -10,9 +10,10 @@
  */
 namespace UthandoCommon;
 
-use Exception;
 use UthandoCommon\Event\MvcListener;
 use UthandoCommon\Event\ServiceListener;
+use Zend\Console\Adapter\AdapterInterface as Console;
+use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\MvcEvent;
 
@@ -20,7 +21,7 @@ use Zend\Mvc\MvcEvent;
  * Class Module
  * @package UthandoCommon
  */
-class Module
+class Module implements ConsoleBannerProviderInterface
 {
     public function init(ModuleManager $moduleManager)
     {
@@ -38,6 +39,13 @@ class Module
             'uthando_models',
             'UthandoCommon\Model\ModelInterface',
             'getUthandoModelConfig'
+        );
+
+        $serviceListener->addServiceManager(
+            'UthandoServiceManager',
+            'uthando_services',
+            'UthandoCommon\Service\ServiceInterface',
+            'getUthandoServiceConfig'
         );
     }
 
@@ -70,6 +78,11 @@ class Module
         return include __DIR__ . '/config/viewHelper.config.php';
     }
 
+    public function getUthandoServiceConfig()
+    {
+        return include __DIR__ . '/config/uthandoServices.config.php';
+    }
+
     public function getAutoloaderConfig()
     {
         return [
@@ -77,5 +90,17 @@ class Module
                 __DIR__ . '/autoload_classmap.php'
             ],
         ];
+    }
+
+    /**
+     * @param Console $console
+     * @return string
+     */
+    public function getConsoleBanner(Console $console){
+        return
+            "==-------------------------------------------------------==\n" .
+            "        Welcome to Uthando CMS Console-enabled app         \n" .
+            "==-------------------------------------------------------==\n" .
+            "Version 1.0\n";
     }
 }

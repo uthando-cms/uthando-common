@@ -13,10 +13,10 @@ namespace UthandoCommon\Service;
 use Zend\Mvc\Service\AbstractPluginManagerFactory;
 
 /**
- * Class MapperManagerFactory
+ * Class ServiceManagerFactory
  * @package UthandoCommon\Service
  */
-class MapperManagerFactory extends AbstractPluginManagerFactory
+class ServiceManagerFactory extends AbstractPluginManagerFactory
 {
-    const PLUGIN_MANAGER_CLASS = 'UthandoCommon\Mapper\MapperManager';
+    const PLUGIN_MANAGER_CLASS = 'UthandoCommon\Service\ServiceManager';
 } 

@@ -69,7 +69,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         $sort = (isset($post['sort'])) ? (string)$post['sort'] : '';
         unset($post['sort'], $post['count'], $post['offset'], $post['page']);
 
-        $searches = array();
+        $searches = [];
 
         foreach ($post as $key => $value) {
             $searches[] = [
@@ -182,7 +182,11 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
             }
         }
 
-        $this->getCache()->clearByNamespace($this->getCache()->getOptions()->getNamespace());
+        $this->getCache()->clearByNamespace(
+            $this->getCache()
+                ->getOptions()
+                ->getNamespace()
+        );
 
         return $result;
     }

@@ -19,8 +19,43 @@ use DateTime as DateTimeClass;
  */
 class DateTime implements StrategyInterface
 {
+    /**
+     * @var string
+     */
 	protected $dateFormat = 'Y-m-d H:i:s';
-	
+
+    /**
+     * @param null|string $dateFormat
+     */
+    function __construct($dateFormat = null)
+    {
+        if ($dateFormat) {
+            $this->dateFormat = $dateFormat;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getDateFormat()
+    {
+        return $this->dateFormat;
+    }
+
+    /**
+     * @param string $dateFormat
+     * @return $this
+     */
+    public function setDateFormat($dateFormat)
+    {
+        $this->dateFormat = $dateFormat;
+        return $this;
+    }
+
+    /**
+     * @param mixed $value
+     * @return string
+     */
 	public function extract($value)
 	{
 		if (!$value instanceof DateTimeClass) {
@@ -30,6 +65,10 @@ class DateTime implements StrategyInterface
 		return $value->format($this->dateFormat);
 	}
 
+    /**
+     * @param string $value
+     * @return \DateTime|null
+     */
 	public function hydrate($value)
 	{
 		if (is_string($value) && '' === $value) {

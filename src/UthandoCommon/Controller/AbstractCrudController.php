@@ -36,20 +36,12 @@ abstract class AbstractCrudController extends AbstractActionController
     
     const FORM_ERROR		= 'There were one or more issues with your submission. Please correct them as indicated below.';
 
+    use ServiceTrait;
+
     /**
      * @var array
      */
     protected $searchDefaultParams = [];
-
-    /**
-     * @var string
-     */
-    protected $serviceName;
-
-    /**
-     * @var array
-     */
-    protected $service = [];
 
     /**
      * @var string
@@ -365,40 +357,6 @@ abstract class AbstractCrudController extends AbstractActionController
     	}
     
     	return $this->redirect()->toRoute($this->getRoute('delete'), $this->params()->fromRoute());
-    }
-
-    /**
-     * @return string
-     */
-    protected function getServiceName()
-    {
-    	return $this->serviceName;
-    }
-
-    /**
-     * @param string $serviceName
-     * @return $this
-     */
-    public function setServiceName($serviceName)
-    {
-        $this->serviceName = $serviceName;
-        return $this;
-    }
-    
-    /**
-     * @param string $service
-     * @return \UthandoCommon\Service\AbstractMapperService|\UthandoCommon\Service\AbstractService
-     */
-    protected function getService($service = null)
-    {
-        $service = (is_string($service)) ? $service : $this->getServiceName();
-        
-    	if (!isset($this->service[$service])) {
-    		$sl = $this->getServiceLocator();
-    		$this->service[$service] = $sl->get($service);
-    	}
-    
-    	return $this->service[$service];
     }
 
     /**

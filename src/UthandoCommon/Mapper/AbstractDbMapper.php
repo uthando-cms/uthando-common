@@ -194,15 +194,15 @@ class AbstractDbMapper implements
 	
 		return $result->getGeneratedValue();
 	}
-	
-	/**
-	 * Updates a database row/s.
-	 *
-	 * @param array $data
-	 * @param string|array|\Zend\Db\Sql\Where $where
-	 * @param string $table
-	 * @return int number of affected rows
-	 */
+
+    /**
+     * Updates a database row/s, return affected rows
+     *
+     * @param array $data
+     * @param $where
+     * @param null $table
+     * @return int
+     */
 	public function update(array $data, $where, $table = null)
 	{
 		$table = ($table) ?: $this->getTable();
@@ -213,18 +213,19 @@ class AbstractDbMapper implements
 			->where($where);
 	
 		$statement = $sql->prepareStatementForSqlObject($update);
-	
-		return $statement->execute();
+		$result = $statement->execute();
+
+        return $result->getAffectedRows();
 	}
-	
-	/**
-	 * Deletes a row/s in the database returns number
-	 * of rows affacted
-	 *
-	 * @param string|array|\Zend\Db\Sql\Where $where
-	 * @param string $table
-	 * @return int
-	 */
+
+    /**
+     * Deletes a row/s in the database returns number
+     * of rows affected
+     *
+     * @param $where
+     * @param null $table
+     * @return int
+     */
 	public function delete($where, $table = null)
 	{
 		$table = ($table) ?: $this->getTable();
@@ -234,8 +235,9 @@ class AbstractDbMapper implements
 		$delete->where($where);
 	
 		$statement = $sql->prepareStatementForSqlObject($delete);
-	
-		return $statement->execute();
+		$result = $statement->execute();
+
+        return $result->getAffectedRows();
 	}
 
     /**
