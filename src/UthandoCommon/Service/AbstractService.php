@@ -138,46 +138,52 @@ abstract class AbstractService implements
     }
 
     /**
-     * Gets the default model from ModelManager
+     * Gets model from ModelManager
      *
+     * @param null|string $model
      * @return \UthandoCommon\Model\ModelInterface
      */
-    public function getModel()
+    public function getModel($model = null)
     {
+        $model = ($model) ?: $this->serviceAlias;
         $sl = $this->getServiceLocator();
         /* @var $modelManager \UthandoCommon\Model\ModelManager */
         $modelManager = $sl->get('UthandoModelManager');
-        $model = $modelManager->get($this->serviceAlias);
+        $model = $modelManager->get($model);
 
         return $model;
     }
-	
-	/**
-	 * Gets the default input filter from InputFilterManager
+
+    /**
+     * Gets input filter from InputFilterManager
      *
-	 * @return \Zend\InputFilter\InputFilter
-	 */
-	public function getInputFilter()
+     * @param null|string $inputFilter
+     * @return \Zend\InputFilter\InputFilter
+     */
+	public function getInputFilter($inputFilter = null)
 	{
+        $inputFilter = ($inputFilter) ?: $this->serviceAlias;
 	    $sl = $this->getServiceLocator();
         /* @var $inputFilterManager \Zend\InputFilter\InputFilterPluginManager */
         $inputFilterManager = $sl->get('InputFilterManager');
-        $inputFilter = $inputFilterManager->get($this->serviceAlias);
+        $inputFilter = $inputFilterManager->get($inputFilter);
 
 	    return $inputFilter;
 	}
 
     /**
-     * Gets the default hydrator from HydratorManager
+     * Gets hydrator from HydratorManager
      *
+     * @param string|null $hydrator
      * @return \Zend\Stdlib\Hydrator\HydratorInterface
      */
-    public function getHydrator()
+    public function getHydrator($hydrator = null)
     {
+        $hydrator = ($hydrator) ?: $this->serviceAlias;
         $sl = $this->getServiceLocator();
         /* @var $hydratorManager \Zend\Stdlib\Hydrator\HydratorPluginManager */
         $hydratorManager = $sl->get('HydratorManager');
-        $hydrator = $hydratorManager->get($this->serviceAlias);
+        $hydrator = $hydratorManager->get($hydrator);
 
         return $hydrator;
     }
