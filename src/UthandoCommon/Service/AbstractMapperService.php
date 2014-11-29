@@ -176,17 +176,12 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
             $result = $this->getMapper()->insert($data);
         } else {
             if ($this->getById($id)) {
+                $this->removeCacheItem($id);
                 $result = $this->getMapper()->update($data, [$pk => $id]);
             } else {
                 throw new ServiceException('ID ' . $id . ' does not exist');
             }
         }
-
-        $this->getCache()->clearByNamespace(
-            $this->getCache()
-                ->getOptions()
-                ->getNamespace()
-        );
 
         return $result;
     }

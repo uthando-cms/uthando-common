@@ -47,16 +47,17 @@ trait ServiceTrait
     }
 
     /**
-     * @param string $service
-     * @return \UthandoCommon\Service\AbstractMapperService|\UthandoCommon\Service\AbstractService
+     * @param null $service
+     * @param array $options
+     * @return mixed
      */
-    protected function getService($service = null)
+    protected function getService($service = null, $options = [])
     {
         $service = (is_string($service)) ? $service : $this->getServiceName();
 
         if (!isset($this->service[$service])) {
             $sl = $this->getServiceLocator()->get('UthandoServiceManager');
-            $this->service[$service] = $sl->get($service);
+            $this->service[$service] = $sl->get($service, $options);
         }
 
         return $this->service[$service];

@@ -10,6 +10,7 @@
  */
 namespace UthandoCommon\Service;
 
+use Zend\EventManager\EventManagerAwareInterface;
 use Zend\Mvc\Exception\InvalidPluginException;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ConfigInterface;
@@ -32,6 +33,8 @@ class ServiceManager extends ZendServiceManager implements ServiceLocatorAwareIn
      */
     protected $serviceLocator;
 
+    protected $initialize = true;
+
     use ServiceLocatorAwareTrait;
 
     /**
@@ -42,7 +45,21 @@ class ServiceManager extends ZendServiceManager implements ServiceLocatorAwareIn
         parent::__construct($config);
 
         $this->addInitializer([$this, 'callServiceInit']);
+        $this->addInitializer([$this, 'callServiceEvents']);
         $this->addInitializer([$this, 'injectServiceLocator']);
+
+    }
+
+    /**
+     * Sets up the class events.
+     *
+     * @param $service
+     */
+    public function callServiceEvents($service)
+    {
+        if ($service instanceof ServiceInterface) {
+            $service->attachEvents();
+        }
     }
 
     /**
@@ -64,7 +81,7 @@ class ServiceManager extends ZendServiceManager implements ServiceLocatorAwareIn
      */
     public function callServiceInit($service)
     {
-        if ($service instanceof InitializableInterface) {
+        if ($service instanceof InitializableInterface  && $this->initialize) {
             $service->init();
         }
     }
@@ -87,6 +104,10 @@ class ServiceManager extends ZendServiceManager implements ServiceLocatorAwareIn
         // If service not registered check the the Service Locator.
         if (!$this->has($name)) {
             return $this->getServiceLocator()->get($name);
+        }
+
+        if (isset($options['initialize'])) {
+            $this->initialize = $options['initialize'];
         }
 
         $instance = parent::get($name, $usePeeringServiceManagers);

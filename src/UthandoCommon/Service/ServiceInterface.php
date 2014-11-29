@@ -21,6 +21,11 @@ use Zend\InputFilter\InputFilter;
 interface ServiceInterface
 {
     /**
+     * events to set up. This should be overridden in parent class.
+     */
+    public function attachEvents();
+
+    /**
      * Gets Service Class
      *
      * @param $service
@@ -37,6 +42,16 @@ interface ServiceInterface
     public function setService($service);
 
     /**
+     * @return array
+     */
+    public function getFormOptions();
+
+    /**
+     * @param array $formOptions
+     */
+    public function setFormOptions($formOptions);
+
+    /**
      * Gets the default form for the service.
      *
      * @param ModelInterface $model
@@ -46,6 +61,14 @@ interface ServiceInterface
      * @return Form $form
      */
     public function getForm(ModelInterface $model=null, array $data=null, $useInputFilter=false, $useHydrator=false);
+
+    /**
+     * Gets model from ModelManager
+     *
+     * @param null|string $model
+     * @return ModelInterface
+     */
+    public function getModel($model = null);
 
     /**
      * Gets the default input filter

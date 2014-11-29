@@ -31,8 +31,7 @@ trait CacheTrait
     public function removeCacheItem($id)
     {
         $id = $this->getCacheKey($id);
-        $this->getCache()->removeItem($id);
-        return $this;
+        return $this->getCache()->removeItem($id);
     }
     
     public function getCacheKey($id)
@@ -49,13 +48,14 @@ trait CacheTrait
     
     public function setCache(AbstractAdapter $cache)
     {
-        $reflector = new \ReflectionClass($this);
+        /*$reflector = new \ReflectionClass($this);
+        $namespace = strtolower(str_replace('\\', '', $reflector->getNamespaceName()));
+
 
         $options = $cache->getOptions();
-        $options->setNamespace(str_replace('\\', '-', $reflector->getNamespaceName()));
-        $options->setNamespaceSeparator(':');
+        $options->setNamespace($namespace);
 
-        $cache->setOptions($options);
+        $cache->setOptions($options);*/
 
         $this->cache = $cache;
 

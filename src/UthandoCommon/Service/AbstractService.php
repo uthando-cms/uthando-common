@@ -45,9 +45,14 @@ abstract class AbstractService implements
     protected $formOptions = [];
 
     /**
+     * events to set up. This should be overridden in parent class.
+     */
+    public function attachEvents()
+    {}
+
+    /**
      * @param $service
      * @return AbstractService
-     * @throws ServiceException
      */
     public function getService($service)
     {
@@ -61,16 +66,10 @@ abstract class AbstractService implements
     /**
      * @param $service
      * @return $this
-     * @throws ServiceException
      */
     public function setService($service)
     {
         $sl = $this->getServiceLocator();
-
-        if (!$sl->has($service)) {
-            throw new ServiceException($service . ' is not found in the service manager');
-        }
-
         $this->services[$service] = $sl->get($service);
 
         return $this;
