@@ -10,7 +10,6 @@
  */
 namespace UthandoCommon\Mapper;
 
-use UthandoCommon\Model\ModelAwareInterface;
 use UthandoCommon\Model\ModelAwareTrait;
 use UthandoCommon\Model\ModelInterface;
 use Zend\Db\Adapter\AdapterAwareTrait;
@@ -20,7 +19,6 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
 use Zend\Paginator\Paginator;
 use Zend\Paginator\Adapter\DbSelect;
-use Zend\Stdlib\Hydrator\HydratorAwareInterface;
 
 /**
  * Class AbstractDbMapper
@@ -28,9 +26,7 @@ use Zend\Stdlib\Hydrator\HydratorAwareInterface;
  */
 class AbstractDbMapper implements
     MapperInterface,
-    DbAdapterAwareInterface,
-    HydratorAwareInterface,
-    ModelAwareInterface
+    DbAdapterAwareInterface
 {
     use AdapterAwareTrait,
         ModelAwareTrait;
@@ -145,10 +141,10 @@ class AbstractDbMapper implements
 	 * @param Select $select
 	 * @return \Zend\Db\ResultSet\ResultSet|Paginator|HydratingResultSet
 	 */
-	public function search(array $search, $sort, Select $select = null)
+	public function search(array $search, $sort, $select = null)
 	{
 		$select = ($select) ?: $this->getSelect();
-		
+
 		foreach ($search as $key => $value) {
 			if (!$value['searchString'] == '') {
 				if (substr($value['searchString'], 0, 1) == '=' && $key == 0) {
@@ -283,7 +279,7 @@ class AbstractDbMapper implements
      * @param AbstractResultSet $resultSet
      * @return Paginator
      */
-    public function paginate(Select $select, AbstractResultSet $resultSet=null)
+    public function paginate($select, $resultSet = null)
 	{
 		$resultSet = $resultSet ?: $this->getResultSet();
 		$adapter = new DbSelect($select, $this->getAdapter(), $resultSet);

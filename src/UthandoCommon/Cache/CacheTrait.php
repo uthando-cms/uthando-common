@@ -48,17 +48,7 @@ trait CacheTrait
     
     public function setCache(AbstractAdapter $cache)
     {
-        /*$reflector = new \ReflectionClass($this);
-        $namespace = strtolower(str_replace('\\', '', $reflector->getNamespaceName()));
-
-
-        $options = $cache->getOptions();
-        $options->setNamespace($namespace);
-
-        $cache->setOptions($options);*/
-
         $this->cache = $cache;
-
         return $this;
     }
 }

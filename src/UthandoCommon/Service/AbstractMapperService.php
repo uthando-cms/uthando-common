@@ -12,8 +12,13 @@ namespace UthandoCommon\Service;
 
 use UthandoCommon\Cache\CacheStorageAwareInterface;
 use UthandoCommon\Cache\CacheTrait;
+use UthandoCommon\Mapper\MapperInterface;
+use UthandoCommon\Mapper\MapperManager;
 use UthandoCommon\Model\ModelInterface;
+use Zend\Db\ResultSet\HydratingResultSet;
+use Zend\Db\ResultSet\ResultSet;
 use Zend\Form\Form;
+use Zend\Paginator\Paginator;
 
 /**
  * Class AbstractMapperService
@@ -51,7 +56,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
     /**
      * fetch all records form database
      *
-     * @return \Zend\Db\ResultSet\ResultSet|\Zend\Paginator\Paginator|\Zend\Db\ResultSet\HydratingResultSet
+     * @return ResultSet|Paginator|HydratingResultSet
      */
     public function fetchAll()
     {
@@ -62,7 +67,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      * basic search on database
      *
      * @param array $post
-     * @return \Zend\Db\ResultSet\ResultSet|\Zend\Paginator\Paginator|\Zend\Db\ResultSet\HydratingResultSet
+     * @return ResultSet|Paginator|HydratingResultSet
      */
     public function search(array $post)
     {
@@ -218,7 +223,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      *
      * @param null|string $mapperClass
      * @param array $options
-     * @return \UthandoCommon\Mapper\MapperInterface
+     * @return MapperInterface
      */
     public function getMapper($mapperClass = null, array $options = [])
     {
@@ -241,7 +246,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
     public function setMapper($mapperClass, array $options = [])
     {
         $sl = $this->getServiceLocator();
-        /* @var $mapperManager \UthandoCommon\Mapper\MapperManager */
+        /* @var $mapperManager MapperManager */
         $mapperManager = $sl->get('UthandoMapperManager');
 
         $defaultOptions = [
