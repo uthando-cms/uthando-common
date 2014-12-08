@@ -14,10 +14,10 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Stdlib\Exception\InvalidArgumentException;
 
 /**
- * Class ViewHelperConfigTrait
+ * Class ConfigTrait
  * @package UthandoCommon\View
  */
-trait ViewHelperConfigTrait
+trait ConfigTrait
 {
     use ServiceLocatorAwareTrait;
     

@@ -1,25 +1,36 @@
 <?php
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
- *
+ * 
  * @package   UthandoCommon\View
  * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
  * @link      https://github.com/uthando-cms for the canonical source repository
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\View;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\Stdlib\Exception\InvalidArgumentException;
-use Zend\View\Helper\AbstractHelper;
+use Zend\Form\Form;
 
 /**
- * Class AbstractViewHelper
+ * Class FromManager
  * @package UthandoCommon\View
  */
-class AbstractViewHelper extends AbstractHelper implements ServiceLocatorAwareInterface
+class FormManager extends AbstractViewHelper
 {
-    use ConfigTrait;
-}
+    /**
+     * @param string $form
+     * @return Form
+     */
+    public function __invoke($form)
+    {
+        $formManager = $this->getServiceLocator()
+            ->getServiceLocator()
+            ->get('FormElementManager');
+
+        $form = $formManager->get($form);
+
+        return $form;
+    }
+} 
