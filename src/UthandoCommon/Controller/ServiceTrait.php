@@ -11,10 +11,12 @@
 
 namespace UthandoCommon\Controller;
 
+use Zend\ServiceManager\ServiceLocatorInterface;
+
 /**
  * Class ServiceTrait
  * @package UthandoCommon\Controller
- * @method \Zend\ServiceManager\ServiceLocatorInterface getServiceLocator()
+ * @method ServiceLocatorInterface getServiceLocator()
  */
 trait ServiceTrait
 {
