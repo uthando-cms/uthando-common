@@ -10,13 +10,11 @@
  */
 namespace UthandoCommon\Service;
 
-use Zend\EventManager\EventManagerAwareInterface;
 use Zend\Mvc\Exception\InvalidPluginException;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ConfigInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager as ZendServiceManager;
 use Zend\Stdlib\InitializableInterface;
 
@@ -26,13 +24,6 @@ use Zend\Stdlib\InitializableInterface;
  */
 class ServiceManager extends ZendServiceManager implements ServiceLocatorAwareInterface
 {
-    /**
-     * The main service locator
-     *
-     * @var ServiceLocatorInterface
-     */
-    protected $serviceLocator;
-
     protected $initialize = true;
 
     use ServiceLocatorAwareTrait;
