@@ -97,7 +97,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      */
     public function add(array $post, Form $form = null)
     {
-        $model = $this->getMapper()->getModel();
+        $model = $this->getModel();
         $form  = ($form) ? $form : $this->getForm($model, $post, true, true);
 
         $argv = compact('post', 'form');
@@ -162,7 +162,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         $this->getEventManager()->trigger('pre.save', $this, $argv);
 
         if ($data instanceof ModelInterface) {
-            $data = $this->getMapper()->extract($data);
+            $data = $this->getHydrator()->extract($data);
         }
 
         $pk = $this->getMapper()->getPrimaryKey();

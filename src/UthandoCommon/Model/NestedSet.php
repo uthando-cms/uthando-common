@@ -14,7 +14,7 @@ namespace UthandoCommon\Model;
  * Class NestedSet
  * @package UthandoCommon\Model
  */
-abstract class NestedSet
+abstract class NestedSet implements ModelInterface, NestedSetInterface
 {
     /**
      * @var int

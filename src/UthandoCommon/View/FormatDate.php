@@ -32,7 +32,10 @@ class FormatDate extends AbstractHelper
 	{
 	    return $this->render();
 	}
-	
+
+    /**
+     * @return string
+     */
 	public function render()
 	{
 	    return $this->getDate()->format($this->getFormat());

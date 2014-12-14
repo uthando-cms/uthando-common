@@ -40,7 +40,7 @@ class ServiceListener implements ListenerAggregateInterface
     {
         /* @var $model \UthandoCommon\Model\ModelInterface */
         $model = $e->getParam('model');
-        
+
         if ($model->has('dateModified')) {
             $model->setDateModified();
         }
