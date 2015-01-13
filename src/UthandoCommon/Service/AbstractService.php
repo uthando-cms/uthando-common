@@ -70,6 +70,7 @@ abstract class AbstractService implements
     public function setService($service)
     {
         $sl = $this->getServiceLocator();
+
         $this->services[$service] = $sl->get($service);
 
         return $this;
