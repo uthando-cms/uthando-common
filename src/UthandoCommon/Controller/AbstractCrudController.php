@@ -15,6 +15,7 @@ use Zend\EventManager\EventManager;
 use Zend\Form\Form;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Session\Container;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
@@ -67,6 +68,11 @@ abstract class AbstractCrudController extends AbstractActionController
      * @var bool
      */
     protected $paginate = true;
+
+    /**
+     * @var Container
+     */
+    protected $container;
     
     use SetExceptionMessages;
 
@@ -77,7 +83,14 @@ abstract class AbstractCrudController extends AbstractActionController
     {
         $params = $this->params()->fromPost();
         $limit = $this->params()->fromPost('count', 25);
-        $page = (!isset($params['page'])) ? $this->params('page', 1) : $this->params()->fromPost('page', 1);
+
+        if (!$this->getRequest()->isXmlHttpRequest()) {
+            $page = (isset($params['page'])) ? $this->params('page', 1) : $this->getContainer()->offsetGet('page');
+        } else {
+            $page = $this->params()->fromPost('page', 1);
+        }
+
+        $this->getContainer()->offsetSet('page', $page);
 
         $service = $this->getService();
 
@@ -119,8 +132,8 @@ abstract class AbstractCrudController extends AbstractActionController
     	$viewModel = new ViewModel([
     		'models' => $this->getPaginatorResults(),
     	]);
-    		
-    	$viewModel->setTerminal(true);
+
+        $viewModel->setTerminal(true);
     		
     	return $viewModel;
     }
@@ -400,5 +413,25 @@ abstract class AbstractCrudController extends AbstractActionController
     {
     	$this->route = $route;
     	return $this;
+    }
+
+    /**
+     * @param Container $ns
+     */
+    public function setContainer(Container $ns)
+    {
+        $this->container = $ns;
+    }
+
+    /**
+     * @return Container
+     */
+    public function getContainer()
+    {
+        if (! $this->container instanceof Container) {
+            $this->setContainer(new Container(__CLASS__));
+        }
+
+        return $this->container;
     }
 }
