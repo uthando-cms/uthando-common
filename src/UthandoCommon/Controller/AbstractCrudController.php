@@ -429,7 +429,7 @@ abstract class AbstractCrudController extends AbstractActionController
     public function getContainer()
     {
         if (! $this->container instanceof Container) {
-            $this->setContainer(new Container(__CLASS__));
+            $this->setContainer(new Container($this->getServiceName()));
         }
 
         return $this->container;
