@@ -82,7 +82,7 @@ abstract class AbstractCrudController extends AbstractActionController
     public function getPaginatorResults()
     {
         $params = ($this->params()->fromPost()) ?: $this->getContainer()->offsetGet('params');
-        
+
         $params['page'] = (isset($params['page'])) ? $params['page'] : 1;
         $params['count'] = (isset($params['count'])) ? $params['count'] : 25;
 
