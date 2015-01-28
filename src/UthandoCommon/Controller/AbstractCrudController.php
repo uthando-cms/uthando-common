@@ -81,27 +81,26 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     public function getPaginatorResults()
     {
-        $params = $this->params()->fromPost();
-        $limit = $this->params()->fromPost('count', 25);
+        $params = ($this->params()->fromPost()) ?: $this->getContainer()->offsetGet('params');
+        
+        $params['page'] = (isset($params['page'])) ? $params['page'] : 1;
+        $params['count'] = (isset($params['count'])) ? $params['count'] : 25;
 
-        if (!$this->getRequest()->isXmlHttpRequest()) {
-            $page = (isset($params['page'])) ? $this->params('page', 1) : $this->getContainer()->offsetGet('page');
-        } else {
-            $page = $this->params()->fromPost('page', 1);
-        }
-
-        $this->getContainer()->offsetSet('page', $page);
+        $this->getContainer()->offsetSet('params', $params);
 
         $service = $this->getService();
 
         if ($this->paginate) {
             $service->usePaginator([
-                'limit'	=> $limit,
-                'page'	=> $page
+                'limit'	=> $params['count'],
+                'page'	=> $params['page'],
             ]);
         }
 
-        return $service->search(array_merge($this->searchDefaultParams, $params));
+        return $service->search(array_merge(
+            $this->searchDefaultParams,
+            $params
+        ));
     }
 
     /**
@@ -109,8 +108,11 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     public function indexAction()
     {
+        $models = $this->getPaginatorResults();
+
     	$viewModel = new ViewModel([
-    		'models' => $this->getPaginatorResults(),
+    		'models' => $models,
+            'params' => $this->getContainer()->offsetGet('params'),
     	]);
 
         if ($this->getRequest()->isXmlHttpRequest()) {
