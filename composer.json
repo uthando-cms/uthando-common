@@ -23,7 +23,8 @@
 	    "zendframework/zend-paginator" : "2.*",
 	    "zendframework/zend-servicemanager" : "2.*",
 	    "zendframework/zend-modulemanager" : "2.*",
-	    "zendframework/zend-view" : "2.*"
+	    "zendframework/zend-view" : "2.*",
+	    "uthando-cms/uthando-session-manager" : "1.*"
     },
     "require-dev" : {
     	"zendframework/zendframework" : "2.*"

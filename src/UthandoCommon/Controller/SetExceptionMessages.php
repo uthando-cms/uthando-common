@@ -11,12 +11,11 @@
 namespace UthandoCommon\Controller;
 
 use Exception;
-use Zend\Mvc\Controller\Plugin\FlashMessenger;
 
 /**
  * Class SetExceptionMessages
  * @package UthandoCommon\Controller
- * @method FlashMessenger flashMessenger()
+ * @method \Zend\Mvc\Controller\Plugin\FlashMessenger\FlashMessenger flashMessenger()
  */
 trait SetExceptionMessages
 {   
@@ -31,7 +30,7 @@ trait SetExceptionMessages
     		'message' => $e->getMessage(),
     		'title'   => 'Error!'
     	));
-
+        
     	$prevException = $e->getPrevious();
     
     	if ($prevException) {

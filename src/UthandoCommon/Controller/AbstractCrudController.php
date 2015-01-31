@@ -11,11 +11,8 @@
 namespace UthandoCommon\Controller;
 
 use Exception;
-use Zend\EventManager\EventManager;
 use Zend\Form\Form;
-use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Session\Container;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
@@ -23,8 +20,9 @@ use Zend\View\Model\ViewModel;
  * Class AbstractCrudController
  *
  * @package UthandoCommon\Controller
- * @method Request getRequest()
- * @method EventManager getEventManager()
+ * @method \Zend\Http\Request\Request getRequest()
+ * @method \Zend\EventManager\EventManager getEventManager()
+ * @method \Zend\Session\Container sessionContainer()
  */
 abstract class AbstractCrudController extends AbstractActionController
 {   
@@ -68,11 +66,6 @@ abstract class AbstractCrudController extends AbstractActionController
      * @var bool
      */
     protected $paginate = true;
-
-    /**
-     * @var Container
-     */
-    protected $container;
     
     use SetExceptionMessages;
 
@@ -81,13 +74,13 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     public function getPaginatorResults()
     {
-        $params = ($this->params()->fromPost()) ?: $this->getContainer()->offsetGet('params');
+        $session = $this->sessionContainer($this->getServiceName());
+        $params = ($this->params()->fromPost()) ?: $session->offsetGet('params');
 
         $params['page'] = (isset($params['page'])) ? $params['page'] : 1;
         $params['count'] = (isset($params['count'])) ? $params['count'] : 25;
 
-        $this->getContainer()->offsetSet('params', $params);
-
+        $session->offsetSet('params', $params);
         $service = $this->getService();
 
         if ($this->paginate) {
@@ -112,7 +105,7 @@ abstract class AbstractCrudController extends AbstractActionController
 
     	$viewModel = new ViewModel([
     		'models' => $models,
-            'params' => $this->getContainer()->offsetGet('params'),
+            'params' => $this->sessionContainer()->offsetGet('params'),
     	]);
 
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -415,25 +408,5 @@ abstract class AbstractCrudController extends AbstractActionController
     {
     	$this->route = $route;
     	return $this;
-    }
-
-    /**
-     * @param Container $ns
-     */
-    public function setContainer(Container $ns)
-    {
-        $this->container = $ns;
-    }
-
-    /**
-     * @return Container
-     */
-    public function getContainer()
-    {
-        if (! $this->container instanceof Container) {
-            $this->setContainer(new Container($this->getServiceName()));
-        }
-
-        return $this->container;
     }
 }
