@@ -179,10 +179,16 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         if (0 === $id || null === $id || '' === $id) {
             $result = $this->getMapper()->insert($data);
+            $this->getEventManager()->trigger('post.insert', $this, array_merge($argv, [
+                'result' => $result,
+            ]));
         } else {
             if ($this->getById($id)) {
                 $this->removeCacheItem($id);
                 $result = $this->getMapper()->update($data, [$pk => $id]);
+                $this->getEventManager()->trigger('post.update', $this, array_merge($argv, [
+                    'result' => $result,
+                ]));
             } else {
                 throw new ServiceException('ID ' . $id . ' does not exist');
             }
