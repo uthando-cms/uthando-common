@@ -62,10 +62,20 @@ class Module implements ConsoleBannerProviderInterface
     {
         return include __DIR__ . '/config/config.php';
     }
+    
+    public function getControllerConfig()
+    {
+        return include __DIR__ . '/config/controller.config.php';
+    }
 
     public function getFilterConfig()
     {
         return include __DIR__ . '/config/filter.config.php';
+    }
+    
+    public function getFormElementConfig()
+    {
+        return include __DIR__ . '/config/formElement.config.php';
     }
 
     public function getServiceConfig()

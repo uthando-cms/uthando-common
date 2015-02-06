@@ -3,6 +3,9 @@
 return [
     'uthando_common' => [
         'ssl' => false,
+        'captcha' => [
+            'class' => 'dumb'
+        ],
     ],
     'cache' => [
         'adapter' => [
@@ -16,6 +19,39 @@ return [
             ],
         ],
         'plugins' => ['Serializer'],
+    ],
+    'uthando_user' => [
+        'acl' => [
+            'roles' => [
+                'guest' => [
+                    'privileges' => [
+                        'allow' => [
+                            'controllers' => [
+                                'UthandoCommon\Controller\Captcha' => ['action' => 'all'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'resources' => [
+                'UthandoCommon\Controller\Captcha',
+            ],
+        ],
+    ],
+    'router' => [
+        'routes' => [
+            'captcha-form-generate' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => '/captcha/[:id]',
+                    'defaults' => [
+                        '__NAMESPACE__' => 'UthandoCommon\Controller',
+                        'controller'    => 'Captcha',
+                        'action'        => 'generate'
+                    ],
+                ],
+            ],
+        ],
     ],
     'view_manager' => [
         'strategies' => [

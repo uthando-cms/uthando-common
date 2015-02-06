@@ -47,7 +47,10 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         if (!$model) {
             $model = $this->getMapper()->getById($id, $col);
-            $this->setCacheItem($id, $model);
+            
+            if ($this->useCache) {
+                $this->setCacheItem($id, $model);
+            }
         }
 
         return $model;
@@ -179,16 +182,18 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         if (0 === $id || null === $id || '' === $id) {
             $result = $this->getMapper()->insert($data);
-            $this->getEventManager()->trigger('post.insert', $this, array_merge($argv, [
+            $this->getEventManager()->trigger('post.insert', $this, [
                 'result' => $result,
-            ]));
+                'model'  => $this->getById($result),
+            ]);
         } else {
             if ($this->getById($id)) {
                 $this->removeCacheItem($id);
                 $result = $this->getMapper()->update($data, [$pk => $id]);
-                $this->getEventManager()->trigger('post.update', $this, array_merge($argv, [
+                $this->getEventManager()->trigger('post.update', $this, [
                     'result' => $result,
-                ]));
+                    'model'  => $this->getById($id),
+                ]);
             } else {
                 throw new ServiceException('ID ' . $id . ' does not exist');
             }

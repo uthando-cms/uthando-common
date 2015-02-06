@@ -24,6 +24,8 @@
 	    "zendframework/zend-servicemanager" : "2.*",
 	    "zendframework/zend-modulemanager" : "2.*",
 	    "zendframework/zend-view" : "2.*",
+	    "Zendframework/zend-captcha" : "2.*",
+	    "zendframework/zend-form" : "2.*",
 	    "uthando-cms/uthando-session-manager" : "1.*"
     },
     "require-dev" : {

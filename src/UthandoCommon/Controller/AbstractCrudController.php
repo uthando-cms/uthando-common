@@ -20,7 +20,7 @@ use Zend\View\Model\ViewModel;
  * Class AbstractCrudController
  *
  * @package UthandoCommon\Controller
- * @method \Zend\Http\Request\Request getRequest()
+ * @method \Zend\Http\Request getRequest()
  * @method \Zend\EventManager\EventManager getEventManager()
  * @method \Zend\Session\Container sessionContainer()
  */

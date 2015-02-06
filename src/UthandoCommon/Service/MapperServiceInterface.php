@@ -10,7 +10,6 @@
  */
 namespace UthandoCommon\Service;
 
-use UthandoCommon\Mapper\AbstractMapper;
 use UthandoCommon\Mapper\MapperInterface;
 use UthandoCommon\Model\ModelInterface;
 use Zend\Form\Form;
