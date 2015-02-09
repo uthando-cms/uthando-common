@@ -369,6 +369,13 @@ class AbstractDbMapper implements
 			} else {
 				$direction = Select::ORDER_ASCENDING;
 			}
+			
+			// COLLATE NOCASE
+			// fix the sort order to make case insensitive for sqlite database.
+			if ('sqlite' == $this->getAdapter()->getPlatform()->getName()) {
+			    $direction = 'COLLATE NOCASE ' . $direction;
+			}
+			
 			$order[] = $column. ' ' . $direction;
 		}
 	
