@@ -11,6 +11,7 @@ return array(
     'UthandoCommon\Event\MvcListener'                           => __DIR__ . '/src/UthandoCommon/Event/MvcListener.php',
     'UthandoCommon\Event\ServiceListener'                       => __DIR__ . '/src/UthandoCommon/Event/ServiceListener.php',
     'UthandoCommon\Filter\Slug'                                 => __DIR__ . '/src/UthandoCommon/Filter/Slug.php',
+    'UthandoCommon\Filter\UcFirst'                              => __DIR__ . '/src/UthandoCommon/Filter/UcFirst.php',
     'UthandoCommon\Filter\Ucwords'                              => __DIR__ . '/src/UthandoCommon/Filter/Ucwords.php',
     'UthandoCommon\Form\Element\Captcha'                        => __DIR__ . '/src/UthandoCommon/Form/Element/Captcha.php',
     'UthandoCommon\Hydrator\AbstractHydrator'                   => __DIR__ . '/src/UthandoCommon/Hydrator/AbstractHydrator.php',
