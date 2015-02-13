@@ -2,6 +2,7 @@
 namespace UthandoCommon\Cache;
 
 use Zend\Cache\Storage\Adapter\AbstractAdapter;
+use Zend\Cache\Storage\TaggableInterface;
 
 trait CacheTrait
 {
@@ -15,6 +16,11 @@ trait CacheTrait
      */
     protected $useCache = true;
     
+    /**
+     * @var array
+     */
+    protected $tags;
+    
     public function getCacheItem($id)
     {
         $id = $this->getCacheKey($id);
@@ -24,16 +30,33 @@ trait CacheTrait
     public function setCacheItem($id, $item)
     {
         $id = $this->getCacheKey($id);
-        $this->getCache()->setItem($id, $item);
+        $cache = $this->getCache();
+        
+        $cache->setItem($id, $item);
+        
+        if ($this->tags && $cache instanceof TaggableInterface) {
+            $cache->setTags($id, $this->tags);
+        }
+        
         return $this;
     }
     
     public function removeCacheItem($id)
     {
         $id = $this->getCacheKey($id);
-        return $this->getCache()->removeItem($id);
+        $cache = $this->getCache();
+        
+        if ($this->tags && $cache instanceof TaggableInterface) {
+            $cache->clearByTags($this->tags);
+        }
+        
+        return $cache->removeItem($id);
     }
     
+    /**
+     * @param string $id
+     * @return string
+     */
     public function getCacheKey($id)
     {
         $id = (string) $id;
@@ -41,11 +64,18 @@ trait CacheTrait
         return $key;
     }
     
+    /**
+     * @return \Zend\Cache\Storage\Adapter\AbstractAdapter
+     */
     public function getCache()
     {
         return $this->cache;
     }
     
+    /**
+     * @param AbstractAdapter $cache
+     * @return \UthandoCommon\Cache\CacheTrait
+     */
     public function setCache(AbstractAdapter $cache)
     {
         $this->cache = $cache;

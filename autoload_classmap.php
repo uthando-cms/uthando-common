@@ -10,6 +10,7 @@ return array(
     'UthandoCommon\Controller\SetExceptionMessages'             => __DIR__ . '/src/UthandoCommon/Controller/SetExceptionMessages.php',
     'UthandoCommon\Event\MvcListener'                           => __DIR__ . '/src/UthandoCommon/Event/MvcListener.php',
     'UthandoCommon\Event\ServiceListener'                       => __DIR__ . '/src/UthandoCommon/Event/ServiceListener.php',
+    'UthandoCommon\Filter\PhoneNumber'                          => __DIR__ . '/src/UthandoCommon/Filter/PhoneNumber.php',
     'UthandoCommon\Filter\Slug'                                 => __DIR__ . '/src/UthandoCommon/Filter/Slug.php',
     'UthandoCommon\Filter\UcFirst'                              => __DIR__ . '/src/UthandoCommon/Filter/UcFirst.php',
     'UthandoCommon\Filter\Ucwords'                              => __DIR__ . '/src/UthandoCommon/Filter/Ucwords.php',

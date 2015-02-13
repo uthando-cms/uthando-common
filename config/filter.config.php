@@ -2,8 +2,9 @@
 
 return [
     'invokables' => [
-        'UthandoSlug'       => 'UthandoCommon\Filter\Slug',
-        'UthandoUcFirst'    => 'UthandoCommon\Filter\UcFirst',
-        'UthandoUcwords'    => 'UthandoCommon\Filter\Ucwords',
+        'UthandoPhoneNumber'    => 'UthandoCommon\Filter\PhoneNumber',
+        'UthandoSlug'           => 'UthandoCommon\Filter\Slug',
+        'UthandoUcFirst'        => 'UthandoCommon\Filter\UcFirst',
+        'UthandoUcwords'        => 'UthandoCommon\Filter\Ucwords',
     ],
 ];
