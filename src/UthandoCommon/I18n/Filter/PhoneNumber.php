@@ -1,5 +1,5 @@
 <?php
-namespace UthandoCommon\Filter;
+namespace UthandoCommon\I18n\Filter;
 
 use Zend\Filter\AbstractFilter;
 use libphonenumber\PhoneNumberUtil;

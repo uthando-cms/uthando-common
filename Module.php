@@ -82,6 +82,11 @@ class Module implements ConsoleBannerProviderInterface
     {
         return include __DIR__ . '/config/service.config.php';
     }
+    
+    public function getValidatorConfig()
+    {
+        return include __DIR__ . '/config/validator.config.php';
+    }
 
     public function getViewHelperConfig()
     {
