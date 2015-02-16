@@ -7,9 +7,10 @@ use Zend\Validator\AbstractValidator;
 
 class PhoneNumber extends AbstractValidator
 {
-    const NO_MATCH    = 'phoneNumberNoMatch';
-    const UNSUPPORTED = 'phoneNumberUnsupported';
-    const INVALID     = 'phoneNumberInvalid';
+    const NO_MATCH          = 'phoneNumberNoMatch';
+    const UNSUPPORTED       = 'phoneNumberUnsupported';
+    const INVALID           = 'phoneNumberInvalid';
+    const INVALID_NUMBER    = 'phoneNumberInvalidNumber';
     
     /**
      * Validation failure message template definitions
@@ -17,9 +18,10 @@ class PhoneNumber extends AbstractValidator
      * @var array
      */
     protected $messageTemplates = [
-        self::NO_MATCH    => 'The input does not match a phone number format',
-        self::UNSUPPORTED => 'The country provided is currently unsupported',
-        self::INVALID     => 'Invalid type given. String expected',
+        self::NO_MATCH          => 'The input does not match a phone number format.',
+        self::UNSUPPORTED       => 'The country provided is currently unsupported',
+        self::INVALID           => 'Invalid type given. String expected',
+        self::INVALID_NUMBER    => 'The number provided is an invalid number format',
     ];
     
     /**
@@ -80,7 +82,7 @@ class PhoneNumber extends AbstractValidator
         try {
             $NumberProto = $this->libPhoneNumer->parse($value, $country);
         } catch (NumberParseException $e) {
-            $this->error(self::INVALID);
+            $this->error(self::INVALID_NUMBER);
             return false;
         }
         

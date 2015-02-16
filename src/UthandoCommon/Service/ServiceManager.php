@@ -13,32 +13,30 @@ namespace UthandoCommon\Service;
 use Zend\Mvc\Exception\InvalidPluginException;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ConfigInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\ServiceManager\ServiceManager as ZendServiceManager;
+//use Zend\ServiceManager\ServiceLocatorAwareInterface;
+//use Zend\ServiceManager\ServiceLocatorAwareTrait;
+//use Zend\ServiceManager\ServiceManager as ZendServiceManager;
 use Zend\Stdlib\InitializableInterface;
 
 /**
  * Class ModelManager
  * @package UthandoCommon\Servie
  */
-class ServiceManager extends ZendServiceManager implements ServiceLocatorAwareInterface
+class ServiceManager extends AbstractPluginManager
 {
     protected $initialize = true;
 
-    use ServiceLocatorAwareTrait;
+    //use ServiceLocatorAwareTrait;
 
     /**
      * @param ConfigInterface $config
      */
     public function __construct(ConfigInterface $config = null)
     {
-        parent::__construct($config);
-
         $this->addInitializer([$this, 'callServiceInit']);
         $this->addInitializer([$this, 'callServiceEvents']);
-        $this->addInitializer([$this, 'injectServiceLocator']);
-
+        
+        parent::__construct($config);
     }
 
     /**
@@ -50,18 +48,6 @@ class ServiceManager extends ZendServiceManager implements ServiceLocatorAwareIn
     {
         if ($service instanceof ServiceInterface) {
             $service->attachEvents();
-        }
-    }
-
-    /**
-     * Sets the service locator in service.
-     *
-     * @param $service
-     */
-    public function injectServiceLocator($service)
-    {
-        if ($service instanceof ServiceLocatorAwareInterface) {
-            $service->setServiceLocator($this);
         }
     }
 
@@ -99,32 +85,12 @@ class ServiceManager extends ZendServiceManager implements ServiceLocatorAwareIn
 
         if (isset($options['initialize'])) {
             $this->initialize = $options['initialize'];
+            unset($options['initialize']);
         }
 
-        $instance = parent::get($name, $usePeeringServiceManagers);
-        $this->validateService($instance);
+        $instance = parent::get($name, $options, $usePeeringServiceManagers);
+        $this->validatePlugin($instance);
         return $instance;
-    }
-
-    /**
-     * Register a service with the locator.
-     *
-     * Validates that the service object via validatePlugin() prior to
-     * attempting to register it.
-     *
-     * @param  string $name
-     * @param  mixed $service
-     * @param  bool $shared
-     * @return AbstractPluginManager
-     * @throws \Zend\ServiceManager\Exception\InvalidArgumentException
-     */
-    public function setService($name, $service, $shared = true)
-    {
-        if ($service) {
-            $this->validateService($service);
-        }
-        parent::setService($name, $service, $shared);
-        return $this;
     }
 
     /**
@@ -136,7 +102,7 @@ class ServiceManager extends ZendServiceManager implements ServiceLocatorAwareIn
      * @throws InvalidPluginException
      * @return void
      */
-    public function validateService($service)
+    public function validatePlugin($service)
     {
         if ($service instanceof ServiceInterface) {
             return;
