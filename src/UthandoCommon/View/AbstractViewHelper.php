@@ -11,8 +11,6 @@
 namespace UthandoCommon\View;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\Stdlib\Exception\InvalidArgumentException;
 use Zend\View\Helper\AbstractHelper;
 
 /**

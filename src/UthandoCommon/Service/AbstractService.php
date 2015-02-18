@@ -69,9 +69,7 @@ abstract class AbstractService implements
      */
     public function setService($service)
     {
-        $sl = $this->getServiceLocator()
-            ->get('UthandoServiceManager');
-
+        $sl = $this->getServiceLocator();
         $this->services[$service] = $sl->get($service);
 
         return $this;
