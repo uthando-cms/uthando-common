@@ -11,7 +11,7 @@
 namespace UthandoCommon\View;
 
 use Zend\View\Helper\AbstractHelper;
-use DateTime;
+use Zend\Soap\Exception\InvalidArgumentException;
 
 /**
  * Class FormatDate
@@ -19,12 +19,26 @@ use DateTime;
  */
 class FormatDate extends AbstractHelper
 {
+    /**
+     * @var string
+     */
 	protected $format = 'd/m/Y H:i:s';
+	
+	/**
+	 * @var \DateTime
+	 */
 	protected $date;
 	
-	public function __invoke($date = null)
+	public function __invoke($date = null, $format = null)
 	{
-        $this->setDate($date);
+	    if ($date) {
+	        $this->setDate($date);
+	    }
+	    
+	    if ($format) {
+	        $this->setFormat($format);
+	    }
+	    
         return $this;
 	}
 	
@@ -38,6 +52,9 @@ class FormatDate extends AbstractHelper
      */
 	public function render()
 	{
+	    if (!$this->date instanceof \DateTime) {
+	        throw new InvalidArgumentException('You need to set the date format.');
+	    }
 	    return $this->getDate()->format($this->getFormat());
 	}
 	
@@ -59,8 +76,8 @@ class FormatDate extends AbstractHelper
 
 	public function setDate($date)
     {
-        if (!$date instanceof DateTime) {
-            $date = new DateTime($date);
+        if (!$date instanceof \DateTime) {
+            $date = new \DateTime($date);
         }
         
         $this->date = $date;

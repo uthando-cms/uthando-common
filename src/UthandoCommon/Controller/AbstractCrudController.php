@@ -40,7 +40,15 @@ abstract class AbstractCrudController extends AbstractActionController
     /**
      * @var array
      */
-    protected $searchDefaultParams = [];
+    protected $searchDefaultParams = [
+        'count' => 25,
+        'page' => 1,
+    ];
+    
+    /**
+     * @var array
+     */
+    protected $controllerSearchOverrides = [];
 
     /**
      * @var string
@@ -68,19 +76,29 @@ abstract class AbstractCrudController extends AbstractActionController
     protected $paginate = true;
     
     use SetExceptionMessages;
+    
+    public function __construct()
+    {
+        $this->searchDefaultParams = array_merge($this->searchDefaultParams, $this->controllerSearchOverrides);
+    }
 
     /**
      * @return \Zend\Db\ResultSet\HydratingResultSet|\Zend\Db\ResultSet\ResultSet|\Zend\Paginator\Paginator
      */
-    public function getPaginatorResults()
+    public function getPaginatorResults($getParamsFromSession = true)
     {
-        $session = $this->sessionContainer($this->getServiceName());
-        $params = ($this->params()->fromPost()) ?: $session->offsetGet('params');
-
-        $params['page'] = (isset($params['page'])) ? $params['page'] : 1;
-        $params['count'] = (isset($params['count'])) ? $params['count'] : 25;
-
-        $session->offsetSet('params', $params);
+        
+        $params = array_merge($this->searchDefaultParams, $this->params()->fromPost());
+        
+        if ($getParamsFromSession) {
+            $session = $this->sessionContainer($this->getServiceName());
+            $params = ($this->params()->fromPost()) ?: $session->offsetGet('params');
+        }
+        
+        if ($getParamsFromSession) {
+            $session->offsetSet('params', $params);
+        }
+        
         $service = $this->getService();
 
         if ($this->paginate) {
