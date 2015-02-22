@@ -87,17 +87,16 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     public function getPaginatorResults($getParamsFromSession = true)
     {
-        
         $params = array_merge($this->searchDefaultParams, $this->params()->fromPost());
+        $session = $this->sessionContainer($this->getServiceName());
         
-        if ($getParamsFromSession) {
-            $session = $this->sessionContainer($this->getServiceName());
-            $params = ($this->params()->fromPost()) ?: $session->offsetGet('params');
-        }
-        
-        if ($getParamsFromSession) {
+        if ($getParamsFromSession && !$this->params()->fromPost()) {
+            $sessionParams = ($session->offsetGet('params')) ?: [];
+            $params = array_merge($params, $sessionParams);
             $session->offsetSet('params', $params);
         }
+        
+        $session->offsetSet('params', $params);
         
         $service = $this->getService();
 
@@ -107,11 +106,8 @@ abstract class AbstractCrudController extends AbstractActionController
                 'page'	=> $params['page'],
             ]);
         }
-
-        return $service->search(array_merge(
-            $this->searchDefaultParams,
-            $params
-        ));
+        
+        return $service->search($params);
     }
 
     /**

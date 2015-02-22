@@ -163,6 +163,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         $argv = compact('data');
         $argv = $this->prepareEventArguments($argv);
         $this->getEventManager()->trigger('pre.save', $this, $argv);
+        $data = $argv['data'];
 
         if ($data instanceof ModelInterface) {
             $data = $this->getHydrator()->extract($data);
