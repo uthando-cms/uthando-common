@@ -81,7 +81,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         foreach ($post as $key => $value) {
             $searches[] = [
-                'searchString' => (string)$value,
+                'searchString' => $value,
                 'columns'      => explode('-', $key),
             ];
         }
