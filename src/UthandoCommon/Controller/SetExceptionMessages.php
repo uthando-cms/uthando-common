@@ -26,16 +26,16 @@ trait SetExceptionMessages
      */
     public function setExceptionMessages(Exception $e)
     {
-    	$this->flashMessenger()->addErrorMessage(array(
+    	$this->flashMessenger()->addErrorMessage([
     		'message' => $e->getMessage(),
     		'title'   => 'Error!'
-    	));
+    	]);
         
     	$prevException = $e->getPrevious();
     
     	if ($prevException) {
     		while ($prevException) {
-    			$this->flashMessenger()->addMessage($prevException->getMessage());
+    			$this->flashMessenger()->addErrorMessage($prevException->getMessage());
                 $prevException = $prevException->getPrevious();
     		}
     	}

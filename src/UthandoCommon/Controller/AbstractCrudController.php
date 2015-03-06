@@ -189,7 +189,7 @@ abstract class AbstractCrudController extends AbstractActionController
                     if ($result) {
                         $this->flashMessenger()->addSuccessMessage(sprintf(self::ADD_SUCCESS, $result, $tableName));
                     } else {
-                        $this->flashMessenger()->addErrorMessage(sprintf(self::ADD_ERROR, $tableName));
+                        $this->flashMessenger()->addErrorMessage(sprintf(self::ADD_ERROR, $result, $tableName));
                     }
 
                     $routeParams = $this->params()->fromRoute();
@@ -214,9 +214,10 @@ abstract class AbstractCrudController extends AbstractActionController
                 }
 
 	    		$this->setExceptionMessages($e);
-	    		return $this->redirect()->toRoute($this->getRoute(), array_merge($this->params()->fromRoute(), [
-	    			'action' => 'list'
-	    		]));
+	    		return $viewModel->setVariables([
+                    'form' => $this->getService()->getForm(null, $this->params()->fromPost()),
+                    'routeParams' => $this->params()->fromRoute(),
+                ]);
 	    	}
     	}
 
@@ -318,9 +319,10 @@ abstract class AbstractCrudController extends AbstractActionController
 
     		$this->setExceptionMessages($e);
 
-    		return $this->redirect()->toRoute($this->getRoute('edit'), array_merge($this->params()->fromRoute(), [
-    			'action' => 'list'
-    		]));
+    		return $viewModel->setVariables([
+			    'form' => $this->getService()->getForm(null, $post),
+			    'routeParams' => $this->params()->fromRoute(),
+			]);
     	}
 
     	return $viewModel->setVariables([

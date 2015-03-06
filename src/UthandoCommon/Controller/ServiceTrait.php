@@ -11,6 +11,8 @@
 
 namespace UthandoCommon\Controller;
 
+use UthandoCommon\Service\AbstractService;
+
 /**
  * Class ServiceTrait
  * @package UthandoCommon\Controller
@@ -49,7 +51,7 @@ trait ServiceTrait
     /**
      * @param null $service
      * @param array $options
-     * @return mixed
+     * @return mixed|AbstractService
      */
     protected function getService($service = null, $options = [])
     {
