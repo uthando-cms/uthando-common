@@ -93,10 +93,9 @@ abstract class AbstractCrudController extends AbstractActionController
         if ($getParamsFromSession && !$this->params()->fromPost()) {
             $sessionParams = ($session->offsetGet('params')) ?: [];
             $params = array_merge($params, $sessionParams);
-            $session->offsetSet('params', $params);
         }
         
-        $session->offsetSet('params', $params);
+       $session->offsetSet('params', $params);
         
         $service = $this->getService();
 
