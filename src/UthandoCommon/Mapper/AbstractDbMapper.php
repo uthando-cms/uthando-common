@@ -350,7 +350,7 @@ class AbstractDbMapper implements
 	 */
 	public function setSortOrder(Select $select, $sort)
 	{
-		if ($sort === '' || null === $sort) {
+		if ($sort === '' || null === $sort || empty($sort)) {
 			return $select;
 		}
 		

@@ -74,7 +74,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      */
     public function search(array $post)
     {
-        $sort = (isset($post['sort'])) ? (string)$post['sort'] : '';
+        $sort = (isset($post['sort'])) ? $post['sort'] : '';
         unset($post['sort'], $post['count'], $post['offset'], $post['page']);
 
         $searches = [];
