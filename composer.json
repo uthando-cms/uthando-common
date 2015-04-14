@@ -27,7 +27,8 @@
 	    "Zendframework/zend-captcha" : "2.*",
 	    "zendframework/zend-form" : "2.*",
 	    "uthando-cms/uthando-session-manager" : "1.*",
-	    "giggsey/libphonenumber-for-php": "7.*"
+	    "giggsey/libphonenumber-for-php": "7.*",
+	    "neilime/zf2-twb-bundle": "2.*@stable"
     },
     "require-dev" : {
     	"zendframework/zendframework" : "2.*"
