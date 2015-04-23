@@ -21,11 +21,11 @@ class Serialize implements  StrategyInterface
 {   
     public function extract($value)
     {
-        return base64_encode(Serializer::serialize($value));
+        return Serializer::serialize($value);
     }
     
     public function hydrate($value)
     {
-        return Serializer::unserialize(base64_decode($value));;
+        return Serializer::unserialize($value);
     }
 }
