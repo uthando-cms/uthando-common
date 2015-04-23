@@ -47,6 +47,7 @@ return array(
     'UthandoCommon\Service\AbstractMapperService'               => __DIR__ . '/src/UthandoCommon/Service/AbstractMapperService.php',
     'UthandoCommon\Service\AbstractRelationalMapperService'     => __DIR__ . '/src/UthandoCommon/Service/AbstractRelationalMapperService.php',
     'UthandoCommon\Service\AbstractService'                     => __DIR__ . '/src/UthandoCommon/Service/AbstractService.php',
+    'UthandoCommon\Service\FormService'                         => __DIR__ . '/src/UthandoCommon/Service/FormService.php',
     'UthandoCommon\Service\Initializer\CacheStorageInitializer' => __DIR__ . '/src/UthandoCommon/Service/Initializer/CacheStorageInitializer.php',
     'UthandoCommon\Service\MapperServiceInterface'              => __DIR__ . '/src/UthandoCommon/Service/MapperServiceInterface.php',
     'UthandoCommon\Service\ServiceException'                    => __DIR__ . '/src/UthandoCommon/Service/ServiceException.php',

@@ -18,14 +18,14 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
  * @package UthandoCommon\Hydrator\Strategy
  */
 class Serialize implements  StrategyInterface
-{
+{   
     public function extract($value)
     {
-        return Serializer::serialize($value);
+        return base64_encode(Serializer::serialize($value));
     }
     
     public function hydrate($value)
     {
-        return Serializer::unserialize($value);
+        return Serializer::unserialize(base64_decode($value));;
     }
 }
