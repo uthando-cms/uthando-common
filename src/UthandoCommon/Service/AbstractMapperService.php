@@ -176,8 +176,8 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         // if values not set then don't save them.
         // doesn't work so allow null values.
         foreach ($data as $key => $value) {
-            if ('' === $value) {
-                $data[$key] = null;
+            if ('' == $value) {
+                unset($data[$key]);
             }
         }
 
