@@ -175,11 +175,12 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         // if values not set then don't save them.
         // doesn't work so allow null values.
-        foreach ($data as $key => $value) {
-            if ('' == $value) {
+        /*foreach ($data as $key => $value) {
+            if ($value == null) {
                 unset($data[$key]);
             }
-        }
+        }*/
+
 
         if (0 === $id || null === $id || '' === $id) {
             $result = $this->getMapper()->insert($data);

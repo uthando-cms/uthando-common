@@ -17,7 +17,7 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
  * Class Serialize
  * @package UthandoCommon\Hydrator\Strategy
  */
-class Serialize implements  StrategyInterface
+class Serialize implements StrategyInterface
 {   
     public function extract($value)
     {
