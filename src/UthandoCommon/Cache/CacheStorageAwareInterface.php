@@ -14,6 +14,7 @@ use Zend\Cache\Storage\Adapter\AbstractAdapter;
 
 /**
  * Interface CacheStorageAwareInterface
+ *
  * @package UthandoCommon\Cache
  */
 interface CacheStorageAwareInterface

@@ -22,6 +22,7 @@ use Zend\Paginator\Adapter\DbSelect;
 
 /**
  * Class AbstractDbMapper
+ *
  * @package UthandoCommon\Mapper
  */
 class AbstractDbMapper implements

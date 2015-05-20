@@ -179,6 +179,8 @@ abstract class AbstractCrudController extends AbstractActionController
                     if ($request->isXmlHttpRequest()) {
                         return new JsonModel([
                             'status'    => ($result) ? 'success' : 'danger',
+                            'table'     => $tableName,
+                            'rowId'     => $result,
                             'messages'  => ($result) ?
                                 sprintf(self::ADD_SUCCESS, $result, $tableName) :
                                 sprintf(self::ADD_ERROR, $tableName),
