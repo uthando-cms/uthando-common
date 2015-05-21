@@ -25,8 +25,10 @@ class Module implements ConsoleBannerProviderInterface
 {
     public function init(ModuleManager $moduleManager)
     {
+        /* @var $sm \Zend\ServiceManager\ServiceManager */
         $sm = $moduleManager->getEvent()->getParam('ServiceManager');
         $serviceListener = $sm->get('ServiceListener');
+
         $serviceListener->addServiceManager(
             'UthandoMapperManager',
             'uthando_mappers',
@@ -60,42 +62,7 @@ class Module implements ConsoleBannerProviderInterface
 
     public function getConfig()
     {
-        return include __DIR__ . '/config/config.php';
-    }
-    
-    public function getControllerConfig()
-    {
-        return include __DIR__ . '/config/controller.config.php';
-    }
-
-    public function getFilterConfig()
-    {
-        return include __DIR__ . '/config/filter.config.php';
-    }
-    
-    public function getFormElementConfig()
-    {
-        return include __DIR__ . '/config/formElement.config.php';
-    }
-
-    public function getServiceConfig()
-    {
-        return include __DIR__ . '/config/service.config.php';
-    }
-    
-    public function getValidatorConfig()
-    {
-        return include __DIR__ . '/config/validator.config.php';
-    }
-
-    public function getViewHelperConfig()
-    {
-        return include __DIR__ . '/config/viewHelper.config.php';
-    }
-
-    public function getUthandoServiceConfig()
-    {
-        return include __DIR__ . '/config/uthandoServices.config.php';
+        return include __DIR__ . '/config/module.config.php';
     }
 
     public function getAutoloaderConfig()
