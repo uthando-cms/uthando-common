@@ -22,6 +22,7 @@ use Zend\Paginator\Paginator;
 
 /**
  * Class AbstractMapperService
+ *
  * @package UthandoCommon\Service
  */
 class AbstractMapperService extends AbstractService implements MapperServiceInterface, CacheStorageAwareInterface
