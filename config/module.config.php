@@ -81,6 +81,7 @@ return [
     ],
     'view_helpers' => [
         'invokables' => [
+            'Enabled'           => 'UthandoCommon\View\Enabled',
             'FormatDate'        => 'UthandoCommon\View\FormatDate',
             'FormManager'       => 'UthandoCommon\View\FormManager',
             'Request'           => 'UthandoCommon\View\Request',

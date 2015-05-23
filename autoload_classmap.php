@@ -62,6 +62,7 @@ return array(
     'UthandoCommon\View\AbstractViewHelper'                     => __DIR__ . '/src/UthandoCommon/View/AbstractViewHelper.php',
     'UthandoCommon\View\Alert'                                  => __DIR__ . '/src/UthandoCommon/View/Alert.php',
     'UthandoCommon\View\ConfigTrait'                            => __DIR__ . '/src/UthandoCommon/View/ConfigTrait.php',
+    'UthandoCommon\View\Enabled'                                => __DIR__ . '/src/UthandoCommon/View/Enabled.php',
     'UthandoCommon\View\FlashMessenger'                         => __DIR__ . '/src/UthandoCommon/View/FlashMessenger.php',
     'UthandoCommon\View\FormatDate'                             => __DIR__ . '/src/UthandoCommon/View/FormatDate.php',
     'UthandoCommon\View\FormManager'                            => __DIR__ . '/src/UthandoCommon/View/FormManager.php',
