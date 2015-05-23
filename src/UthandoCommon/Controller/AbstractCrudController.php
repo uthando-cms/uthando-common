@@ -89,13 +89,13 @@ abstract class AbstractCrudController extends AbstractActionController
     {
         $params = array_merge($this->searchDefaultParams, $this->params()->fromPost());
         $session = $this->sessionContainer($this->getServiceName());
-        
+
         if ($getParamsFromSession && !$this->params()->fromPost()) {
             $sessionParams = ($session->offsetGet('params')) ?: [];
             $params = array_merge($params, $sessionParams);
         }
-        
-       $session->offsetSet('params', $params);
+
+        $session->offsetSet('params', $params);
         
         $service = $this->getService();
 
