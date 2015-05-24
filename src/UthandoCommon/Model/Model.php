@@ -17,7 +17,7 @@ namespace UthandoCommon\Model;
 trait Model
 {	
     /**
-     * Check to see if this class has a getter method defined
+     * Check to see if this class has a 'get' or 'is' method defined
      * 
      * @param string $prop
      * @return boolean
@@ -25,7 +25,14 @@ trait Model
 	public function has($prop)
 	{
 		$getter = 'get' . ucfirst($prop);
-		return method_exists($this, $getter);
+        $return = method_exists($this, $getter);
+
+        if (!$return) {
+            $is = 'is' . ucfirst($prop);
+            $return = method_exists($this, $is);
+        }
+
+        return $return;
 	}
 	
 	/**

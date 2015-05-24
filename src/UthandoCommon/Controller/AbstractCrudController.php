@@ -30,7 +30,7 @@ abstract class AbstractCrudController extends AbstractActionController
 	const ADD_SUCCESS		= 'row %s has been saved to database table %s.';
 	const DELETE_ERROR		= 'row %s could not be deleted form table %s due to a database error.';
 	const DELETE_SUCCESS	= 'row %s has been deleted from the database table %s.';
-    const SAVE_ERROR		= 'row %s could not be saved to table %s due to a database error.';
+    const SAVE_ERROR		= 'no changes where applied to row %s.';
     const SAVE_SUCCESS		= self::ADD_SUCCESS;
     
     const FORM_ERROR		= 'There were one or more issues with your submission. Please correct them as indicated below.';
