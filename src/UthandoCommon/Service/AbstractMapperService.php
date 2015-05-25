@@ -114,11 +114,9 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         $saved = $this->save($form->getData());
 
-        if ($saved) {
-            $argv = compact('post', 'form', 'saved');
-            $argv = $this->prepareEventArguments($argv);
-            $this->getEventManager()->trigger('post.add', $this, $argv);
-        }
+        $argv = compact('post', 'form', 'saved');
+        $argv = $this->prepareEventArguments($argv);
+        $this->getEventManager()->trigger('post.add', $this, $argv);
 
         return $saved;
     }
@@ -145,9 +143,12 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         $saved = $this->save($form->getData());
 
-        if ($saved) {
-            $this->getEventManager()->trigger('post.edit', $this, $argv);
-        }
+        $argv = compact('model', 'post', 'form');
+        $argv = $this->prepareEventArguments($argv);
+
+        $this->getEventManager()->trigger('post.edit', $this, $argv);
+
+        if (isset($argv['result'])) $saved = $argv['result'];
 
         return $saved;
     }
@@ -181,7 +182,6 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
                 unset($data[$key]);
             }
         }*/
-
 
         if (0 === $id || null === $id || '' === $id) {
             $result = $this->getMapper()->insert($data);
