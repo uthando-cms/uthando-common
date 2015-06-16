@@ -11,6 +11,7 @@
 
 namespace UthandoCommon\View;
 
+use Zend\Form\Element;
 use Zend\Form\Form;
 
 /**
@@ -20,16 +21,17 @@ use Zend\Form\Form;
 class FormManager extends AbstractViewHelper
 {
     /**
-     * @param string $form
-     * @return Form
+     * @param $form
+     * @param array $options
+     * @return Form|Element
      */
-    public function __invoke($form)
+    public function __invoke($form, $options = [])
     {
         $formManager = $this->getServiceLocator()
             ->getServiceLocator()
             ->get('FormElementManager');
 
-        $form = $formManager->get($form);
+        $form = $formManager->get($form, $options);
 
         return $form;
     }
