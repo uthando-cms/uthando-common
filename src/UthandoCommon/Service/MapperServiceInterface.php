@@ -32,9 +32,10 @@ interface MapperServiceInterface
     /**
      * fetch all records form database
      *
-     * @return \Zend\Db\ResultSet\ResultSet|\Zend\Paginator\Paginator|\Zend\Db\ResultSet\HydratingResultSet
+     * @param null|string $sort
+     * @return \Zend\Db\ResultSet\HydratingResultSet|\Zend\Db\ResultSet\ResultSet|\Zend\Paginator\Paginator
      */
-    public function fetchAll();
+    public function fetchAll($sort = null);
 
     /**
      * basic search on database

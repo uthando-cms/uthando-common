@@ -60,11 +60,13 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
     /**
      * fetch all records form database
      *
-     * @return ResultSet|Paginator|HydratingResultSet
+     * @param null|string $sort
+     * @return HydratingResultSet|ResultSet|Paginator
      */
-    public function fetchAll()
+    public function fetchAll($sort = null)
     {
-        return $this->getMapper()->fetchAll();
+        return $this->getMapper()
+            ->fetchAll($sort);
     }
 
     /**

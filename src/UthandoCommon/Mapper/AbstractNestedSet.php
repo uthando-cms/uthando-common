@@ -30,12 +30,14 @@ abstract class AbstractNestedSet extends AbstractDbMapper
     /**
      * Gets all items in tree.
      *
+     * @param null|string $sort
      * @return \Zend\Db\ResultSet\HydratingResultSet|ResultSet|\Zend\Paginator\Paginator
      */
-    public function fetchAll()
+    public function fetchAll($sort = null)
     {
         $select = $this->getFullTree();
-                	
+        $select = $this->setSortOrder($select, $sort);
+
         return $this->fetchResult($select);
     }
     

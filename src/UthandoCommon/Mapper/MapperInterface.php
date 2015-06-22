@@ -26,9 +26,10 @@ interface MapperInterface extends HydratorAwareInterface, ModelAwareInterface
     public function getById($id);
 
     /**
+     * @param null|string $sort
      * @return mixed
      */
-    public function fetchAll();
+    public function fetchAll($sort = null);
 
     /**
      * @param array $search

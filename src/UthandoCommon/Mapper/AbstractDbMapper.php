@@ -124,11 +124,14 @@ class AbstractDbMapper implements
     /**
      * Fetches all rows from database table.
      *
+     * @param null|string $sort
      * @return HydratingResultSet|\Zend\Db\ResultSet\ResultSet|Paginator
      */
-    public function fetchAll()
+    public function fetchAll($sort = null)
 	{
 		$select = $this->getSelect();
+        $select = $this->setSortOrder($select, $sort);
+
 		$resultSet = $this->fetchResult($select);
 		
 		return $resultSet;

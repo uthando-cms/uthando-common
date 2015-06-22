@@ -13,9 +13,6 @@ namespace UthandoCommon\Service;
 use Zend\Mvc\Exception\InvalidPluginException;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ConfigInterface;
-//use Zend\ServiceManager\ServiceLocatorAwareInterface;
-//use Zend\ServiceManager\ServiceLocatorAwareTrait;
-//use Zend\ServiceManager\ServiceManager as ZendServiceManager;
 use Zend\Stdlib\InitializableInterface;
 
 /**
