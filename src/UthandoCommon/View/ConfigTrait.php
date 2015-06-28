@@ -16,6 +16,7 @@ use Zend\Stdlib\Exception\InvalidArgumentException;
 /**
  * Class ConfigTrait
  * @package UthandoCommon\View
+ * @method \Zend\View\HelperPluginManager getServiceLocator()
  */
 trait ConfigTrait
 {
@@ -53,7 +54,7 @@ trait ConfigTrait
     /**
      * Sets the config array.
      * 
-     * @return AbstractHelper
+     * @return AbstractViewHelper
      */
     protected function setConfig()
     {

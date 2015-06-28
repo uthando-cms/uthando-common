@@ -15,6 +15,7 @@ use UthandoCommon\Service\AbstractService;
 
 /**
  * Class ServiceTrait
+ *
  * @package UthandoCommon\Controller
  * @method \Zend\ServiceManager\ServiceLocatorInterface getServiceLocator()
  */
