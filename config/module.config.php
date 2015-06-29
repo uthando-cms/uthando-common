@@ -75,6 +75,7 @@ return [
     ],
     'validators' => [
         'invokables' => [
+            'UthandoCommonAkismet'      => 'UthandoCommon\Validator\Akismet',
             'UthandoCommonPhoneNumber'  => 'UthandoCommon\I18n\Validator\PhoneNumber',
             'UthandoCommonPostCode'     => 'UthandoCommon\I18n\Validator\PostCode',
         ],

@@ -32,13 +32,13 @@ class PhoneNumber extends AbstractValidator
     /**
      * @var PhoneNumberUtil
      */
-    protected $libPhoneNumer;
+    protected $libPhoneNumber;
     
     public function __construct($options = null)
     {
         parent::__construct($options);
         
-        $this->libPhoneNumer = PhoneNumberUtil::getInstance();
+        $this->libPhoneNumber = PhoneNumberUtil::getInstance();
     
         if (array_key_exists('country', $options)) {
             $this->setCountry($options['country']);
@@ -72,7 +72,7 @@ class PhoneNumber extends AbstractValidator
         
         $country = $this->getCountry();
         
-        $supportedCountries = $this->libPhoneNumer->getSupportedRegions();
+        $supportedCountries = $this->libPhoneNumber->getSupportedRegions();
         
         if (!in_array($country, $supportedCountries)) {
             $this->error(self::UNSUPPORTED);
@@ -80,13 +80,13 @@ class PhoneNumber extends AbstractValidator
         }
         
         try {
-            $NumberProto = $this->libPhoneNumer->parse($value, $country);
+            $NumberProto = $this->libPhoneNumber->parse($value, $country);
         } catch (NumberParseException $e) {
             $this->error(self::INVALID_NUMBER);
             return false;
         }
         
-        if ($this->libPhoneNumer->isValidNumberForRegion($NumberProto, $country)) {
+        if ($this->libPhoneNumber->isValidNumberForRegion($NumberProto, $country)) {
             return true;
         }
         

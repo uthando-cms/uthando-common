@@ -59,6 +59,7 @@ return array(
     'UthandoCommon\Stdlib\OptionsTrait'                         => __DIR__ . '/src/UthandoCommon/Stdlib/OptionsTrait.php',
     'UthandoCommon\Stdlib\StringUtils'                          => __DIR__ . '/src/UthandoCommon/Stdlib/StringUtils.php',
     'UthandoCommon\UthandoException'                            => __DIR__ . '/src/UthandoCommon/UthandoException.php',
+    'UthandoCommon\Validator\Akismet'                           => __DIR__ . '/src/UthandoCommon/Validator/Akismet.php',
     'UthandoCommon\View\AbstractViewHelper'                     => __DIR__ . '/src/UthandoCommon/View/AbstractViewHelper.php',
     'UthandoCommon\View\Alert'                                  => __DIR__ . '/src/UthandoCommon/View/Alert.php',
     'UthandoCommon\View\ConfigTrait'                            => __DIR__ . '/src/UthandoCommon/View/ConfigTrait.php',
