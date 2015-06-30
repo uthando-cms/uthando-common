@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Controller;
 
 use Exception;
@@ -23,6 +24,7 @@ use Zend\View\Model\ViewModel;
  * @method \Zend\Http\PHPEnvironment\Request getRequest()
  * @method \Zend\EventManager\EventManager getEventManager()
  * @method \Zend\Session\Container sessionContainer()
+ * @method \Zend\Mvc\Controller\Plugin\FlashMessenger flashMessenger()
  */
 abstract class AbstractCrudController extends AbstractActionController
 {   
@@ -252,6 +254,8 @@ abstract class AbstractCrudController extends AbstractActionController
         if ($request->isXmlHttpRequest()) {
             $viewModel->setTerminal(true);
         }
+
+        $post = $this->params()->fromPost();
     
     	try {
 
@@ -264,8 +268,6 @@ abstract class AbstractCrudController extends AbstractActionController
 	    	if ($request->isPost()) {
 	    		
 	    		// primary key ids must match. If not throw exception.
-
-	    		$post = $this->params()->fromPost();
 
 	    		if ($post[$pk] != $model->$modelMethod()) {
 	    			throw new Exception('Primary keys do not match.');

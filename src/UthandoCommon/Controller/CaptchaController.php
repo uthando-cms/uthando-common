@@ -1,8 +1,24 @@
 <?php
+/**
+ * Uthando CMS (http://www.shaunfreeman.co.uk/)
+ *
+ * @package   UthandoCommon\Controller
+ * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
+ * @link      https://github.com/uthando-cms for the canonical source repository
+ * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
+ * @license   see LICENSE.txt
+ */
+
 namespace UthandoCommon\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 
+/**
+ * Class CaptchaController
+ *
+ * @package UthandoCommon\Controller
+ * @method \Zend\Http\PHPEnvironment\Response getResponse()
+ */
 class CaptchaController extends AbstractActionController
 {
     public function generateAction ()
@@ -24,10 +40,10 @@ class CaptchaController extends AbstractActionController
     
             if (file_exists($image) !== false) {
     
-                $imageread = file_get_contents($image);
+                $imageRead = file_get_contents($image);
     
                 $response->setStatusCode(200);
-                $response->setContent($imageread);
+                $response->setContent($imageRead);
                  
                 if (file_exists($image) == true) {
                     unlink($image);

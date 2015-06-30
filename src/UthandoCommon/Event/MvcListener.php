@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Event;
 
 use Zend\EventManager\EventManagerInterface;
@@ -19,6 +20,7 @@ use Zend\Mvc\MvcEvent;
 
 /**
  * Class MvcListener
+ *
  * @package UthandoCommon\Event
  */
 class MvcListener implements ListenerAggregateInterface

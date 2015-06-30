@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Event;
 
 use Zend\EventManager\Event;
@@ -17,6 +18,7 @@ use Zend\EventManager\ListenerAggregateTrait;
 
 /**
  * Class ServiceListener
+ *
  * @package UthandoCommon\Event
  */
 class ServiceListener implements ListenerAggregateInterface

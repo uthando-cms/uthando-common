@@ -8,14 +8,16 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Controller;
 
 use Exception;
 
 /**
  * Class SetExceptionMessages
+ *
  * @package UthandoCommon\Controller
- * @method \Zend\Mvc\Controller\Plugin\FlashMessenger\FlashMessenger flashMessenger()
+ * @method \Zend\Mvc\Controller\Plugin\FlashMessenger flashMessenger()
  */
 trait SetExceptionMessages
 {   
