@@ -19,6 +19,7 @@ use Zend\Mvc\MvcEvent;
 
 /**
  * Class Module
+ *
  * @package UthandoCommon
  */
 class Module implements ConsoleBannerProviderInterface

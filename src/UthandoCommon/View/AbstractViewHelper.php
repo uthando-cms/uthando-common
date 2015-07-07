@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\View;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -15,6 +16,7 @@ use Zend\View\Helper\AbstractHelper;
 
 /**
  * Class AbstractViewHelper
+ *
  * @package UthandoCommon\View
  */
 class AbstractViewHelper extends AbstractHelper implements ServiceLocatorAwareInterface
