@@ -18,7 +18,7 @@ return array(
     'UthandoCommon\Hydrator\NestedSetInterface'                 => __DIR__ . '/src/UthandoCommon/Hydrator/NestedSetInterface.php',
     'UthandoCommon\Hydrator\Strategy\DateTime'                  => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/DateTime.php',
     'UthandoCommon\Hydrator\Strategy\EmptyString'               => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/EmptyString.php',
-    'UthandoCommon\Hydrator\Strategy\Null'                      => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/Null.php',
+    'UthandoCommon\Hydrator\Strategy\NullStrategy'              => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/NullStrategy.php',
     'UthandoCommon\Hydrator\Strategy\Serialize'                 => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/Serialize.php',
     'UthandoCommon\Hydrator\Strategy\TrueFalse'                 => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/TrueFalse.php',
     'UthandoCommon\I18n\Filter\PhoneNumber'                     => __DIR__ . '/src/UthandoCommon/I18n/Filter/PhoneNumber.php',

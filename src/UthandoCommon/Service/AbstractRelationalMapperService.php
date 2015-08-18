@@ -8,13 +8,15 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Service;
 
 use Zend\Db\ResultSet\HydratingResultSet;
 
 /**
  * Class AbstractRelationalMapperService
- * @package
+ *
+ * @package UthandoCommon\Service
  */
 abstract class AbstractRelationalMapperService extends AbstractMapperService
 {
@@ -43,7 +45,7 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
      *
      * @param \UthandoCommon\Model\Model $model
      * @param bool|array $children
-     * @return mixed
+     * @return \UthandoCommon\Model\Model
      */
     public function populate($model, $children)
     {

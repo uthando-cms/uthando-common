@@ -13,10 +13,10 @@ namespace UthandoCommon\Hydrator\Strategy;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 /**
- * Class Null
+ * Class NullStrategy
  * @package UthandoCommon\Hydrator\Strategy
  */
-class Null implements StrategyInterface
+class NullStrategy implements StrategyInterface
 {
 	public function extract($value)
 	{

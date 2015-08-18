@@ -44,7 +44,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
     public function getById($id, $col = null)
     {
         $id = (int) $id;
-        $model = $this->getCacheItem($id);
+        $model = (($this->useCache)) ? $this->getCacheItem($id) : null;
 
         if (!$model) {
             $model = $this->getMapper()->getById($id, $col);
