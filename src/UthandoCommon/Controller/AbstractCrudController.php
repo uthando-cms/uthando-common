@@ -85,6 +85,7 @@ abstract class AbstractCrudController extends AbstractActionController
     }
 
     /**
+     * @param bool $getParamsFromSession
      * @return \Zend\Db\ResultSet\HydratingResultSet|\Zend\Db\ResultSet\ResultSet|\Zend\Paginator\Paginator
      */
     public function getPaginatorResults($getParamsFromSession = true)
