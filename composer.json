@@ -26,6 +26,7 @@
 	    "zendframework/zend-view" : "2.*",
 	    "Zendframework/zend-captcha" : "2.*",
 	    "zendframework/zend-form" : "2.*",
+        "zendframework/zendservice-akismet": "2.*",
 	    "uthando-cms/uthando-session-manager" : "1.*",
 	    "giggsey/libphonenumber-for-php": "7.*",
 	    "neilime/zf2-twb-bundle": "2.*@stable"

@@ -17,6 +17,11 @@ use Zend\Validator\AbstractValidator;
 use Zend\Validator\Callback;
 use Zend\Validator\Exception;
 
+/**
+ * Class PostCode
+ *
+ * @package UthandoCommon\I18n\Validator
+ */
 class PostCode extends AbstractValidator
 {
     const INVALID        = 'postcodeInvalid';

@@ -12,8 +12,12 @@
 namespace UthandoCommon\Controller;
 
 use Exception;
+use Zend\Session\Container;
+use Zend\EventManager\EventManager;
 use Zend\Form\Form;
+use Zend\Http\PHPEnvironment\Request;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Controller\Plugin\FlashMessenger;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
@@ -21,10 +25,10 @@ use Zend\View\Model\ViewModel;
  * Class AbstractCrudController
  *
  * @package UthandoCommon\Controller
- * @method \Zend\Http\PHPEnvironment\Request getRequest()
- * @method \Zend\EventManager\EventManager getEventManager()
- * @method \Zend\Session\Container sessionContainer()
- * @method \Zend\Mvc\Controller\Plugin\FlashMessenger flashMessenger()
+ * @method Request getRequest()
+ * @method EventManager getEventManager()
+ * @method Container sessionContainer($sessionName = null)
+ * @method FlashMessenger flashMessenger()
  */
 abstract class AbstractCrudController extends AbstractActionController
 {   
