@@ -18,6 +18,7 @@ use SeekableIterator;
 
 /**
  * Class Collection
+ *
  * @package UthandoCommon\Model
  */
 abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, SeekableIterator
@@ -37,8 +38,6 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
     protected $entityClass;
 
     /**
-     * Constructor
-     *
      * @param array $entities
      */
     public function init(array $entities = [])
@@ -55,11 +54,33 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
      *
      * @param object $entity
      * @return $this
+     * @throws CollectionException
      */
     public function add($entity)
-    {   
+    {
+        $class = $this->entityClass;
+
+        if (!$entity instanceof $class) {
+            throw new CollectionException('class must an instance of ' . $class);
+        }
+
         $this->entities[] = $entity;
+
         return $this;
+    }
+
+    /**
+     * filter out all entities that don't belong to the entity class
+     *
+     * @param $entities
+     * @return array
+     */
+    public function checkEntities($entities)
+    {
+        return array_filter($entities, function($val) {
+            $entityClass = $this->entityClass;
+            return ($val instanceof $entityClass);
+        });
     }
     
     /**
@@ -69,7 +90,7 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
      */
     public function setEntities(array $entities)
     {
-        $this->entities = $entities;
+        $this->entities = $this->checkEntities($entities);
     }
     
     /**
@@ -86,16 +107,6 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
     public function getEntityClass()
     {
         return $this->entityClass;
-    }
-
-	/**
-     * @param string $entityClass
-     *
-     * @return void
-     */
-    public function setEntityClass($entityClass)
-    {
-        $this->entityClass = $entityClass;
     }
 
 	/**
@@ -168,7 +179,9 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
      */
     public function offsetSet($key, $entity)
     {
-        if ($entity instanceof $this->entityClass) {
+        $class = $this->entityClass;
+
+        if ($entity instanceof $class) {
             if (!isset($key)) {
                 $this->entities[] = $entity;
             } else {
@@ -176,6 +189,7 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
             }
             return true;
         }
+
         throw new CollectionException(
             'The specified entity is not allowed for this collection.'
         );
@@ -189,13 +203,12 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
      */
     public function offsetUnset($key)
     {
-        if ($key instanceof $this->entityClass) {
-            $this->entities = array_filter(
-                $this->entities,
-                function ($v) use ($key) {
-                    return $v !== $key;
-                }
-            );
+        $entityClass = $this->entityClass;
+
+        if ($key instanceof $entityClass) {
+            $this->entities = array_filter($this->entities, function ($v) use ($key) {
+                return $v !== $key;
+            });
             return true;
         }
         
