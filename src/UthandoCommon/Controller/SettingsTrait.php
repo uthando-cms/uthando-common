@@ -16,6 +16,7 @@ use Zend\Http\PhpEnvironment\Response;
 use Zend\Config\Writer\PhpArray;
 use Zend\Mvc\Controller\Plugin\FlashMessenger;
 use Zend\Mvc\Controller\Plugin\PostRedirectGet;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * Class SettingsTrait
@@ -55,7 +56,19 @@ trait SettingsTrait
         if ($prg instanceof Response) {
             return $prg;
         } elseif (false === $prg) {
-            $form->setData($settings);
+            $defaults = $settings;
+
+            foreach($settings as $key => $value) {
+                if ($form->has($key)) {
+                    if (!array_key_exists($key, $defaults)) {
+                        $defaults[$key] = $form->get($key)->getObject()->toArray();
+                    } else {
+                        $defaults[$key] = ArrayUtils::merge($form->get($key)->getObject()->toArray(), $defaults[$key]);
+                    }
+                }
+            }
+
+            $form->setData($defaults);
             return ['form' => $form,];
         }
 
@@ -69,6 +82,8 @@ trait SettingsTrait
             $fileName = $filter->filter($this->getConfigKey());
 
             $config = new PhpArray();
+            $config->setUseBracketArraySyntax(true);
+
             $config->toFile('./config/autoload/' . $fileName . '.local.php', [$this->getConfigKey() => $array]);
 
             $this->flashMessenger()->addSuccessMessage('Settings have been updated!');
