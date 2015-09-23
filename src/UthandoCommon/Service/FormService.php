@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Service;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -16,17 +17,18 @@ use UthandoCommon\Model\ModelInterface;
 
 /**
  * Class AbstractService
+ *
  * @package UthandoCommon\Service
  */
 class FormService implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    
+
     /**
      * @var array
      */
     protected $options;
-    
+
     /**
      * @param array $options
      */
@@ -36,7 +38,7 @@ class FormService implements ServiceLocatorAwareInterface
             $this->setOptions($options);
         }
     }
-    
+
     /**
      * @return array|null:
      */
@@ -44,7 +46,7 @@ class FormService implements ServiceLocatorAwareInterface
     {
         return $this->options;
     }
-    
+
     /**
      * @param array $options
      * @return \UthandoCommon\Service\FormService
@@ -54,7 +56,7 @@ class FormService implements ServiceLocatorAwareInterface
         $this->options = $options;
         return $this;
     }
-    
+
     /**
      * @param string $key
      * @return string|null
@@ -67,7 +69,7 @@ class FormService implements ServiceLocatorAwareInterface
 
         return $this->options[$key];
     }
-    
+
     /**
      * @param string $key
      * @param string $value
@@ -78,7 +80,7 @@ class FormService implements ServiceLocatorAwareInterface
         $this->options[$key] = $value;
         return $this;
     }
-    
+
     /**
      * @param string $name
      * @param ModelInterface $model
@@ -88,18 +90,18 @@ class FormService implements ServiceLocatorAwareInterface
     public function getForm($name, $model = null, $data = null)
     {
         $form = $this->getFromServiceManager($name);
-        
+
         if ($model instanceof ModelInterface) {
             $form->bind($model);
         }
-        
+
         if (is_array($data)) {
             $form->setData($data);
         }
-        
+
         return $form;
     }
-    
+
     /**
      * @param string $name
      * @return \Zend\Form\Form

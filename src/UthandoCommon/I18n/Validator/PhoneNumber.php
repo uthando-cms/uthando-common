@@ -22,44 +22,44 @@ use Zend\Validator\AbstractValidator;
  */
 class PhoneNumber extends AbstractValidator
 {
-    const NO_MATCH          = 'phoneNumberNoMatch';
-    const UNSUPPORTED       = 'phoneNumberUnsupported';
-    const INVALID           = 'phoneNumberInvalid';
-    const INVALID_NUMBER    = 'phoneNumberInvalidNumber';
-    
+    const NO_MATCH = 'phoneNumberNoMatch';
+    const UNSUPPORTED = 'phoneNumberUnsupported';
+    const INVALID = 'phoneNumberInvalid';
+    const INVALID_NUMBER = 'phoneNumberInvalidNumber';
+
     /**
      * Validation failure message template definitions
      *
      * @var array
      */
     protected $messageTemplates = [
-        self::NO_MATCH          => 'The input does not match a phone number format.',
-        self::UNSUPPORTED       => 'The country provided is currently unsupported',
-        self::INVALID           => 'Invalid type given. String expected',
-        self::INVALID_NUMBER    => 'The number provided is an invalid number format',
+        self::NO_MATCH => 'The input does not match a phone number format.',
+        self::UNSUPPORTED => 'The country provided is currently unsupported',
+        self::INVALID => 'Invalid type given. String expected',
+        self::INVALID_NUMBER => 'The number provided is an invalid number format',
     ];
-    
+
     /**
      * @var string
      */
     protected $country;
-    
+
     /**
      * @var PhoneNumberUtil
      */
     protected $libPhoneNumber;
-    
+
     public function __construct($options = null)
     {
         parent::__construct($options);
-        
+
         $this->libPhoneNumber = PhoneNumberUtil::getInstance();
-    
+
         if (array_key_exists('country', $options)) {
             $this->setCountry($options['country']);
         }
     }
-    
+
     /**
      * @return string $country
      */
@@ -67,7 +67,7 @@ class PhoneNumber extends AbstractValidator
     {
         return $this->country;
     }
-    
+
     /**
      * @param string $country
      * @return $this
@@ -77,34 +77,34 @@ class PhoneNumber extends AbstractValidator
         $this->country = $country;
         return $this;
     }
-    
+
     public function isValid($value)
     {
         if (!is_scalar($value)) {
             $this->error(self::INVALID);
             return false;
         }
-        
+
         $country = $this->getCountry();
-        
+
         $supportedCountries = $this->libPhoneNumber->getSupportedRegions();
-        
+
         if (!in_array($country, $supportedCountries)) {
             $this->error(self::UNSUPPORTED);
             return false;
         }
-        
+
         try {
             $NumberProto = $this->libPhoneNumber->parse($value, $country);
         } catch (NumberParseException $e) {
             $this->error(self::INVALID_NUMBER);
             return false;
         }
-        
+
         if ($this->libPhoneNumber->isValidNumberForRegion($NumberProto, $country)) {
             return true;
         }
-        
+
         $this->error(self::NO_MATCH);
 
         return false;

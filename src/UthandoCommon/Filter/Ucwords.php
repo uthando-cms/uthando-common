@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Filter;
 
 use Zend\Filter\AbstractUnicode;
@@ -22,10 +23,10 @@ class Ucwords extends AbstractUnicode
     /**
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         'encoding' => null,
-    );
-    
+    ];
+
     /**
      * Constructor
      *
@@ -41,7 +42,7 @@ class Ucwords extends AbstractUnicode
             }
         }
     }
-    
+
     /**
      * Defined by Zend\Filter\FilterInterface
      *
@@ -57,11 +58,11 @@ class Ucwords extends AbstractUnicode
         if (!is_scalar($value)) {
             return $value;
         }
-        
-        $value = (string) $value;
+
+        $value = (string)$value;
 
         if ($this->options['encoding'] !== null) {
-            return mb_convert_case($value, MB_CASE_TITLE,  $this->options['encoding']);
+            return mb_convert_case($value, MB_CASE_TITLE, $this->options['encoding']);
         }
 
         return ucwords(strtolower($value));

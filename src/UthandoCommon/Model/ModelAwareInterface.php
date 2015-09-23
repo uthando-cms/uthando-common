@@ -8,12 +8,14 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Model;
 
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Interface ModelAwareInterface
+ *
  * @package UthandoCommon\Model
  */
 interface ModelAwareInterface
@@ -36,4 +38,4 @@ interface ModelAwareInterface
      * @return array
      */
     public function extract($dataOrModel, HydratorInterface $hydrator = null);
-} 
+}

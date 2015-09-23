@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Service;
 
 use UthandoCommon\Mapper\MapperInterface;
@@ -16,6 +17,7 @@ use Zend\Form\Form;
 
 /**
  * Interface MapperServiceInterface
+ *
  * @package UthandoCommon\Service
  */
 interface MapperServiceInterface
@@ -104,4 +106,4 @@ interface MapperServiceInterface
      * @return mixed
      */
     public function usePaginator($options = []);
-} 
+}

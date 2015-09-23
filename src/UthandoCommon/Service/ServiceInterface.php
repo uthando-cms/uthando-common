@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Service;
 
 use UthandoCommon\Model\ModelInterface;
@@ -16,6 +17,7 @@ use Zend\InputFilter\InputFilter;
 
 /**
  * Interface ServiceInterface
+ *
  * @package UthandoCommon\Service
  */
 interface ServiceInterface
@@ -60,7 +62,7 @@ interface ServiceInterface
      * @param bool $useHydrator
      * @return Form $form
      */
-    public function getForm(ModelInterface $model=null, array $data=null, $useInputFilter=false, $useHydrator=false);
+    public function getForm(ModelInterface $model = null, array $data = null, $useInputFilter = false, $useHydrator = false);
 
     /**
      * Gets model from ModelManager
@@ -90,4 +92,4 @@ interface ServiceInterface
      * @return array $config
      */
     public function getConfig($key);
-} 
+}

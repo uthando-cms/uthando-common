@@ -1,7 +1,7 @@
 <?php
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
- * 
+ *
  * @package   UthandoCommon\Stdlib
  * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
  * @link      https://github.com/uthando-cms for the canonical source repository
@@ -13,6 +13,7 @@ namespace UthandoCommon\Stdlib;
 
 /**
  * Class StringUtils
+ *
  * @package UthandoCommon\Stdlib
  */
 abstract class StringUtils
@@ -40,4 +41,4 @@ abstract class StringUtils
     {
         return strpos($string, $look) === 0;
     }
-} 
+}

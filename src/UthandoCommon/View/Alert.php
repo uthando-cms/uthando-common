@@ -8,12 +8,14 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\View;
 
 use Zend\Form\View\Helper\AbstractHelper;
 
 /**
  * Class Alert
+ *
  * @package UthandoCommon\View
  */
 class Alert extends AbstractHelper
@@ -22,13 +24,13 @@ class Alert extends AbstractHelper
     /**
      * @var string
      */
-     protected $format = '<div class="alert %s alert-dismissable"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</div>';
+    protected $format = '<div class="alert %s alert-dismissable"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</div>';
 
     /**
      * Display an Informational Alert
      *
      * @param  string $alert
-     * @param  bool   $isBlock
+     * @param  bool $isBlock
      * @return string
      */
     public function info($alert, $isBlock = false)
@@ -40,7 +42,7 @@ class Alert extends AbstractHelper
      * Display an Error Alert
      *
      * @param  string $alert
-     * @param  bool   $isBlock
+     * @param  bool $isBlock
      * @return string
      */
     public function danger($alert, $isBlock = false)
@@ -52,7 +54,7 @@ class Alert extends AbstractHelper
      * Display a Success Alert
      *
      * @param  string $alert
-     * @param  bool   $isBlock
+     * @param  bool $isBlock
      * @return string
      */
     public function success($alert, $isBlock = false)
@@ -64,7 +66,7 @@ class Alert extends AbstractHelper
      * Display a Warning Alert
      *
      * @param  string $alert
-     * @param  bool   $isBlock
+     * @param  bool $isBlock
      * @return string
      */
     public function warning($alert, $isBlock = false)
@@ -76,7 +78,7 @@ class Alert extends AbstractHelper
      * Render an Alert
      *
      * @param  string $alert
-     * @param  bool   $isBlock
+     * @param  bool $isBlock
      * @param  string $class
      * @return string
      */
@@ -93,9 +95,9 @@ class Alert extends AbstractHelper
     /**
      * Invoke Alert
      *
-     * @param  string      $alert
-     * @param  bool        $isBlock
-     * @param  string      $class
+     * @param  string $alert
+     * @param  bool $isBlock
+     * @param  string $class
      * @return string|self
      */
     public function __invoke($alert = null, $isBlock = false, $class = '')

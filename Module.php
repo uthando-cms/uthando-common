@@ -57,7 +57,7 @@ class Module implements ConsoleBannerProviderInterface
     {
         $app = $event->getApplication();
         $eventManager = $app->getEventManager();
-        
+
         $eventManager->attachAggregate(new MvcListener());
         $eventManager->attachAggregate(new ServiceListener());
     }
@@ -80,7 +80,8 @@ class Module implements ConsoleBannerProviderInterface
      * @param Console $console
      * @return string
      */
-    public function getConsoleBanner(Console $console){
+    public function getConsoleBanner(Console $console)
+    {
         return
             "==-------------------------------------------------------==\n" .
             "        Welcome to Uthando CMS Console-enabled app         \n" .

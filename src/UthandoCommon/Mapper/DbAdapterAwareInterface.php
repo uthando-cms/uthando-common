@@ -8,12 +8,14 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Mapper;
 
 use Zend\Db\Adapter\Adapter;
 
 /**
  * Interface DbAdapterAwareInterface
+ *
  * @package UthandoCommon\Mapper
  */
 interface DbAdapterAwareInterface
@@ -21,11 +23,11 @@ interface DbAdapterAwareInterface
     /**
      * @return Adapter
      */
-	public function getAdapter();
+    public function getAdapter();
 
     /**
      * @param Adapter $dbAdapter
      * @return $this
      */
-	public function setDbAdapter(Adapter $dbAdapter);
+    public function setDbAdapter(Adapter $dbAdapter);
 }

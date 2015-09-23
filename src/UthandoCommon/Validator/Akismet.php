@@ -23,12 +23,12 @@ use ZendService\Akismet\Exception;
  */
 class Akismet extends AbstractValidator
 {
-    const INVALID   = 'invalid';
-    const SPAM      = 'isSpam';
+    const INVALID = 'invalid';
+    const SPAM = 'isSpam';
 
     protected $messageTemplates = [
-        self::INVALID   => 'Invalid input',
-        self::SPAM      => 'The text seems to be spam',
+        self::INVALID => 'Invalid input',
+        self::SPAM => 'The text seems to be spam',
     ];
 
     /**
@@ -272,12 +272,12 @@ class Akismet extends AbstractValidator
         }
 
         $data = [
-            'comment_type'          => $this->getCommentType(),
-            'comment_author'        => $context[$this->getCommentAuthor()],
-            'comment_author_email'  => $context[$this->getCommentAuthorEmail()],
-            'comment_content'       => $value,
-            'user_agent'            => $this->getUserAgent(),
-            'user_ip'               => $this->getUserIp(),
+            'comment_type' => $this->getCommentType(),
+            'comment_author' => $context[$this->getCommentAuthor()],
+            'comment_author_email' => $context[$this->getCommentAuthorEmail()],
+            'comment_content' => $value,
+            'user_agent' => $this->getUserAgent(),
+            'user_ip' => $this->getUserIp(),
         ];
 
         if ($akismet->isSpam($data)) {

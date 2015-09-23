@@ -49,7 +49,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         if (!$model) {
             $model = $this->getMapper()->getById($id, $col);
-            
+
             if ($this->useCache) {
                 $this->setCacheItem($id, $model);
             }
@@ -86,7 +86,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         foreach ($post as $key => $value) {
             $searches[] = [
                 'searchString' => $value,
-                'columns'      => explode('-', $key),
+                'columns' => explode('-', $key),
             ];
         }
 
@@ -105,7 +105,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
     public function add(array $post, Form $form = null)
     {
         $model = $this->getModel();
-        $form  = ($form) ? $form : $this->getForm($model, $post, true, true);
+        $form = ($form) ? $form : $this->getForm($model, $post, true, true);
 
         $argv = compact('post', 'form');
         $argv = $this->prepareEventArguments($argv);
@@ -134,7 +134,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      */
     public function edit(ModelInterface $model, array $post, Form $form = null)
     {
-        $form  = ($form) ? $form : $this->getForm($model, $post, true, true);
+        $form = ($form) ? $form : $this->getForm($model, $post, true, true);
 
         $argv = compact('model', 'post', 'form');
         $argv = $this->prepareEventArguments($argv);
@@ -195,7 +195,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
                 throw new ServiceException('ID ' . $id . ' does not exist');
             }
         }
-        
+
         $this->removeCacheItem($id);
 
         return $result;
@@ -260,8 +260,8 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         $mapperManager = $sl->get('UthandoMapperManager');
 
         $defaultOptions = [
-            'model'     => $this->serviceAlias,
-            'hydrator'  => $this->serviceAlias,
+            'model' => $this->serviceAlias,
+            'hydrator' => $this->serviceAlias,
         ];
 
         $options = array_merge($defaultOptions, $options);
@@ -285,4 +285,4 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         return $this;
     }
-} 
+}

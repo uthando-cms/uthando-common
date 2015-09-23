@@ -57,7 +57,7 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
 
                 $service = $this->getRelatedService($name);
 
-                $getIdMethod = 'get' .  ucfirst($options['refCol']);
+                $getIdMethod = 'get' . ucfirst($options['refCol']);
                 $setMethod = 'set' . ucfirst($name);
                 $getMethod = (isset($options['getMethod'])) ? $options['getMethod'] : 'getById';
 
@@ -110,7 +110,7 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
      */
     public function setReferenceMap($referenceMap)
     {
-        $this->referenceMap = (array) $referenceMap;
+        $this->referenceMap = (array)$referenceMap;
         return $this;
     }
 }

@@ -58,7 +58,7 @@ trait SettingsTrait
         } elseif (false === $prg) {
             $defaults = $settings;
 
-            foreach($settings as $key => $value) {
+            foreach ($settings as $key => $value) {
                 if ($form->has($key)) {
                     if (!array_key_exists($key, $defaults)) {
                         $defaults[$key] = $form->get($key)->getObject()->toArray();
@@ -71,6 +71,7 @@ trait SettingsTrait
             $form->setData($defaults);
             return ['form' => $form,];
         }
+
 
         $form->setData($prg);
 

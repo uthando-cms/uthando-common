@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Service;
 
 use Zend\Mvc\Exception\InvalidPluginException;
@@ -17,6 +18,7 @@ use Zend\Stdlib\InitializableInterface;
 
 /**
  * Class ModelManager
+ *
  * @package UthandoCommon\Servie
  */
 class ServiceManager extends AbstractPluginManager
@@ -32,7 +34,7 @@ class ServiceManager extends AbstractPluginManager
     {
         $this->addInitializer([$this, 'callServiceInit']);
         $this->addInitializer([$this, 'callServiceEvents']);
-        
+
         parent::__construct($config);
     }
 
@@ -55,7 +57,7 @@ class ServiceManager extends AbstractPluginManager
      */
     public function callServiceInit($service)
     {
-        if ($service instanceof InitializableInterface  && $this->initialize) {
+        if ($service instanceof InitializableInterface && $this->initialize) {
             $service->init();
         }
     }
@@ -111,4 +113,4 @@ class ServiceManager extends AbstractPluginManager
             __NAMESPACE__
         ));
     }
-} 
+}

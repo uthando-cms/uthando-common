@@ -1,7 +1,7 @@
 <?php
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
- * 
+ *
  * @package   UthandoCommon\Model
  * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
  * @link      https://github.com/uthando-cms for the canonical source repository
@@ -11,8 +11,12 @@
 
 namespace UthandoCommon\Model;
 
-
+/**
+ * Class RowSetCollection
+ *
+ * @package UthandoCommon\Model
+ */
 class RowSetCollection extends AbstractCollection
 {
 
-} 
+}

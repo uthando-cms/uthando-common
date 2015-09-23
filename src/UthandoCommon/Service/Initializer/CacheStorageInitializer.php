@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Service\Initializer;
 
 use Zend\ServiceManager\InitializerInterface;
@@ -16,6 +17,7 @@ use UthandoCommon\Cache\CacheStorageAwareInterface;
 
 /**
  * Class CacheStorageInitializer
+ *
  * @package UthandoCommon\Service\Initializer
  */
 class CacheStorageInitializer implements InitializerInterface
@@ -27,12 +29,12 @@ class CacheStorageInitializer implements InitializerInterface
      */
     public function initialize($instance, ServiceLocatorInterface $serviceLocator)
     {
-    	if ($instance instanceof CacheStorageAwareInterface) {
+        if ($instance instanceof CacheStorageAwareInterface) {
 
             /* @var $cache \Zend\Cache\Storage\Adapter\AbstractAdapter */
-    		$cache = $serviceLocator->get('Zend\Cache\Service\StorageCacheFactory');
-    			
-    		$instance->setCache($cache);
-    	}
+            $cache = $serviceLocator->get('Zend\Cache\Service\StorageCacheFactory');
+
+            $instance->setCache($cache);
+        }
     }
 }

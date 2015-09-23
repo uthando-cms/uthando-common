@@ -19,6 +19,7 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Class AbstractService
+ *
  * @package UthandoCommon\Service
  */
 abstract class AbstractService implements
@@ -48,7 +49,8 @@ abstract class AbstractService implements
      * events to set up. This should be overridden in parent class.
      */
     public function attachEvents()
-    {}
+    {
+    }
 
     /**
      * @param $service
@@ -84,41 +86,41 @@ abstract class AbstractService implements
      * @param bool $useHydrator
      * @return Form
      */
-	public function getForm(ModelInterface $model=null, array $data=null, $useInputFilter=false, $useHydrator=false)
-	{
+    public function getForm(ModelInterface $model = null, array $data = null, $useInputFilter = false, $useHydrator = false)
+    {
         $argv = compact('model', 'data');
         $argv = $this->prepareEventArguments($argv);
         $this->getEventManager()->trigger('pre.form', $this, $argv);
         $data = $argv['data'];
 
-		$sl = $this->getServiceLocator();
+        $sl = $this->getServiceLocator();
         /* @var $formElementManager \Zend\Form\FormElementManager */
-		$formElementManager = $sl->get('FormElementManager');
-		/* @var $form \Zend\Form\Form */
-		$form = $formElementManager->get($this->serviceAlias, $this->formOptions);
-		
-		if ($useInputFilter) {
-			$form->setInputFilter($this->getInputFilter());
-		}
-		
-		if ($useHydrator) {
-			$form->setHydrator($this->getHydrator());
-		}
-		 
-		if ($model) {
-			$form->bind($model);
-		}
-		 
-		if ($data) {
-			$form->setData($data);
-		}
+        $formElementManager = $sl->get('FormElementManager');
+        /* @var $form \Zend\Form\Form */
+        $form = $formElementManager->get($this->serviceAlias, $this->formOptions);
+
+        if ($useInputFilter) {
+            $form->setInputFilter($this->getInputFilter());
+        }
+
+        if ($useHydrator) {
+            $form->setHydrator($this->getHydrator());
+        }
+
+        if ($model) {
+            $form->bind($model);
+        }
+
+        if ($data) {
+            $form->setData($data);
+        }
 
         $argv = compact('form', 'model', 'data');
 
         $this->getEventManager()->trigger('form.init', $this, $this->prepareEventArguments($argv));
-	
-		return $form;
-	}
+
+        return $form;
+    }
 
     /**
      * @return array
@@ -159,16 +161,16 @@ abstract class AbstractService implements
      * @param null|string $inputFilter
      * @return \Zend\InputFilter\InputFilter
      */
-	public function getInputFilter($inputFilter = null)
-	{
+    public function getInputFilter($inputFilter = null)
+    {
         $inputFilter = ($inputFilter) ?: $this->serviceAlias;
-	    $sl = $this->getServiceLocator();
+        $sl = $this->getServiceLocator();
         /* @var $inputFilterManager \Zend\InputFilter\InputFilterPluginManager */
         $inputFilterManager = $sl->get('InputFilterManager');
         $inputFilter = $inputFilterManager->get($inputFilter);
 
-	    return $inputFilter;
-	}
+        return $inputFilter;
+    }
 
     /**
      * Gets hydrator from HydratorManager
@@ -192,22 +194,22 @@ abstract class AbstractService implements
      * @return \ArrayObject
      */
     public function prepareEventArguments($argv)
-	{
+    {
         /* @var $em \Zend\EventManager\EventManager */
         $em = $this->getEventManager();
-	    $argv = $em->prepareArgs($argv);
-	    return $argv;
-	}
-	
-	/**
-	 * get application config option by its key.
-	 *
-	 * @param string $key
-	 * @return array $config
-	 */
-	public function getConfig($key)
-	{
-		$config = $this->getServiceLocator()->get('config');
-		return $config[$key];
-	}
+        $argv = $em->prepareArgs($argv);
+        return $argv;
+    }
+
+    /**
+     * get application config option by its key.
+     *
+     * @param string $key
+     * @return array $config
+     */
+    public function getConfig($key)
+    {
+        $config = $this->getServiceLocator()->get('config');
+        return $config[$key];
+    }
 }

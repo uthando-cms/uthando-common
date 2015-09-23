@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Filter;
 
 use Zend\Filter\AbstractUnicode;
@@ -22,15 +23,15 @@ class UcFirst extends AbstractUnicode
     /**
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         'encoding' => null,
-    );
-    
+    ];
+
     /**
      * Constructor
      *
      * @param string|array|Traversable $encodingOrOptions OPTIONAL
-    */
+     */
     public function __construct($encodingOrOptions = null)
     {
         if ($encodingOrOptions !== null) {
@@ -41,7 +42,7 @@ class UcFirst extends AbstractUnicode
             }
         }
     }
-    
+
     /**
      * Defined by Zend\Filter\FilterInterface
      *
@@ -57,17 +58,17 @@ class UcFirst extends AbstractUnicode
         if (!is_scalar($value)) {
             return $value;
         }
-    
-        $value = (string) $value;
-    
+
+        $value = (string)$value;
+
         if ($this->options['encoding'] !== null) {
             $string = mb_strtolower($value, $this->options['encoding']);
             $upper = mb_strtoupper($string, $this->options['encoding']);
             preg_match('#(.)#us', $upper, $matches);
-            $string = $matches[1] . mb_substr($string, 1, mb_strlen($string, $this->options['encoding']), $this->options['encoding']); 
+            $string = $matches[1] . mb_substr($string, 1, mb_strlen($string, $this->options['encoding']), $this->options['encoding']);
             return $string;
         }
-    
+
         return ucfirst(strtolower($value));
     }
 }

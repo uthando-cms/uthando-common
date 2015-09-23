@@ -1,7 +1,7 @@
 <?php
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
- * 
+ *
  * @package   UthandoCommon\Stdlib
  * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
  * @link      https://github.com/uthando-cms for the canonical source repository
@@ -13,6 +13,7 @@ namespace UthandoCommon\Stdlib;
 
 /**
  * Class ArrayUtils
+ *
  * @package UthandoCommon\Stdlib
  */
 abstract class ArrayUtils
@@ -30,7 +31,7 @@ abstract class ArrayUtils
             if (is_array($value)) {
                 self::traverseArray($value, $keys);
             } else {
-                if (in_array($key, $keys) || '' == $value){
+                if (in_array($key, $keys) || '' == $value) {
                     unset($array[$key]);
                 }
             }
@@ -51,9 +52,9 @@ abstract class ArrayUtils
         $nested = [];
         $depths = [];
 
-        foreach($array as $key => $arr) {
+        foreach ($array as $key => $arr) {
 
-            if( $arr['depth'] == 0 ) {
+            if ($arr['depth'] == 0) {
                 $nested[$key] = $arr;
             } else {
                 $parent =& $nested;
@@ -70,4 +71,4 @@ abstract class ArrayUtils
 
         return $nested;
     }
-} 
+}

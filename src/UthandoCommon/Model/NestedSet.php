@@ -8,10 +8,12 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Model;
 
 /**
  * Class NestedSet
+ *
  * @package UthandoCommon\Model
  */
 abstract class NestedSet implements ModelInterface, NestedSetInterface
@@ -103,4 +105,4 @@ abstract class NestedSet implements ModelInterface, NestedSetInterface
         $children = (($this->getRgt() - $this->getLft()) - 1) / 2;
         return (0 === $children) ? false : true;
     }
-} 
+}

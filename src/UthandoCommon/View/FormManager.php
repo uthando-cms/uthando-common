@@ -1,7 +1,7 @@
 <?php
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
- * 
+ *
  * @package   UthandoCommon\View
  * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
  * @link      https://github.com/uthando-cms for the canonical source repository
@@ -35,4 +35,4 @@ class FormManager extends AbstractViewHelper
 
         return $form;
     }
-} 
+}

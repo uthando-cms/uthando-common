@@ -25,14 +25,14 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
 {
     /**
      * collection of entities.
-     * 
+     *
      * @var array
      */
     protected $entities = [];
-    
+
     /**
      * entity class name
-     * 
+     *
      * @var string
      */
     protected $entityClass;
@@ -45,7 +45,7 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
         if (!empty($entities)) {
             $this->setEntities($entities);
         }
-        
+
         $this->rewind();
     }
 
@@ -77,22 +77,22 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
      */
     public function checkEntities($entities)
     {
-        return array_filter($entities, function($val) {
+        return array_filter($entities, function ($val) {
             $entityClass = $this->entityClass;
             return ($val instanceof $entityClass);
         });
     }
-    
+
     /**
      * Set the entities stored in the collection
-     * 
+     *
      * @param array $entities
      */
     public function setEntities(array $entities)
     {
         $this->entities = $this->checkEntities($entities);
     }
-    
+
     /**
      * Get the entities stored in the collection
      */
@@ -100,7 +100,7 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
     {
         return $this->entities;
     }
-     
+
     /**
      * @return object $entityClass
      */
@@ -109,7 +109,7 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
         return $this->entityClass;
     }
 
-	/**
+    /**
      * Clear the collection
      *
      * @return void
@@ -211,12 +211,12 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
             });
             return true;
         }
-        
+
         if (isset($this->entities[$key])) {
             unset($this->entities[$key]);
             return true;
         }
-        
+
         return false;
     }
 
@@ -254,12 +254,12 @@ abstract class AbstractCollection implements Iterator, Countable, ArrayAccess, S
     {
         $this->rewind();
         $position = 0;
-    
+
         while ($position < $index && $this->valid()) {
             $this->next();
             $position++;
         }
-    
+
         if (!$this->valid()) {
             throw new CollectionException('Invalid seek position');
         }

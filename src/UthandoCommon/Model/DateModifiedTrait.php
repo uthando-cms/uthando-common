@@ -8,12 +8,14 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Model;
 
 use DateTime;
 
 /**
  * Class DateModifiedTrait
+ *
  * @package UthandoCommon\Model
  */
 trait DateModifiedTrait
@@ -22,13 +24,13 @@ trait DateModifiedTrait
      * @var DateTime
      */
     protected $dateModified;
-    
+
     /**
      * @return DateTime $dateModified
      */
     public function getDateModified()
     {
-    	return $this->dateModified;
+        return $this->dateModified;
     }
 
     /**
@@ -37,7 +39,7 @@ trait DateModifiedTrait
      */
     public function setDateModified(DateTime $dateModified = null)
     {
-    	$this->dateModified = $dateModified;
-    	return $this;
+        $this->dateModified = $dateModified;
+        return $this;
     }
 }

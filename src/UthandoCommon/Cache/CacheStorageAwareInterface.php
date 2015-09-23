@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Cache;
 
 use Zend\Cache\Storage\Adapter\AbstractAdapter;
@@ -19,6 +20,14 @@ use Zend\Cache\Storage\Adapter\AbstractAdapter;
  */
 interface CacheStorageAwareInterface
 {
+    /**
+     * @return mixed
+     */
     public function getCache();
+
+    /**
+     * @param AbstractAdapter $cache
+     * @return mixed
+     */
     public function setCache(AbstractAdapter $cache);
 }

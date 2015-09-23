@@ -13,6 +13,7 @@ namespace UthandoCommon\Model;
 
 /**
  * Interface NestedSetInterface
+ *
  * @package UthandoCommon\Model
  */
 interface NestedSetInterface
@@ -59,4 +60,4 @@ interface NestedSetInterface
      * @return bool
      */
     public function hasChildren();
-} 
+}

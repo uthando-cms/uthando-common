@@ -31,15 +31,15 @@ use Zend\View\Model\ViewModel;
  * @method FlashMessenger flashMessenger()
  */
 abstract class AbstractCrudController extends AbstractActionController
-{   
-	const ADD_ERROR			= 'record could not be saved to table %s due to a database error.';
-	const ADD_SUCCESS		= 'row %s has been saved to database table %s.';
-	const DELETE_ERROR		= 'row %s could not be deleted form table %s due to a database error.';
-	const DELETE_SUCCESS	= 'row %s has been deleted from the database table %s.';
-    const SAVE_ERROR		= 'no changes where applied to row %s.';
-    const SAVE_SUCCESS		= self::ADD_SUCCESS;
-    
-    const FORM_ERROR		= 'There were one or more issues with your submission. Please correct them as indicated below.';
+{
+    const ADD_ERROR = 'record could not be saved to table %s due to a database error.';
+    const ADD_SUCCESS = 'row %s has been saved to database table %s.';
+    const DELETE_ERROR = 'row %s could not be deleted form table %s due to a database error.';
+    const DELETE_SUCCESS = 'row %s has been deleted from the database table %s.';
+    const SAVE_ERROR = 'no changes where applied to row %s.';
+    const SAVE_SUCCESS = self::ADD_SUCCESS;
+
+    const FORM_ERROR = 'There were one or more issues with your submission. Please correct them as indicated below.';
 
     use ServiceTrait;
 
@@ -50,7 +50,7 @@ abstract class AbstractCrudController extends AbstractActionController
         'count' => 25,
         'page' => 1,
     ];
-    
+
     /**
      * @var array
      */
@@ -80,9 +80,12 @@ abstract class AbstractCrudController extends AbstractActionController
      * @var bool
      */
     protected $paginate = true;
-    
+
     use SetExceptionMessages;
-    
+
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->searchDefaultParams = array_merge($this->searchDefaultParams, $this->controllerSearchOverrides);
@@ -103,16 +106,16 @@ abstract class AbstractCrudController extends AbstractActionController
         }
 
         $session->offsetSet('params', $params);
-        
+
         $service = $this->getService();
 
         if ($this->paginate) {
             $service->usePaginator([
-                'limit'	=> $params['count'],
-                'page'	=> $params['page'],
+                'limit' => $params['count'],
+                'page' => $params['page'],
             ]);
         }
-        
+
         return $service->search($params);
     }
 
@@ -123,10 +126,10 @@ abstract class AbstractCrudController extends AbstractActionController
     {
         $models = $this->getPaginatorResults();
 
-    	$viewModel = new ViewModel([
-    		'models' => $models,
+        $viewModel = new ViewModel([
+            'models' => $models,
             'params' => $this->sessionContainer()->offsetGet('params'),
-    	]);
+        ]);
 
         if ($this->getRequest()->isXmlHttpRequest()) {
             $viewModel->setTerminal(true);
@@ -140,17 +143,17 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     public function listAction()
     {
-    	if (!$this->getRequest()->isXmlHttpRequest()) {
-    		return $this->redirect()->toRoute($this->getRoute('list'), $this->params()->fromRoute());
-    	}
-    		
-    	$viewModel = new ViewModel([
-    		'models' => $this->getPaginatorResults(),
-    	]);
+        if (!$this->getRequest()->isXmlHttpRequest()) {
+            return $this->redirect()->toRoute($this->getRoute('list'), $this->params()->fromRoute());
+        }
+
+        $viewModel = new ViewModel([
+            'models' => $this->getPaginatorResults(),
+        ]);
 
         $viewModel->setTerminal(true);
-    		
-    	return $viewModel;
+
+        return $viewModel;
     }
 
     /**
@@ -158,37 +161,37 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     public function addAction()
     {
-    	$request = $this->getRequest();
+        $request = $this->getRequest();
 
         $viewModel = new ViewModel();
 
         if ($request->isXmlHttpRequest()) {
             $viewModel->setTerminal(true);
         }
-    
-    	if ($request->isPost()) {
-    		try {
-    			$params = $this->params()->fromPost();
-	    		$result = $this->getService()->add($params);
 
-	    		if ($result instanceof Form) {
-	    
-	    			$this->flashMessenger()->addInfoMessage(self::FORM_ERROR);
+        if ($request->isPost()) {
+            try {
+                $params = $this->params()->fromPost();
+                $result = $this->getService()->add($params);
 
-	    			return $viewModel->setVariables([
-	    				'form' => $result,
-	    			    'routeParams' => $this->params()->fromRoute(),
-	    			]);
-	    
-	    		} else {
+                if ($result instanceof Form) {
+
+                    $this->flashMessenger()->addInfoMessage(self::FORM_ERROR);
+
+                    return $viewModel->setVariables([
+                        'form' => $result,
+                        'routeParams' => $this->params()->fromRoute(),
+                    ]);
+
+                } else {
                     $tableName = $this->getService()->getMapper()->getTable();
 
                     if ($request->isXmlHttpRequest()) {
                         return new JsonModel([
-                            'status'    => ($result) ? 'success' : 'danger',
-                            'table'     => $tableName,
-                            'rowId'     => $result,
-                            'messages'  => ($result) ?
+                            'status' => ($result) ? 'success' : 'danger',
+                            'table' => $tableName,
+                            'rowId' => $result,
+                            'messages' => ($result) ?
                                 sprintf(self::ADD_SUCCESS, $result, $tableName) :
                                 sprintf(self::ADD_ERROR, $tableName),
                         ]);
@@ -205,38 +208,38 @@ abstract class AbstractCrudController extends AbstractActionController
 
                     if ('1' == $this->params()->fromPost('redirectToEdit', null)) {
                         $routeParams = array_merge($routeParams, [
-                            'action'    => 'edit',
-                            'id'        => $result,
+                            'action' => 'edit',
+                            'id' => $result,
                         ]);
                         $route = $route . '/edit';
                     }
 
                     return $this->redirect()->toRoute($route, $routeParams);
-	    		}
-    		} catch (Exception $e) {
+                }
+            } catch (Exception $e) {
                 if ($request->isXmlHttpRequest()) {
                     return new JsonModel([
-                        'status'    => 'danger',
-                        'messages'  => $e->getMessage(),
+                        'status' => 'danger',
+                        'messages' => $e->getMessage(),
                     ]);
                 }
 
-	    		$this->setExceptionMessages($e);
-	    		return $viewModel->setVariables([
+                $this->setExceptionMessages($e);
+                return $viewModel->setVariables([
                     'form' => $this->getService()->getForm(null, $this->params()->fromPost()),
                     'routeParams' => $this->params()->fromRoute(),
                 ]);
-	    	}
-    	}
+            }
+        }
 
         $form = $this->getService()->getForm();
         $argv = $this->getEventManager()->prepareArgs(compact('form'));
         $this->getEventManager()->trigger('add.action', $this, $argv);
 
-    	return $viewModel->setVariables([
-    		'form' => $form,
-    	    'routeParams' => $this->params()->fromRoute(),
-    	]);
+        return $viewModel->setVariables([
+            'form' => $form,
+            'routeParams' => $this->params()->fromRoute(),
+        ]);
     }
 
     /**
@@ -244,13 +247,13 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     public function editAction()
     {
-    	$id = (int) $this->params('id', 0);
+        $id = (int)$this->params('id', 0);
 
-    	if (!$id) {
-    		return $this->redirect()->toRoute($this->getRoute(), array_merge($this->params()->fromRoute(),[
-    			'action' => 'add'
-    		]));
-    	}
+        if (!$id) {
+            return $this->redirect()->toRoute($this->getRoute(), array_merge($this->params()->fromRoute(), [
+                'action' => 'add'
+            ]));
+        }
 
         $viewModel = new ViewModel();
 
@@ -261,8 +264,8 @@ abstract class AbstractCrudController extends AbstractActionController
         }
 
         $post = $this->params()->fromPost();
-    
-    	try {
+
+        try {
 
             $pk = $this->getService()->getMapper()->getPrimaryKey();
             $tableName = $this->getService()->getMapper()->getTable();
@@ -270,73 +273,73 @@ abstract class AbstractCrudController extends AbstractActionController
 
             $model = $this->getService()->getById($id);
 
-	    	if ($request->isPost()) {
-	    		
-	    		// primary key ids must match. If not throw exception.
+            if ($request->isPost()) {
 
-	    		if ($post[$pk] != $model->$modelMethod()) {
-	    			throw new Exception('Primary keys do not match.');
-	    		}
-	    
-	    		$result = $this->getService()->edit($model, $post);
-	    
-	    		if ($result instanceof Form) {
-	    
-	    			$this->flashMessenger()->addInfoMessage(self::FORM_ERROR);
-	    
-	    			return $viewModel->setVariables([
-	    				'form'	=> $result,
-	    				'model'	=> $model,
-	    			]);
-	    		} else {
+                // primary key ids must match. If not throw exception.
+
+                if ($post[$pk] != $model->$modelMethod()) {
+                    throw new Exception('Primary keys do not match.');
+                }
+
+                $result = $this->getService()->edit($model, $post);
+
+                if ($result instanceof Form) {
+
+                    $this->flashMessenger()->addInfoMessage(self::FORM_ERROR);
+
+                    return $viewModel->setVariables([
+                        'form' => $result,
+                        'model' => $model,
+                    ]);
+                } else {
 
                     if ($request->isXmlHttpRequest()) {
                         return new JsonModel([
-                            'status'    => ($result) ? 'success' : 'danger',
-                            'messages'  => ($result) ?
+                            'status' => ($result) ? 'success' : 'danger',
+                            'messages' => ($result) ?
                                 sprintf(self::SAVE_SUCCESS, $id, $tableName) :
                                 sprintf(self::SAVE_ERROR, $id, $tableName),
                         ]);
                     }
 
-	    			if ($result) {
-	    				$this->flashMessenger()->addSuccessMessage(sprintf(self::SAVE_SUCCESS, $id, $tableName));
-	    			} else {
-	    				$this->flashMessenger()->addErrorMessage(sprintf(self::SAVE_ERROR, $id, $tableName));
-	    			}
-	    			
-	    			$params = ($this->addRouteParams) ? $this->params()->fromRoute() : [];
-	                
-	    			return $this->redirect()->toRoute($this->getRoute('edit'), $params);
-	    		}
-	    	}
+                    if ($result) {
+                        $this->flashMessenger()->addSuccessMessage(sprintf(self::SAVE_SUCCESS, $id, $tableName));
+                    } else {
+                        $this->flashMessenger()->addErrorMessage(sprintf(self::SAVE_ERROR, $id, $tableName));
+                    }
+
+                    $params = ($this->addRouteParams) ? $this->params()->fromRoute() : [];
+
+                    return $this->redirect()->toRoute($this->getRoute('edit'), $params);
+                }
+            }
 
             if (!$model->$modelMethod()) {
                 throw new Exception('No records match key: ' . $id);
             }
-	    	
-	    	$form = $this->getService()->getForm($model);
-	    	
-    	} catch (Exception $e) {
+
+            $form = $this->getService()->getForm($model);
+
+        } catch (Exception $e) {
             if ($request->isXmlHttpRequest()) {
                 return new JsonModel([
-                    'status'    => 'danger',
-                    'messages'  => $e->getMessage(),
+                    'status' => 'danger',
+                    'messages' => $e->getMessage(),
                 ]);
             }
 
-    		$this->setExceptionMessages($e);
+            $this->setExceptionMessages($e);
 
-    		return $viewModel->setVariables([
-			    'form' => $this->getService()->getForm(null, $post),
-			    'routeParams' => $this->params()->fromRoute(),
-			]);
-    	}
+            return $viewModel->setVariables([
+                'form' => $this->getService()->getForm(null, $post),
+                'routeParams' => $this->params()->fromRoute(),
+            ]);
+        }
 
-    	return $viewModel->setVariables([
-    		'form'	=> $form,
-    		'model'	=> $model,
-    	]);
+        return $viewModel->setVariables([
+            'form' => $form,
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -344,51 +347,51 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     public function deleteAction()
     {
-    	$request = $this->getRequest();
-    
-    	$tableName = $this->getService()->getMapper()->getTable();
-    	$pk = $this->getService()->getMapper()->getPrimaryKey();
-    	$id = $request->getPost($pk);
-    
-    	if (!$id) {
-    		return $this->redirect()->toRoute($this->getRoute(), $this->params()->fromRoute());
-    	}
-    
-    	if ($request->isPost()) {
-    		$del = $request->getPost('submit', 'No');
-    
-    		if ($del == 'delete') {
-    			try {
-    				$result = $this->getService()->delete($id);
+        $request = $this->getRequest();
+
+        $tableName = $this->getService()->getMapper()->getTable();
+        $pk = $this->getService()->getMapper()->getPrimaryKey();
+        $id = $request->getPost($pk);
+
+        if (!$id) {
+            return $this->redirect()->toRoute($this->getRoute(), $this->params()->fromRoute());
+        }
+
+        if ($request->isPost()) {
+            $del = $request->getPost('submit', 'No');
+
+            if ($del == 'delete') {
+                try {
+                    $result = $this->getService()->delete($id);
 
                     if ($request->isXmlHttpRequest()) {
                         return new JsonModel([
-                            'status'    => ($result) ? 'success' : 'danger',
-                            'messages'  => ($result) ?
+                            'status' => ($result) ? 'success' : 'danger',
+                            'messages' => ($result) ?
                                 sprintf(self::DELETE_SUCCESS, $id, $tableName) :
                                 sprintf(self::DELETE_ERROR, $id, $tableName),
                         ]);
                     }
-    
-    				if ($result) {
-    					$this->flashMessenger()->addSuccessMessage(sprintf(self::DELETE_SUCCESS, $id, $tableName));
-    				} else {
-    					$this->flashMessenger()->addErrorMessage(sprintf(self::DELETE_ERROR, $id, $tableName));
-    				}
-    			} catch (Exception $e) {
+
+                    if ($result) {
+                        $this->flashMessenger()->addSuccessMessage(sprintf(self::DELETE_SUCCESS, $id, $tableName));
+                    } else {
+                        $this->flashMessenger()->addErrorMessage(sprintf(self::DELETE_ERROR, $id, $tableName));
+                    }
+                } catch (Exception $e) {
                     if ($request->isXmlHttpRequest()) {
                         return new JsonModel([
-                            'status'    => 'danger',
-                            'messages'  => $e->getMessage(),
+                            'status' => 'danger',
+                            'messages' => $e->getMessage(),
                         ]);
                     }
 
-    				$this->setExceptionMessages($e);
-    			}
-    		}
-    	}
-    
-    	return $this->redirect()->toRoute($this->getRoute('delete'), $this->params()->fromRoute());
+                    $this->setExceptionMessages($e);
+                }
+            }
+        }
+
+        return $this->redirect()->toRoute($this->getRoute('delete'), $this->params()->fromRoute());
     }
 
     /**
@@ -396,7 +399,7 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     public function getSearchDefaultParams()
     {
-    	return $this->searchDefaultParams;
+        return $this->searchDefaultParams;
     }
 
     /**
@@ -405,8 +408,8 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     public function setSearchDefaultParams($searchDefaultParams)
     {
-    	$this->searchDefaultParams = $searchDefaultParams;
-    	return $this;
+        $this->searchDefaultParams = $searchDefaultParams;
+        return $this;
     }
 
     /**
@@ -421,7 +424,7 @@ abstract class AbstractCrudController extends AbstractActionController
             $route = $this->route;
         }
 
-    	return $route;
+        return $route;
     }
 
     /**
@@ -430,7 +433,7 @@ abstract class AbstractCrudController extends AbstractActionController
      */
     public function setRoute($route)
     {
-    	$this->route = $route;
-    	return $this;
+        $this->route = $route;
+        return $this;
     }
 }

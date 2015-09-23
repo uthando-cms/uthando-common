@@ -24,21 +24,21 @@ use Zend\Validator\Exception;
  */
 class PostCode extends AbstractValidator
 {
-    const INVALID        = 'postcodeInvalid';
-    const NO_MATCH       = 'postcodeNoMatch';
-    const SERVICE        = 'postcodeService';
+    const INVALID = 'postcodeInvalid';
+    const NO_MATCH = 'postcodeNoMatch';
+    const SERVICE = 'postcodeService';
     const SERVICEFAILURE = 'postcodeServiceFailure';
 
     /**
      * @var array
      */
     protected $messageTemplates = array(
-        self::INVALID        => "Invalid type given. String or integer expected",
-        self::NO_MATCH       => "The input does not appear to be a postal code",
-        self::SERVICE        => "The input does not appear to be a postal code",
+        self::INVALID => "Invalid type given. String or integer expected",
+        self::NO_MATCH => "The input does not appear to be a postal code",
+        self::SERVICE => "The input does not appear to be a postal code",
         self::SERVICEFAILURE => "An exception has been raised while validating the input",
     );
-    
+
     /**
      * ISO 3611 Country Code
      *
@@ -253,18 +253,18 @@ class PostCode extends AbstractValidator
             $country = Locale::getRegion(Locale::getDefault());
             $this->setCountry($country);
         }
-        
+
         if (array_key_exists('format', $options)) {
             $this->setFormat($options['format']);
         }
-        
+
         if (array_key_exists('service', $options)) {
             $this->setService($options['service']);
         }
 
         parent::__construct($options);
     }
-    
+
     /**
      * Get Country
      *
@@ -272,9 +272,9 @@ class PostCode extends AbstractValidator
      */
     public function getCountry()
     {
-    	return $this->country;
+        return $this->country;
     }
-    
+
     /**
      * Set Country
      *
@@ -283,9 +283,9 @@ class PostCode extends AbstractValidator
      */
     public function setCountry($country)
     {
-    	$this->country = strtoupper($country);
-    
-    	return $this;
+        $this->country = strtoupper($country);
+
+        return $this;
     }
 
     /**
@@ -350,8 +350,8 @@ class PostCode extends AbstractValidator
 
         $service = $this->getService();
         $country = $this->getCountry();
-        $format  = $this->getFormat();
-        
+        $format = $this->getFormat();
+
         if ((null === $format || '' === $format) && !empty($country)) {
             if (isset(static::$postCodeRegex[$country])) {
                 $format = static::$postCodeRegex[$country];

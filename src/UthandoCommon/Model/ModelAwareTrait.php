@@ -8,13 +8,15 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Model;
 
-use Zend\Stdlib\Hydrator\HydratorAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorAwareTrait;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Class ModelAwareTrait
+ *
  * @package UthandoCommon\Model
  */
 trait ModelAwareTrait
@@ -74,4 +76,4 @@ trait ModelAwareTrait
 
         return $hydrator->extract($dataOrModel);
     }
-} 
+}

@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Mapper;
 
 use UthandoCommon\Model\ModelAwareInterface;
@@ -15,11 +16,12 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Mvc\Exception\InvalidPluginException;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ConfigInterface;
-use Zend\Stdlib\Hydrator\ClassMethods;
-use Zend\Stdlib\Hydrator\HydratorAwareInterface;
+use Zend\Hydrator\ClassMethods;
+use Zend\Hydrator\HydratorAwareInterface;
 
 /**
  * Class MapperManager
+ *
  * @package UthandoCommon\Mapper
  */
 class MapperManager extends AbstractPluginManager
@@ -53,7 +55,7 @@ class MapperManager extends AbstractPluginManager
             $config = $this->serviceLocator->get('config');
 
             // enable foreign key constraints on sqlite.
-            if (isset($config['db']['sqlite_constraints']) && $config['db']['sqlite_constraints']  && !$this->sqliteConstraints) {
+            if (isset($config['db']['sqlite_constraints']) && $config['db']['sqlite_constraints'] && !$this->sqliteConstraints) {
                 $dbAdapter->query('PRAGMA FOREIGN_KEYS = ON', Adapter::QUERY_MODE_EXECUTE);
                 $this->sqliteConstraints = true;
             }

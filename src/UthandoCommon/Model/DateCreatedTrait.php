@@ -8,12 +8,14 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Model;
 
 use DateTime;
 
 /**
  * Class DateCreatedTrait
+ *
  * @package UthandoCommon\Model
  */
 trait DateCreatedTrait
@@ -22,13 +24,13 @@ trait DateCreatedTrait
      * @var DateTime
      */
     protected $dateCreated;
-    
+
     /**
      * @return DateTime $dateCreated
      */
     public function getDateCreated()
     {
-    	return $this->dateCreated;
+        return $this->dateCreated;
     }
 
     /**
@@ -37,7 +39,7 @@ trait DateCreatedTrait
      */
     public function setDateCreated(DateTime $dateCreated = null)
     {
-    	$this->dateCreated = $dateCreated;
-    	return $this;
+        $this->dateCreated = $dateCreated;
+        return $this;
     }
 }

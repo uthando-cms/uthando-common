@@ -1,7 +1,7 @@
 <?php
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
- * 
+ *
  * @package   UthandoCommon\Hydrator
  * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
  * @link      https://github.com/uthando-cms for the canonical source repository
@@ -11,13 +11,17 @@
 
 namespace UthandoCommon\Hydrator;
 
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Interface NestedSetInterface
+ *
  * @package UthandoCommon\Hydrator
  */
 interface NestedSetInterface extends HydratorInterface
 {
+    /**
+     * @return mixed
+     */
     public function addDepth();
-} 
+}

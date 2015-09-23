@@ -8,23 +8,25 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Hydrator\Strategy;
 
-use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
+use Zend\Hydrator\Strategy\StrategyInterface;
 
 /**
  * Class NullStrategy
+ *
  * @package UthandoCommon\Hydrator\Strategy
  */
 class NullStrategy implements StrategyInterface
 {
-	public function extract($value)
-	{
-		return (0 == $value || '' == $value) ? null : $value;
-	}
-	
-	public function hydrate($value)
-	{
-		return (0 == $value || '' == $value) ? null : $value;
-	}
+    public function extract($value)
+    {
+        return (0 == $value || '' == $value) ? null : $value;
+    }
+
+    public function hydrate($value)
+    {
+        return (0 == $value || '' == $value) ? null : $value;
+    }
 }

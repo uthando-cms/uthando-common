@@ -8,12 +8,14 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Mapper;
 
 use UthandoCommon\UthandoException;
 
 /**
  * Class MapperException
+ *
  * @package UthandoCommon\Mapper
  */
 class MapperException extends UthandoException

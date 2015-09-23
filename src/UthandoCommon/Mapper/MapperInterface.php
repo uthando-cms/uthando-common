@@ -8,22 +8,25 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Mapper;
 
 use UthandoCommon\Model\ModelAwareInterface;
-use Zend\Stdlib\Hydrator\HydratorAwareInterface;
+use Zend\Hydrator\HydratorAwareInterface;
 
 /**
  * Interface MapperInterface
+ *
  * @package UthandoCommon\Mapper
  */
 interface MapperInterface extends HydratorAwareInterface, ModelAwareInterface
 {
     /**
      * @param $id
+     * @param null $col
      * @return mixed
      */
-    public function getById($id);
+    public function getById($id, $col = null);
 
     /**
      * @param null|string $sort
@@ -99,4 +102,4 @@ interface MapperInterface extends HydratorAwareInterface, ModelAwareInterface
      * @return mixed
      */
     public function paginate($select, $resultSet = null);
-} 
+}

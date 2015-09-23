@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\View;
 
 use Zend\Mvc\Controller\Plugin\FlashMessenger as PluginFlashMessenger;
@@ -15,6 +16,7 @@ use Zend\View\Helper\AbstractHelper;
 
 /**
  * Class FlashMessenger
+ *
  * @package UthandoCommon\View
  */
 class FlashMessenger extends AbstractHelper
@@ -43,8 +45,8 @@ class FlashMessenger extends AbstractHelper
      * @var array Default attributes for the open format tag
      */
     protected $classMessages = array(
-        PluginFlashMessenger::NAMESPACE_INFO    => 'info',
-        PluginFlashMessenger::NAMESPACE_ERROR   => 'danger',
+        PluginFlashMessenger::NAMESPACE_INFO => 'info',
+        PluginFlashMessenger::NAMESPACE_ERROR => 'danger',
         PluginFlashMessenger::NAMESPACE_SUCCESS => 'success',
         PluginFlashMessenger::NAMESPACE_DEFAULT => 'warning',
     );
@@ -53,7 +55,7 @@ class FlashMessenger extends AbstractHelper
      * @var array An array of allowed title tags
      */
     protected $allowedTags = array(
-        'h1','h2','h3','h4','h5','h6','b','strong'
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'b', 'strong'
     );
 
     /**
@@ -74,7 +76,7 @@ class FlashMessenger extends AbstractHelper
      * Proxy the flash messenger plugin controller
      *
      * @param  string $method
-     * @param  array  $argv
+     * @param  array $argv
      * @return mixed
      */
     public function __call($method, $argv)
@@ -87,7 +89,7 @@ class FlashMessenger extends AbstractHelper
     /**
      * Render Messages
      *
-     * @param  array  $namespace
+     * @param  array $namespace
      * @return string
      */
     public function render($namespace = null)
@@ -130,7 +132,7 @@ class FlashMessenger extends AbstractHelper
     /**
      * Build the message
      *
-     * @param  string       $namespace
+     * @param  string $namespace
      * @param  array|string $messages
      * @return string
      */
@@ -150,7 +152,8 @@ class FlashMessenger extends AbstractHelper
                 }
 
                 if (isset($message['titleTag']) &&
-                in_array($message['titleTag'], $this->allowedTags)) {
+                    in_array($message['titleTag'], $this->allowedTags)
+                ) {
                     $titleTag = $escapeHtml($message['titleTag']);
                 } else {
                     $titleTag = ($isBlock) ? 'h4' : 'strong';

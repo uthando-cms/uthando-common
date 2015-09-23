@@ -8,15 +8,17 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Mapper;
 
 use Zend\Mvc\Service\AbstractPluginManagerFactory;
 
 /**
  * Class MapperManagerFactory
+ *
  * @package UthandoCommon\Mapper
  */
 class MapperManagerFactory extends AbstractPluginManagerFactory
 {
     const PLUGIN_MANAGER_CLASS = 'UthandoCommon\Mapper\MapperManager';
-} 
+}

@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Model;
 
 use Zend\Mvc\Exception\InvalidPluginException;
@@ -15,6 +16,7 @@ use Zend\ServiceManager\AbstractPluginManager;
 
 /**
  * Class ModelManager
+ *
  * @package UthandoCommon\Model
  */
 class ModelManager extends AbstractPluginManager
@@ -47,4 +49,4 @@ class ModelManager extends AbstractPluginManager
             __NAMESPACE__
         ));
     }
-} 
+}

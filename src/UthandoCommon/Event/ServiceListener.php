@@ -31,8 +31,8 @@ class ServiceListener implements ListenerAggregateInterface
     public function attach(EventManagerInterface $events)
     {
         $events = $events->getSharedManager();
-        
-		$this->listeners[] = $events->attach('UthandoCommon\Service\AbstractService', 'pre.edit', [$this, 'edit']);
+
+        $this->listeners[] = $events->attach('UthandoCommon\Service\AbstractService', 'pre.edit', [$this, 'edit']);
     }
 
     /**
@@ -46,6 +46,6 @@ class ServiceListener implements ListenerAggregateInterface
         if ($model->has('dateModified')) {
             $model->setDateModified();
         }
-        
+
     }
 }

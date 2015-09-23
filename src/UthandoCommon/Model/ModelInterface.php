@@ -8,10 +8,12 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\Model;
 
 /**
  * Interface ModelInterface
+ *
  * @package UthandoCommon\Model
  */
 interface ModelInterface
@@ -23,7 +25,7 @@ interface ModelInterface
      * @return boolean
      */
     public function has($prop);
-    
+
     /**
      * Returns object properties as an array
      *

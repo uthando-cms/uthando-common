@@ -1,7 +1,7 @@
 <?php
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
- * 
+ *
  * @package   UthandoCommon\Controller
  * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
  * @link      https://github.com/uthando-cms for the canonical source repository
@@ -12,12 +12,13 @@
 namespace UthandoCommon\Controller;
 
 use UthandoCommon\Service\AbstractService;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class ServiceTrait
  *
  * @package UthandoCommon\Controller
- * @method \Zend\ServiceManager\ServiceLocatorInterface getServiceLocator()
+ * @method ServiceLocatorInterface getServiceLocator()
  */
 trait ServiceTrait
 {
@@ -65,4 +66,4 @@ trait ServiceTrait
 
         return $this->service[$service];
     }
-} 
+}

@@ -8,10 +8,12 @@
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
  * @license   see LICENSE.txt
  */
+
 namespace UthandoCommon\View;
 
 /**
  * Class Request
+ *
  * @package UthandoCommon\View
  */
 class Request extends AbstractViewHelper
@@ -19,7 +21,7 @@ class Request extends AbstractViewHelper
     public function __invoke()
     {
         return $this->getServiceLocator()
-			->getServiceLocator()
-			->get('Request');
+            ->getServiceLocator()
+            ->get('Request');
     }
 }

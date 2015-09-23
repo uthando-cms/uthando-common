@@ -13,17 +13,18 @@ namespace UthandoCommon\View;
 
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Stdlib\Exception\InvalidArgumentException;
+use Zend\View\HelperPluginManager;
 
 /**
  * Class ConfigTrait
  *
  * @package UthandoCommon\View
- * @method \Zend\View\HelperPluginManager getServiceLocator()
+ * @method HelperPluginManager getServiceLocator()
  */
 trait ConfigTrait
 {
     use ServiceLocatorAwareTrait;
-    
+
     /**
      * @var array
      */
@@ -36,26 +37,26 @@ trait ConfigTrait
      * @return array|null
      * @throws array|InvalidArgumentException
      */
-    protected function getConfig($key=null)
+    protected function getConfig($key = null)
     {
         if ($this->config === null) {
             $this->setConfig();
         }
-        
+
         if (null === $key) {
             return $this->config;
         }
-        
+
         if (!array_key_exists($key, $this->config)) {
             throw new InvalidArgumentException("key: '" . $key . "' is not set in configuration options.");
         }
-        
+
         return $this->config[$key];
     }
-    
+
     /**
      * Sets the config array.
-     * 
+     *
      * @return AbstractViewHelper
      */
     protected function setConfig()
