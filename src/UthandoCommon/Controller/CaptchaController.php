@@ -11,18 +11,19 @@
 
 namespace UthandoCommon\Controller;
 
+use Zend\Http\PHPEnvironment\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
  * Class CaptchaController
  *
  * @package UthandoCommon\Controller
- * @method \Zend\Http\PHPEnvironment\Response getResponse()
+ * @method Response getResponse()
  */
 class CaptchaController extends AbstractActionController
 {
     /**
-     * @return \Zend\Http\PHPEnvironment\Response
+     * @return Response
      */
     public function generateAction()
     {

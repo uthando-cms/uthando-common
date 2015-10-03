@@ -53,7 +53,8 @@ return [
     ],
     'form_elements' => [
         'invokables' => [
-            'UthandoCommonCaptcha' => 'UthandoCommon\Form\Element\Captcha',
+            'UthandoCommonCaptcha'                      => 'UthandoCommon\Form\Element\Captcha',
+            'UthandoCommonLibPhoneNumberCountryList'    => 'UthandoCommon\Form\Element\LibPhoneNumberCountryList',
         ],
     ],
     'service_manager' => [

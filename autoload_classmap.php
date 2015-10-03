@@ -15,6 +15,7 @@ return array(
     'UthandoCommon\Filter\UcFirst'                              => __DIR__ . '/src/UthandoCommon/Filter/UcFirst.php',
     'UthandoCommon\Filter\Ucwords'                              => __DIR__ . '/src/UthandoCommon/Filter/Ucwords.php',
     'UthandoCommon\Form\Element\Captcha'                        => __DIR__ . '/src/UthandoCommon/Form/Element/Captcha.php',
+    'UthandoCommon\Form\Element\LibPhoneNumberCountryList'      => __DIR__ . '/src/UthandoCommon/Form/Element/LibPhoneNumberCountryList.php',
     'UthandoCommon\Hydrator\AbstractHydrator'                   => __DIR__ . '/src/UthandoCommon/Hydrator/AbstractHydrator.php',
     'UthandoCommon\Hydrator\NestedSetInterface'                 => __DIR__ . '/src/UthandoCommon/Hydrator/NestedSetInterface.php',
     'UthandoCommon\Hydrator\Strategy\DateTime'                  => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/DateTime.php',

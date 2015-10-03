@@ -31,11 +31,11 @@ class PhoneNumber extends AbstractFilter
     /**
      * @var PhoneNumberUtil
      */
-    protected $libPhoneNumer;
+    protected $libPhoneNumber;
 
     public function __construct($options = [])
     {
-        $this->libPhoneNumer = PhoneNumberUtil::getInstance();
+        $this->libPhoneNumber = PhoneNumberUtil::getInstance();
 
         if (array_key_exists('country', $options)) {
             $this->setCountry($options['country']);
@@ -63,12 +63,12 @@ class PhoneNumber extends AbstractFilter
     public function filter($value)
     {
         try {
-            $NumberProto = $this->libPhoneNumer->parse($value, $this->getCountry());
+            $NumberProto = $this->libPhoneNumber->parse($value, $this->getCountry());
         } catch (NumberParseException $e) {
             return $value;
         }
 
-        return $this->libPhoneNumer->format($NumberProto, PhoneNumberFormat::E164);
+        return $this->libPhoneNumber->format($NumberProto, PhoneNumberFormat::E164);
 
     }
 }

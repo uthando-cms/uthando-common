@@ -69,9 +69,9 @@ trait SettingsTrait
             }
 
             $form->setData($defaults);
+
             return ['form' => $form,];
         }
-
 
         $form->setData($prg);
 
