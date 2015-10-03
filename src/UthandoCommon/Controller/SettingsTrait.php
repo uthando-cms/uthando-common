@@ -51,7 +51,7 @@ trait SettingsTrait
         $prg = $this->prg();
 
         $config = $this->getService('config');
-        $settings = $config[$this->getConfigKey()];
+        $settings = (isset($config[$this->getConfigKey()])) ? $config[$this->getConfigKey()] : [];
 
         if ($prg instanceof Response) {
             return $prg;
