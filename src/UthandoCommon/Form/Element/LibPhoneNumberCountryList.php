@@ -38,6 +38,8 @@ class LibPhoneNumberCountryList extends Select
             $optionsList[$code] = $fullTextCountry;
         }
 
+        asort($optionsList);
+
         $this->setValueOptions($optionsList);
     }
 }

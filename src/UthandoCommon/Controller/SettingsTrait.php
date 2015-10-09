@@ -76,6 +76,7 @@ trait SettingsTrait
         $form->setData($prg);
 
         if ($form->isValid()) {
+
             $array = $form->getData();
             unset($array['button-submit']);
 
