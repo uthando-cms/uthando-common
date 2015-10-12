@@ -26,6 +26,7 @@ return array(
     'UthandoCommon\I18n\Filter\PhoneNumber'                     => __DIR__ . '/src/UthandoCommon/I18n/Filter/PhoneNumber.php',
     'UthandoCommon\I18n\Validator\PhoneNumber'                  => __DIR__ . '/src/UthandoCommon/I18n/Validator/PhoneNumber.php',
     'UthandoCommon\I18n\Validator\PostCode'                     => __DIR__ . '/src/UthandoCommon/I18n/Validator/PostCode.php',
+    'UthandoCommon\I18n\View\Helper\LibPhoneNumber'             => __DIR__ . '/src/UthandoCommon/I18n/View/Helper/LibPhoneNumber.php',
     'UthandoCommon\Mapper\AbstractDbMapper'                     => __DIR__ . '/src/UthandoCommon/Mapper/AbstractDbMapper.php',
     'UthandoCommon\Mapper\AbstractNestedSet'                    => __DIR__ . '/src/UthandoCommon/Mapper/AbstractNestedSet.php',
     'UthandoCommon\Mapper\DbAdapterAwareInterface'              => __DIR__ . '/src/UthandoCommon/Mapper/DbAdapterAwareInterface.php',

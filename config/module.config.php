@@ -86,6 +86,7 @@ return [
             'Enabled'           => 'UthandoCommon\View\Enabled',
             'FormatDate'        => 'UthandoCommon\View\FormatDate',
             'FormManager'       => 'UthandoCommon\View\FormManager',
+            'LibPhoneNumber'    => 'UthandoCommon\I18n\View\Helper\LibPhoneNumber',
             'Request'           => 'UthandoCommon\View\Request',
             'tbAlert'           => 'UthandoCommon\View\Alert',
             'tbFlashMessenger'  => 'UthandoCommon\View\FlashMessenger'
