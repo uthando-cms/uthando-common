@@ -34,7 +34,7 @@ class LibPhoneNumberCountryList extends Select
         $optionsList    = [];
 
         foreach ($libPhoneNumber->getSupportedRegions() as $code) {
-            $fullTextCountry = \Locale::getDisplayRegion('en_' . $code);
+            $fullTextCountry = \Locale::getDisplayRegion('en_' . $code, 'en');
             $optionsList[$code] = $fullTextCountry;
         }
 
