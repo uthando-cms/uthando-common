@@ -2,20 +2,18 @@
 
 namespace UthandoCommonTest\Framework;
 
-use PHPUnit_Framework_TestCase;
+use UthandoCommonTest\Bootstrap;
 use Zend\ServiceManager\ServiceManager;
 
-class TestCase extends PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit_Framework_TestCase
 {
-    protected static $serviceManager = null;
-    
-    public static function setServiceManager(ServiceManager $sm)
+    /**
+     * @var ServiceManager
+     */
+    protected $serviceManager;
+
+    protected function setUp()
     {
-        self::$serviceManager = $sm;
-    }
-    
-    public function getServiceManager()
-    {
-    	return self::$serviceManager;
+        $this->serviceManager = Bootstrap::getServiceManager();
     }
 }

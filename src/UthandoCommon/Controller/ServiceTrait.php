@@ -19,6 +19,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @package UthandoCommon\Controller
  * @method ServiceLocatorInterface getServiceLocator()
+ * @deprecated this method is being deprecated
  */
 trait ServiceTrait
 {

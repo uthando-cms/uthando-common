@@ -12,6 +12,7 @@
 namespace UthandoCommon\Controller;
 
 use Exception;
+use UthandoCommon\Service\ServiceTrait;
 use Zend\Session\Container;
 use Zend\EventManager\EventManager;
 use Zend\Form\Form;

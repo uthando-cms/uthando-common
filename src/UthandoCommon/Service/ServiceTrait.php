@@ -11,48 +11,56 @@
 
 namespace UthandoCommon\Service;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-
 /**
  * Class ServiceTrait
  *
  * @package UthandoCommon\Service
- * @method ServiceLocatorInterface getServiceLocator()
+ * @method ServiceManager getServiceLocator()
  */
 trait ServiceTrait
 {
     /**
      * @var string
      */
-    protected $serviceAlias;
+    protected $serviceName;
 
     /**
      * @var array
      */
-    protected $services = [];
+    protected $service = [];
 
     /**
-     * @param $service
-     * @return AbstractService
+     * @return string
      */
-    public function getService($service)
+    protected function getServiceName()
     {
-        if (!array_key_exists($service, $this->services)) {
-            $this->setService($service);
-        }
-
-        return $this->services[$service];
+        return $this->serviceName;
     }
 
     /**
-     * @param $service
+     * @param string $serviceName
      * @return $this
      */
-    public function setService($service)
+    public function setServiceName($serviceName)
     {
-        $sl = $this->getServiceLocator();
-        $this->services[$service] = $sl->get($service);
-
+        $this->serviceName = $serviceName;
         return $this;
+    }
+
+    /**
+     * @param null $service
+     * @param array $options
+     * @return object|AbstractService
+     */
+    protected function getService($service = null, $options = [])
+    {
+        $service = (is_string($service)) ? $service : $this->getServiceName();
+
+        if (!isset($this->service[$service])) {
+            $sl = $this->getServiceLocator()->get('UthandoServiceManager');
+            $this->service[$service] = $sl->get($service, $options);
+        }
+
+        return $this->service[$service];
     }
 }

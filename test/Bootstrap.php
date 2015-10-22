@@ -1,51 +1,90 @@
 <?php
 
-use UthandoCommonTest\Framework\TestCase;
-use Zend\ServiceManager\ServiceManager;
+namespace UthandoCommonTest;
+
+use Zend\Loader\AutoloaderFactory;
 use Zend\Mvc\Service\ServiceManagerConfig;
-use Zend\Loader\StandardAutoloader;
+use Zend\ServiceManager\ServiceManager;
 
 error_reporting(E_ALL | E_STRICT);
+chdir(__DIR__);
 ini_set('date.timezone', 'Europe/London');
 
-chdir(__DIR__);
+/**
+ * Test bootstrap, for setting up autoloading
+ */
+class Bootstrap
+{
+    protected static $serviceManager;
 
-$previousDir = '.';
-while (!file_exists('config/application.config.php')) {
-    $dir = dirname(getcwd());
-    if ($previousDir === $dir) {
-        throw new RuntimeException(
-                'Unable to locate "config/application.config.php": ' .
-                'is UthandoDomPdf in a subdir of your application skeleton?'
+    public static function init()
+    {
+        static::initAutoloader();
+
+        // use ModuleManager to load this module and it's dependencies
+        $config = array(
+            'module_listener_options' => array(
+                'module_paths' => [
+                    './module',
+                    './devmodules',
+                    './vendor',
+                ],
+            ),
+            'modules' => array(
+                'Application',
+                'UthandoCommon',
+            ),
         );
+
+        $serviceManager = new ServiceManager(new ServiceManagerConfig());
+        $serviceManager->setService('ApplicationConfig', $config);
+        $serviceManager->get('ModuleManager')->loadModules();
+        static::$serviceManager = $serviceManager;
     }
-    $previousDir = $dir;
-    chdir($dir);
+
+    public static function chroot()
+    {
+        $rootPath = dirname(static::findParentPath('module'));
+        chdir($rootPath);
+    }
+
+    public static function getServiceManager()
+    {
+        return static::$serviceManager;
+    }
+
+    protected static function initAutoloader()
+    {
+        $vendorPath = static::findParentPath('vendor');
+
+        if (file_exists($vendorPath . '/autoload.php')) {
+            include $vendorPath . '/autoload.php';
+        }
+
+        AutoloaderFactory::factory(array(
+            'Zend\Loader\StandardAutoloader' => array(
+                'autoregister_zf' => true,
+                'namespaces' => array(
+                    __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,
+                ),
+            ),
+        ));
+    }
+
+    protected static function findParentPath($path)
+    {
+        $dir = __DIR__;
+        $previousDir = '.';
+        while (!is_dir($dir . '/' . $path)) {
+            $dir = dirname($dir);
+            if ($previousDir === $dir) {
+                return false;
+            }
+            $previousDir = $dir;
+        }
+        return $dir . '/' . $path;
+    }
 }
 
-if (is_readable(__DIR__ . '/TestConfiguration.php')) {
-    $configuration = include_once __DIR__ . '/TestConfiguration.php';
-} else {
-    $configuration = include_once __DIR__ . '/TestConfig.php.dist';
-}
-
-// Assumes PHP Composer autoloader w/compiled classmaps, etc.
-require_once 'vendor/autoload.php';
-
-// This namespace is not in classmap.
-$loader = new StandardAutoloader([
-    StandardAutoloader::LOAD_NS => [
-        'UthandoCommonTest' => __DIR__ . '/UthandoCommonTest'
-    ],
-]);
-
-$loader->register();
-
-$serviceManager = new ServiceManager(new ServiceManagerConfig($configuration['service_manager']));
-$serviceManager->setService('ApplicationConfig', $configuration);
-$serviceManager->setAllowOverride(true);
-
-$moduleManager = $serviceManager->get('ModuleManager');
-$moduleManager->loadModules();
-
-TestCase::setServiceManager($serviceManager);
+Bootstrap::chroot();
+Bootstrap::init();
