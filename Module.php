@@ -11,6 +11,7 @@
 
 namespace UthandoCommon;
 
+use UthandoCommon\Event\ConfigListener;
 use UthandoCommon\Event\MvcListener;
 use UthandoCommon\Event\ServiceListener;
 use Zend\Console\Adapter\AdapterInterface as Console;
@@ -30,6 +31,7 @@ class Module implements ConsoleBannerProviderInterface
         /* @var $sm \Zend\ServiceManager\ServiceManager */
         $sm = $moduleManager->getEvent()->getParam('ServiceManager');
         $serviceListener = $sm->get('ServiceListener');
+        $events = $moduleManager->getEventManager();
 
         $serviceListener->addServiceManager(
             'UthandoMapperManager',
@@ -51,6 +53,8 @@ class Module implements ConsoleBannerProviderInterface
             'UthandoCommon\Service\ServiceInterface',
             'getUthandoServiceConfig'
         );
+
+        $events->attachAggregate(new ConfigListener());
     }
 
     public function onBootstrap(MvcEvent $event)
