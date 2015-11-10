@@ -2,7 +2,6 @@ language: php
 
 php:
   - 7.0
-  - hhvm
 
 before_script:
   - cd ..
@@ -13,12 +12,9 @@ before_script:
   - cd module/UthandoCommon/test
 
 script:
-  - phpunit
+  - phpdbg -qrr ../../../vendor/bin/phpunit -v
 
 after_script:
   - cd ../
   - php vendor/bin/test-reporter --coverage-report=build/logs/clover.xml
 
-matrix:
-  allow_failures:
-    - php: hhvm

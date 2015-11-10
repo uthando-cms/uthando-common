@@ -86,7 +86,7 @@ trait CacheTrait
      */
     public function getCacheKey($id)
     {
-        $id = (string)$id;
+        $id = (string) $id;
         $key = str_replace('\\', '-', get_class($this)) . '-' . md5($id);
         return $key;
     }
