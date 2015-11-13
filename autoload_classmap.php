@@ -8,7 +8,6 @@ return array(
     'UthandoCommon\Config\ConfigTrait'                          => __DIR__ . '/src/UthandoCommon/Config/ConfigTrait.php',
     'UthandoCommon\Controller\AbstractCrudController'           => __DIR__ . '/src/UthandoCommon/Controller/AbstractCrudController.php',
     'UthandoCommon\Controller\CaptchaController'                => __DIR__ . '/src/UthandoCommon/Controller/CaptchaController.php',
-    'UthandoCommon\Controller\ServiceTrait'                     => __DIR__ . '/src/UthandoCommon/Controller/ServiceTrait.php',
     'UthandoCommon\Controller\SetExceptionMessages'             => __DIR__ . '/src/UthandoCommon/Controller/SetExceptionMessages.php',
     'UthandoCommon\Controller\SettingsTrait'                    => __DIR__ . '/src/UthandoCommon/Controller/SettingsTrait.php',
     'UthandoCommon\Event\ConfigListener'                        => __DIR__ . '/src/UthandoCommon/Event/ConfigListener.php',
