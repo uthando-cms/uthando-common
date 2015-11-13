@@ -10,6 +10,7 @@
 
 namespace UthandoCommon\Controller;
 
+use UthandoCommon\Service\ServiceTrait;
 use Zend\Filter\Word\UnderscoreToDash;
 use Zend\Form\Form;
 use Zend\Http\PhpEnvironment\Response;

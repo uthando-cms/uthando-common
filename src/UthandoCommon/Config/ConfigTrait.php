@@ -20,26 +20,51 @@ use ReflectionClass;
 trait ConfigTrait
 {
     /**
+     * Name of the module config directory
+     *
+     * @var string
+     */
+    protected $configDirectory = 'config';
+
+    /**
+     * File pattern for uthando configs
+     * 
+     * @var string
+     */
+    protected $filePattern = 'uthando-*.config.php';
+
+    /**
+     * Get all uthando configs for this module.
+     *
      * @return array
      */
     public function getUthandoConfig() : array
     {
-        $modulePath = $this->getModulePath();
-        $routes     = include $modulePath . '/config/uthando-routes.config.php';
-        $acl        = include $modulePath . '/config/uthando-user.config.php';
-        $navigation = include $modulePath . '/config/uthando-navigation.config.php';
-        $config     = array_merge($routes, $navigation, $acl);
+        $config             = [];
+        $configFilePattern  = join('/', [
+            $this->getModulePath(),
+            $this->configDirectory,
+            $this->filePattern,
+        ]);
+
+        foreach (glob($configFilePattern) as $filename) {
+            $configFile = include $filename;
+            $config     = array_merge($config, $configFile);
+        }
 
         return $config;
     }
 
     /**
+     * Get the directory the module is in.
+     *
      * @return string
      */
     public function getModulePath() : string
     {
         $reflector = new ReflectionClass(get_class($this));
         $fn = $reflector->getFileName();
-        return dirname($fn);
+        $directory = dirname($fn);
+        return $directory;
     }
 }

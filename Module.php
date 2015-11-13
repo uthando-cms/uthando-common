@@ -11,6 +11,11 @@
 
 namespace UthandoCommon;
 
+require_once(__DIR__ . '/src/UthandoCommon/Config/ConfigInterface.php');
+require_once(__DIR__ . '/src/UthandoCommon/Config/ConfigTrait.php');
+
+use UthandoCommon\Config\ConfigInterface;
+use UthandoCommon\Config\ConfigTrait;
 use UthandoCommon\Event\ConfigListener;
 use UthandoCommon\Event\MvcListener;
 use UthandoCommon\Event\ServiceListener;
@@ -24,8 +29,13 @@ use Zend\Mvc\MvcEvent;
  *
  * @package UthandoCommon
  */
-class Module implements ConsoleBannerProviderInterface
+class Module implements ConsoleBannerProviderInterface, ConfigInterface
 {
+    use ConfigTrait;
+
+    /**
+     * @param ModuleManager $moduleManager
+     */
     public function init(ModuleManager $moduleManager)
     {
         /* @var $sm \Zend\ServiceManager\ServiceManager */
@@ -57,6 +67,9 @@ class Module implements ConsoleBannerProviderInterface
         $events->attachAggregate(new ConfigListener());
     }
 
+    /**
+     * @param MvcEvent $event
+     */
     public function onBootstrap(MvcEvent $event)
     {
         $app = $event->getApplication();
@@ -66,16 +79,27 @@ class Module implements ConsoleBannerProviderInterface
         $eventManager->attachAggregate(new ServiceListener());
     }
 
+    /**
+     * @return mixed
+     */
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
     }
 
+    /**
+     * @return array
+     */
     public function getAutoloaderConfig()
     {
         return [
             'Zend\Loader\ClassMapAutoloader' => [
                 __DIR__ . '/autoload_classmap.php'
+            ],
+            'Zend\Loader\StandardAutoloader' => [
+                'namespaces' => [
+                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                ],
             ],
         ];
     }
