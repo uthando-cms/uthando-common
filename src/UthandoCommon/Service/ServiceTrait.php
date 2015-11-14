@@ -6,7 +6,7 @@
  * @author    Shaun Freeman <shaun@shaunfreeman.co.uk>
  * @link      https://github.com/uthando-cms for the canonical source repository
  * @copyright Copyright (c) 2014 Shaun Freeman. (http://www.shaunfreeman.co.uk)
- * @license   see LICENSE.txt
+ * @license   see LICENSE
  */
 
 namespace UthandoCommon\Service;
@@ -54,7 +54,7 @@ trait ServiceTrait
      */
     protected function getService($service = null, $options = [])
     {
-        $service = (is_string($service)) ? $service : $this->getServiceName();
+        $service = $service ?? $this->getServiceName();
 
         if (!isset($this->service[$service])) {
             $sl = $this->getServiceLocator()->get('UthandoServiceManager');
