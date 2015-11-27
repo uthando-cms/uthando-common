@@ -17,6 +17,7 @@ use Zend\Http\PhpEnvironment\Response;
 use Zend\Config\Writer\PhpArray;
 use Zend\Mvc\Controller\Plugin\FlashMessenger;
 use Zend\Mvc\Controller\Plugin\PostRedirectGet;
+use Zend\Stdlib\AbstractOptions;
 use Zend\Stdlib\ArrayUtils;
 
 /**
@@ -78,8 +79,15 @@ trait SettingsTrait
 
         if ($form->isValid()) {
 
-            $array = $form->getData();
-            unset($array['button-submit']);
+            $arrayOrObject = $form->getData();
+
+            if (is_array($arrayOrObject)) {
+                unset($arrayOrObject['button-submit']);
+            }
+
+            if ($arrayOrObject instanceof AbstractOptions) {
+                $arrayOrObject = $arrayOrObject->toArray();
+            }
 
             $filter = new UnderscoreToDash();
             $fileName = $filter->filter($this->getConfigKey());
@@ -87,7 +95,7 @@ trait SettingsTrait
             $config = new PhpArray();
             $config->setUseBracketArraySyntax(true);
 
-            $config->toFile('./config/autoload/' . $fileName . '.local.php', [$this->getConfigKey() => $array]);
+            $config->toFile('./config/autoload/' . $fileName . '.local.php', [$this->getConfigKey() => $arrayOrObject]);
 
             $this->flashMessenger()->addSuccessMessage('Settings have been updated!');
         }
