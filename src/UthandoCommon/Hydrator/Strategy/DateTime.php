@@ -26,33 +26,62 @@ class DateTime implements StrategyInterface
     /**
      * @var string
      */
-    protected $dateFormat = 'Y-m-d H:i:s';
+    protected $extractFormat = 'Y-m-d H:i:s';
 
     /**
-     * @param null|string $dateFormat
+     * @var string
      */
-    function __construct($dateFormat = null)
+    protected $hydrateFormat = 'Y-m-d H:i:s';
+
+    /**
+     * DateTime constructor.
+     *
+     * @param array $options
+     */
+    function __construct($options = [])
     {
-        if ($dateFormat) {
-            $this->dateFormat = $dateFormat;
+        if (isset($options['extractFormat'])) {
+            $this->extractFormat = $options['extractFormat'];
+        }
+
+        if (isset($options['hyrdateFormat'])) {
+            $this->extractFormat = $options['hydrateFormat'];
         }
     }
 
     /**
      * @return string
      */
-    public function getDateFormat()
+    public function getExtractFormat()
     {
-        return $this->dateFormat;
+        return $this->extractFormat;
     }
 
     /**
-     * @param string $dateFormat
+     * @param string $extractFormat
      * @return $this
      */
-    public function setDateFormat($dateFormat)
+    public function setExtractFormat($extractFormat)
     {
-        $this->dateFormat = $dateFormat;
+        $this->extractFormat = $extractFormat;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHydrateFormat()
+    {
+        return $this->hydrateFormat;
+    }
+
+    /**
+     * @param string $hydrateFormat
+     * @return $this
+     */
+    public function setHydrateFormat($hydrateFormat)
+    {
+        $this->hydrateFormat = $hydrateFormat;
         return $this;
     }
 
@@ -66,7 +95,7 @@ class DateTime implements StrategyInterface
             $value = new DateTimeClass();
         }
 
-        return $value->format($this->dateFormat);
+        return $value->format($this->getExtractFormat());
     }
 
     /**
@@ -81,28 +110,24 @@ class DateTime implements StrategyInterface
         if (is_string($value) && '' === $value) {
             $value = null;
         } else {
-            try {
-                $date = new DateTimeClass($value);
-            } catch (Exception $e) {
-                $date       = DateTimeClass::createFromFormat($this->getDateFormat(), $value);
-                $errors     = DateTimeClass::getLastErrors();
-                $messages   = '';
+            $date       = DateTimeClass::createFromFormat($this->getHydrateFormat(), $value);
+            $errors     = DateTimeClass::getLastErrors();
+            $messages   = '';
 
-                if ($errors['warning_count'] > 0) {
-                    foreach ($errors['warnings'] as $index => $message) {
-                        $messages .= $message . 'found at index ' . $index . '; ';
-                    }
+            if ($errors['warning_count'] > 0) {
+                foreach ($errors['warnings'] as $index => $message) {
+                    $messages .= $message . 'found at index ' . $index . '; ';
                 }
+            }
 
-                if ($errors['error_count'] > 0) {
-                    foreach ($errors['errors'] as $index => $message) {
-                        $messages .= $message . 'found at index ' . $index . '; ';
-                    }
+            if ($errors['error_count'] > 0) {
+                foreach ($errors['errors'] as $index => $message) {
+                    $messages .= $message . 'found at index ' . $index . '; ';
                 }
+            }
 
-                if ($messages) {
-                    throw new Exception(sprintf(self::ERROR_MEESAGE, $messages, $this->getDateFormat(), $value));
-                }
+            if ($messages) {
+                throw new Exception(sprintf(self::ERROR_MEESAGE, $messages, $this->getHydrateFormat(), $value));
             }
         }
 
