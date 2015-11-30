@@ -12,6 +12,7 @@ namespace UthandoCommon\Controller;
 
 use UthandoCommon\Service\ServiceTrait;
 use Zend\Filter\Word\UnderscoreToDash;
+use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Zend\Http\PhpEnvironment\Response;
 use Zend\Config\Writer\PhpArray;
@@ -61,7 +62,8 @@ trait SettingsTrait
             $defaults = $settings;
 
             foreach ($settings as $key => $value) {
-                if ($form->has($key)) {
+                // this needs moving to the form to set defaults there.
+                if ($form->has($key) && $form->get($key) instanceof Fieldset) {
                     if (!array_key_exists($key, $defaults)) {
                         $defaults[$key] = $form->get($key)->getObject()->toArray();
                     } else {
