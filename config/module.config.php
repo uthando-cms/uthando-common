@@ -65,13 +65,14 @@ return [
     ],
     'view_helpers' => [
         'invokables' => [
-            'Enabled'           => 'UthandoCommon\View\Enabled',
-            'FormatDate'        => 'UthandoCommon\View\FormatDate',
-            'FormManager'       => 'UthandoCommon\View\FormManager',
-            'LibPhoneNumber'    => 'UthandoCommon\I18n\View\Helper\LibPhoneNumber',
-            'Request'           => 'UthandoCommon\View\Request',
-            'tbAlert'           => 'UthandoCommon\View\Alert',
-            'tbFlashMessenger'  => 'UthandoCommon\View\FlashMessenger'
+            'Enabled'               => 'UthandoCommon\View\Enabled',
+            'FormatDate'            => 'UthandoCommon\View\FormatDate',
+            'FormManager'           => 'UthandoCommon\View\FormManager',
+            'LibPhoneNumber'        => 'UthandoCommon\I18n\View\Helper\LibPhoneNumber',
+            'Request'               => 'UthandoCommon\View\Request',
+            'tbAlert'               => 'UthandoCommon\View\Alert',
+            'tbFlashMessenger'      => 'UthandoCommon\View\FlashMessenger',
+            'convertToJsDateFormat' => 'UthandoCommon\View\ConvertToJsDateFormat',
         ],
     ],
     'view_manager' => [
