@@ -99,6 +99,16 @@ trait SettingsTrait
 
             $config->toFile('./config/autoload/' . $fileName . '.local.php', [$this->getConfigKey() => $arrayOrObject]);
 
+            $appConfig = $this->getService('Application\Config');
+
+            // delete cached config.
+            if (true === $appConfig['module_listener_options']['config_cache_enabled']) {
+                $configCache = $appConfig['module_listener_options']['cache_dir'] . '/module-config-cache.' . $appConfig['module_listener_options']['config_cache_key'] . '.php';
+                if (file_exists($configCache)) {
+                    unlink($configCache);
+                }
+            }
+
             $this->flashMessenger()->addSuccessMessage('Settings have been updated!');
         }
 
