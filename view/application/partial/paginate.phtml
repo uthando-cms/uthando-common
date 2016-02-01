@@ -1,13 +1,11 @@
 <?php $routeParams = (is_array($this->routeParams)) ? $this->routeParams : []; ?>
-<div class="text-right paginate">
-	<?php if ($this->pageCount): ?>
 
-    <span>Showing <strong><?=$this->firstItemNumber ?> - <?=$this->lastItemNumber ?></strong>
-	 	of <strong><?=$this->totalItemCount ?></strong>
-    </span>
+<?php if ($this->pageCount): ?>
 
-	<nav>
+<div class="row">
+    <div class="col-sm-6 text-left vcenter">
 		<ul id="pagination-links" class="pagination">
+            <?php if ($this->pageCount > 1): ?>
 			<?php if (isset($this->previous)): ?>
 			<li>
 				<a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $this->previous])); ?>">
@@ -31,9 +29,7 @@
 			</li>
 			<?php else: ?>
 			<li class="active">
-				<a href="">
-					<?=$page; ?>
-				</a>
+				<a href=""><?=$page; ?></a>
 			</li>
 			<?php endif; ?>
 			<?php endforeach; ?>
@@ -51,7 +47,11 @@
 				</a>
 			</li>
 			<?php endif; ?>
+            <?php endif; ?>
 		</ul>
-	</nav>
-	<?php endif; ?>
+    </div><!-- white space fix
+    --><div class="col-sm-6 text-right vcenter"><?=$this->translate('Showing');?> <?=$this->firstItemNumber ?> - <?=$this->lastItemNumber ?>
+        of <?=$this->totalItemCount ?> (<?=$this->pageCount; ?> <?=$this->translate('Pages');?>)
+    </div>
 </div>
+<?php endif; ?>
