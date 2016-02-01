@@ -40,6 +40,9 @@ return [
         ],
     ],
     'service_manager' => [
+        'abstract_factories' => [
+            'UthandoCommon\Db\Table\AbstractTableFactory',
+        ],
         'factories' => [
             'UthandoMapperManager'                      => 'UthandoCommon\Mapper\MapperManagerFactory',
             'UthandoModelManager'                       => 'UthandoCommon\Model\ModelManagerFactory',

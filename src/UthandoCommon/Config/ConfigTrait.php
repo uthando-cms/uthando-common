@@ -48,6 +48,7 @@ trait ConfigTrait
         ]);
 
         foreach (glob($configFilePattern) as $filename) {
+            /** @noinspection PhpIncludeInspection */
             $configFile = include $filename;
             $config     = array_merge($config, $configFile);
         }

@@ -105,7 +105,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
     public function add(array $post, Form $form = null)
     {
         $model = $this->getModel();
-        $form = ($form) ? $form : $this->getForm($model, $post, true, true);
+        $form = ($form instanceof Form) ? $form->setData($post) : $this->getForm($model, $post, true, true);
 
         $argv = compact('post', 'form');
         $argv = $this->prepareEventArguments($argv);
@@ -134,7 +134,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      */
     public function edit(ModelInterface $model, array $post, Form $form = null)
     {
-        $form = ($form) ? $form : $this->getForm($model, $post, true, true);
+        $form = ($form instanceof From) ? $form->setData($post) : $this->getForm($model, $post, true, true);
 
         $argv = compact('model', 'post', 'form');
         $argv = $this->prepareEventArguments($argv);
@@ -146,7 +146,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         $saved = $this->save($form->getData());
 
-        $argv = compact('model', 'post', 'form');
+        $argv = compact('model', 'post', 'form', 'saved');
         $argv = $this->prepareEventArguments($argv);
 
         $this->getEventManager()->trigger('post.edit', $this, $argv);

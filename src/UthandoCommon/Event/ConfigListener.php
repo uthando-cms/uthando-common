@@ -36,9 +36,9 @@ class ConfigListener implements ListenerAggregateInterface
 
     /**
      * @param ModuleEvent $event
-     * @return $this
+     * @return ConfigListener
      */
-    public function onMergeConfig(ModuleEvent $event)
+    public function onMergeConfig(ModuleEvent $event) : ConfigListener
     {
         $configListener     = $event->getConfigListener();
         $config             = $configListener->getMergedConfig(false);

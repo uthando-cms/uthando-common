@@ -1,58 +1,57 @@
 <?php $routeParams = (is_array($this->routeParams)) ? $this->routeParams : []; ?>
-<div id="pagination">
+<div class="text-right paginate">
 	<?php if ($this->pageCount): ?>
-	<div class="centered">
-	    <span>Showing <strong><?=$this->firstItemNumber ?> - <?=$this->lastItemNumber ?></strong>
-	 	of <strong><?=$this->totalItemCount ?></strong></span>
-	</div>
-	<div class="row">
-	    <div class="text-center">
-	    	<ul id="pagination-links" class="pagination">
-	    		<?php if (isset($this->previous)): ?>
-	 			<li>
-                    <a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $this->previous])); ?>">
-                        &laquo; Prev
-                    </a>
-                </li>
-	 			<?php endif; ?>
-	 			<?php if($this->current > 1 && $this->firstPageInRange > 1): ?>
-	 			<li>
-                    <a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $this->first])); ?>">
-                        1
-                    </a>
-                </li>
-	            <?php endif; ?>
-	            <?php foreach ($this->pagesInRange as $page): ?>
- 				<?php if ($page != $this->current): ?>
- 				<li>
-                    <a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $page])); ?>">
-                        <?=$page; ?>
-                    </a>
-                </li>
- 				<?php else: ?>
- 				<li class="active">
-                    <a href="">
-                        <?=$page; ?>
-                    </a>
-                </li>
- 				<?php endif; ?>
-	 			<?php endforeach; ?>
-	 			<?php if($this->current != $this->last && $this->last > $this->lastPageInRange): ?>
-	 			<li id="last-in-range">
-                    <a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $this->last])); ?>">
-                        <?=$this->last; ?>
-                    </a>
-                </li>
-	 			<?php endif; ?>
-	 			<?php if (isset($this->next)): ?>
-	 			<li>
-                    <a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $this->next])); ?>">
-                        Next &raquo;
-                    </a>
-                </li>
-	 			<?php endif; ?>
-	    	</ul>
-	    </div>
-	</div>
+
+    <span>Showing <strong><?=$this->firstItemNumber ?> - <?=$this->lastItemNumber ?></strong>
+	 	of <strong><?=$this->totalItemCount ?></strong>
+    </span>
+
+	<nav>
+		<ul id="pagination-links" class="pagination">
+			<?php if (isset($this->previous)): ?>
+			<li>
+				<a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $this->previous])); ?>">
+					&laquo; Prev
+				</a>
+			</li>
+			<?php endif; ?>
+			<?php if($this->current > 1 && $this->firstPageInRange > 1): ?>
+			<li>
+				<a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $this->first])); ?>">
+					1
+				</a>
+			</li>
+			<?php endif; ?>
+			<?php foreach ($this->pagesInRange as $page): ?>
+			<?php if ($page != $this->current): ?>
+			<li>
+				<a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $page])); ?>">
+					<?=$page; ?>
+				</a>
+			</li>
+			<?php else: ?>
+			<li class="active">
+				<a href="">
+					<?=$page; ?>
+				</a>
+			</li>
+			<?php endif; ?>
+			<?php endforeach; ?>
+			<?php if($this->current != $this->last && $this->last > $this->lastPageInRange): ?>
+			<li id="last-in-range">
+				<a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $this->last])); ?>">
+					<?=$this->last; ?>
+				</a>
+			</li>
+			<?php endif; ?>
+			<?php if (isset($this->next)): ?>
+			<li>
+				<a href="<?=$this->url($this->route, array_merge($routeParams, ['page' => $this->next])); ?>">
+					Next &raquo;
+				</a>
+			</li>
+			<?php endif; ?>
+		</ul>
+	</nav>
 	<?php endif; ?>
 </div>
