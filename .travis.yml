@@ -6,6 +6,7 @@ php:
 before_script:
   - cd ..
   - git clone git://github.com/uthando-cms/uthando.git
+  - cp -R ./uthando-user/test/composer.test.json ./uthando/composer.json
   - cd uthando
   - composer install
   - cp -R ../uthando-common ./module/UthandoCommon
@@ -16,5 +17,6 @@ script:
 
 after_script:
   - cd ../
+  - cp -R ../../vendor ./vendor
   - php vendor/bin/test-reporter --coverage-report=build/logs/clover.xml
 

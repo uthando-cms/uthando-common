@@ -22,19 +22,7 @@ class Bootstrap
         static::initAutoloader();
 
         // use ModuleManager to load this module and it's dependencies
-        $config = array(
-            'module_listener_options' => array(
-                'module_paths' => [
-                    './module',
-                    './devmodules',
-                    './vendor',
-                ],
-            ),
-            'modules' => array(
-                'Application',
-                'UthandoCommon',
-            ),
-        );
+        $config = include __DIR__ . '/TestConfig.php';
 
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
         $serviceManager->setService('ApplicationConfig', $config);
