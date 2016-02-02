@@ -11,7 +11,7 @@
 namespace UthandoCommon\Hydrator;
 
 use UthandoCommon\Model\ModelInterface;
-use Zend\Hydrator\AbstractHydrator;
+use Zend\Hydrator\AbstractHydrator as ZendAbstractHydrator;
 use Zend\Hydrator\NamingStrategy\MapNamingStrategy;
 
 /**
@@ -19,7 +19,7 @@ use Zend\Hydrator\NamingStrategy\MapNamingStrategy;
  *
  * @package UthandoCommon\Hydrator
  */
-class BaseHydrator extends AbstractHydrator
+class BaseHydrator extends ZendAbstractHydrator
 {
 
     /**
