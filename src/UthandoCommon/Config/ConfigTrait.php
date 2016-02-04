@@ -38,7 +38,7 @@ trait ConfigTrait
      *
      * @return array
      */
-    public function getUthandoConfig() : array
+    public function getUthandoConfig()
     {
         $config             = [];
         $configFilePattern  = join('/', [
@@ -61,7 +61,7 @@ trait ConfigTrait
      *
      * @return string
      */
-    public function getModulePath() : string
+    public function getModulePath()
     {
         $reflector = new ReflectionClass(get_class($this));
         $fn = $reflector->getFileName();

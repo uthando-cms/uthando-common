@@ -38,12 +38,12 @@ class ConfigListener implements ListenerAggregateInterface
      * @param ModuleEvent $event
      * @return ConfigListener
      */
-    public function onMergeConfig(ModuleEvent $event) : ConfigListener
+    public function onMergeConfig(ModuleEvent $event)
     {
         $configListener     = $event->getConfigListener();
         $config             = $configListener->getMergedConfig(false);
         $loadedModules      = $event->getTarget()->getLoadedModules();
-        $loadUthandoConfigs = $config['load_uthando_configs'] ?? false;
+        $loadUthandoConfigs = (isset($config['load_uthando_configs'])) ? $config['load_uthando_configs'] : false;
         $uthandoConfig      = [];
 
         if (false === $loadUthandoConfigs) return $this;

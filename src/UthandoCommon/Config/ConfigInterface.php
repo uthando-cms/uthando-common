@@ -20,10 +20,10 @@ interface ConfigInterface
     /**
      * @return array
      */
-    public function getUthandoConfig() : array;
+    public function getUthandoConfig();
 
     /**
      * @return string
      */
-    public function getModulePath() : string;
+    public function getModulePath();
 }
