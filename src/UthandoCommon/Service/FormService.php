@@ -63,7 +63,7 @@ class FormService implements ServiceLocatorAwareInterface
      */
     public function getOption($key)
     {
-        if (!isset($this->options[$option])) {
+        if (!isset($this->options[$key])) {
             return null;
         }
 
