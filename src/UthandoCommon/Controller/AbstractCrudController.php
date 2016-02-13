@@ -420,7 +420,7 @@ abstract class AbstractCrudController extends AbstractActionController
     public function getRoute($route = null)
     {
         if ($route && isset($this->routes[$route])) {
-            $route = $this->routes['route'];
+            $route = $this->routes[$route];
         } else {
             $route = $this->route;
         }
