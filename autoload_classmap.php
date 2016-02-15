@@ -15,6 +15,7 @@ return array(
     'UthandoCommon\Event\ConfigListener'                        => __DIR__ . '/src/UthandoCommon/Event/ConfigListener.php',
     'UthandoCommon\Event\MvcListener'                           => __DIR__ . '/src/UthandoCommon/Event/MvcListener.php',
     'UthandoCommon\Event\ServiceListener'                       => __DIR__ . '/src/UthandoCommon/Event/ServiceListener.php',
+    'UthandoCommon\Event\TidyResponseSender'                    => __DIR__ . '/src/UthandoCommon/Event/TidyResponseSender.php',
     'UthandoCommon\Filter\Slug'                                 => __DIR__ . '/src/UthandoCommon/Filter/Slug.php',
     'UthandoCommon\Filter\UcFirst'                              => __DIR__ . '/src/UthandoCommon/Filter/UcFirst.php',
     'UthandoCommon\Filter\Ucwords'                              => __DIR__ . '/src/UthandoCommon/Filter/Ucwords.php',
@@ -80,4 +81,5 @@ return array(
     'UthandoCommon\View\Request'                                => __DIR__ . '/src/UthandoCommon/View/Request.php',
     'UthandoCommonTest\Bootstrap'                               => __DIR__ . '/test/Bootstrap.php',
     'UthandoCommonTest\Framework\TestCase'                      => __DIR__ . '/test/UthandoCommonTest/Framework/TestCase.php',
+    'UthandoCommonTest\Stdlib\StringUtilsTest'                  => __DIR__ . '/test/UthandoCommonTest/Stdlib/StringUtilsTest.php',
 );

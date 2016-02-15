@@ -63,7 +63,7 @@ return [
         'tidy-mark' => FALSE,
         'gnu-emacs' => FALSE,
         'gnu-emacs-file' => '',
-        'literal-attributes' => '', FALSE,
+        'literal-attributes' => FALSE,
         'show-body-only' => 0,
         'fix-uri' => TRUE,
         'lower-literals' => TRUE,

@@ -7,3 +7,5 @@ Uthando Common
 [![Dependency Status](https://www.versioneye.com/user/projects/55f2d17dd4d204001e0000e0/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55f2d17dd4d204001e0000e0)
 [![Packagist](https://img.shields.io/packagist/v/uthando-cms/uthando-common.svg)](https://packagist.org/packages/uthando-cms/uthando-common)
 
+
+To use PHP Tidy you must have the extension installed then just copy `config/tidy.local.php.dist` to your `config\autoload` folder and renaming it to `tidy.local.php`.
