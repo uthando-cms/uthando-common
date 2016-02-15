@@ -18,11 +18,13 @@ use UthandoCommon\Config\ConfigInterface;
 use UthandoCommon\Config\ConfigTrait;
 use UthandoCommon\Event\ConfigListener;
 use UthandoCommon\Event\MvcListener;
+use UthandoCommon\Event\TidyResponseSender;
 use UthandoCommon\Event\ServiceListener;
 use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\MvcEvent;
+use Zend\Mvc\ResponseSender\SendResponseEvent;
 
 /**
  * Class Module
@@ -64,7 +66,7 @@ class Module implements ConsoleBannerProviderInterface, ConfigInterface
             'getUthandoServiceConfig'
         );
 
-        $events->attachAggregate(new ConfigListener());
+        $events->attach(new ConfigListener());
     }
 
     /**
@@ -75,8 +77,19 @@ class Module implements ConsoleBannerProviderInterface, ConfigInterface
         $app = $event->getApplication();
         $eventManager = $app->getEventManager();
 
-        $eventManager->attachAggregate(new MvcListener());
-        $eventManager->attachAggregate(new ServiceListener());
+        $eventManager->attach(new MvcListener());
+        $eventManager->attach(new ServiceListener());
+
+        $config = $app->getServiceManager()
+            ->get('config');
+
+        $tidyConfig = (isset($config['tidy_config'])) ? $config['tidy_config'] : [];
+
+        $eventManager->getSharedManager()->attach(
+            'Zend\Mvc\SendResponseListener',
+            SendResponseEvent::EVENT_SEND_RESPONSE,
+            new TidyResponseSender($tidyConfig)
+        );
     }
 
     /**
