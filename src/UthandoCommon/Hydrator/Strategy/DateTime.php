@@ -22,7 +22,6 @@ use DateTime as DateTimeClass;
  */
 class DateTime implements StrategyInterface
 {
-    const ERROR_MEESAGE = '%s Date format: "%s", Date string: "%s". In class '. __CLASS__;
     /**
      * @var string
      */
@@ -127,7 +126,11 @@ class DateTime implements StrategyInterface
             }
 
             if ($messages) {
-                throw new Exception(sprintf(self::ERROR_MEESAGE, $messages, $this->getHydrateFormat(), $value));
+                throw new Exception(sprintf(
+                    '%s Date format: "%s", Date string: "%s". In class ' . __CLASS__,
+                    $messages,
+                    $this->getHydrateFormat(), $value)
+                );
             }
         }
 
