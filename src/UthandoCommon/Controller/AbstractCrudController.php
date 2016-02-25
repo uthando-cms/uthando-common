@@ -227,13 +227,13 @@ abstract class AbstractCrudController extends AbstractActionController
 
                 $this->setExceptionMessages($e);
                 return $viewModel->setVariables([
-                    'form' => $this->getService()->getForm(null, $this->params()->fromPost()),
+                    'form' => $this->getService()->prepareForm(null, $this->params()->fromPost()),
                     'routeParams' => $this->params()->fromRoute(),
                 ]);
             }
         }
 
-        $form = $this->getService()->getForm();
+        $form = $this->getService()->prepareForm();
         $argv = $this->getEventManager()->prepareArgs(compact('form'));
         $this->getEventManager()->trigger('add.action', $this, $argv);
 
@@ -319,7 +319,7 @@ abstract class AbstractCrudController extends AbstractActionController
                 throw new Exception('No records match key: ' . $id);
             }
 
-            $form = $this->getService()->getForm($model);
+            $form = $this->getService()->prepareForm($model);
 
         } catch (Exception $e) {
             if ($request->isXmlHttpRequest()) {
@@ -332,7 +332,7 @@ abstract class AbstractCrudController extends AbstractActionController
             $this->setExceptionMessages($e);
 
             return $viewModel->setVariables([
-                'form' => $this->getService()->getForm(null, $post),
+                'form' => $this->getService()->prepareForm(null, $post),
                 'routeParams' => $this->params()->fromRoute(),
             ]);
         }

@@ -62,7 +62,7 @@ interface ServiceInterface
      * @param bool $useHydrator
      * @return Form $form
      */
-    public function getForm(ModelInterface $model = null, array $data = null, $useInputFilter = false, $useHydrator = false);
+    public function prepareForm(ModelInterface $model = null, array $data = null, $useInputFilter = false, $useHydrator = false);
 
     /**
      * Gets model from ModelManager

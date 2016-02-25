@@ -12,9 +12,16 @@
 namespace UthandoCommon\Service;
 
 use UthandoCommon\Model\ModelInterface;
+use UthandoCommon\Model\ModelManager;
+use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerAwareTrait;
 use Zend\Form\Form;
+use Zend\Form\FormElementManager;
+use Zend\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorPluginManager;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterPluginManager;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -40,6 +47,11 @@ abstract class AbstractService implements
      * @var string
      */
     protected $serviceAlias;
+
+    /**
+     * @var array
+     */
+    protected $formAliases = [];
 
     /**
      * @var array
@@ -79,15 +91,15 @@ abstract class AbstractService implements
     }
 
     /**
-     * Gets the default form for the service.
+     * Prepares form for the service.
      *
      * @param ModelInterface $model
      * @param array $data
-     * @param bool $useInputFilter
-     * @param bool $useHydrator
+     * @param bool|string $useInputFilter
+     * @param bool|string $useHydrator
      * @return Form
      */
-    public function getForm(ModelInterface $model = null, array $data = null, $useInputFilter = false, $useHydrator = false)
+    public function prepareForm(ModelInterface $model = null, array $data = null, $useInputFilter = false, $useHydrator = false)
     {
         $argv = compact('model', 'data');
         $argv = $this->prepareEventArguments($argv);
@@ -95,9 +107,9 @@ abstract class AbstractService implements
         $data = $argv['data'];
 
         $sl = $this->getServiceLocator();
-        /* @var $formElementManager \Zend\Form\FormElementManager */
+        /* @var $formElementManager FormElementManager */
         $formElementManager = $sl->get('FormElementManager');
-        /* @var $form \Zend\Form\Form */
+        /* @var $form Form */
 
         $form = $formElementManager->get($this->serviceAlias, $this->formOptions);
 
@@ -125,6 +137,35 @@ abstract class AbstractService implements
     }
 
     /**
+     * Gets the default form or on specified for the service.
+     *
+     * @param null|string $name
+     * @param array $options
+     * @return Form
+     */
+    public function getForm($name = null, $options = [])
+    {
+        $name = ($name) ?: $this->serviceAlias;
+        $sl = $this->getServiceLocator();
+
+        /* @var $formElementManager FormElementManager */
+        $formElementManager = $sl->get('FormElementManager');
+
+        $argv = compact('options');
+
+        $this->getEventManager()->trigger('pre.form.init', $this, $this->prepareEventArguments($argv));
+
+        /* @var $form Form */
+        $form = $formElementManager->get($name, $options);
+
+        $argv = compact('form', 'options');
+
+        $this->getEventManager()->trigger('post.form.init', $this, $this->prepareEventArguments($argv));
+
+        return $form;
+    }
+
+    /**
      * @return array
      */
     public function getFormOptions()
@@ -144,15 +185,16 @@ abstract class AbstractService implements
      * Gets model from ModelManager
      *
      * @param null|string $model
-     * @return \UthandoCommon\Model\ModelInterface
+     * @return ModelInterface
      */
     public function getModel($model = null)
     {
-        $model = ($model) ?: $this->serviceAlias;
-        $sl = $this->getServiceLocator();
-        /* @var $modelManager \UthandoCommon\Model\ModelManager */
-        $modelManager = $sl->get('UthandoModelManager');
-        $model = $modelManager->get($model);
+        $model          = ($model) ?: $this->serviceAlias;
+        $sl             = $this->getServiceLocator();
+
+        /* @var $modelManager ModelManager */
+        $modelManager   = $sl->get('UthandoModelManager');
+        $model          = $modelManager->get($model);
 
         return $model;
     }
@@ -161,15 +203,16 @@ abstract class AbstractService implements
      * Gets input filter from InputFilterManager
      *
      * @param null|string $inputFilter
-     * @return \Zend\InputFilter\InputFilter
+     * @return InputFilter
      */
     public function getInputFilter($inputFilter = null)
     {
-        $inputFilter = ($inputFilter) ?: $this->serviceAlias;
-        $sl = $this->getServiceLocator();
-        /* @var $inputFilterManager \Zend\InputFilter\InputFilterPluginManager */
+        $inputFilter        = ($inputFilter) ?: $this->serviceAlias;
+        $sl                 = $this->getServiceLocator();
+
+        /* @var $inputFilterManager InputFilterPluginManager */
         $inputFilterManager = $sl->get('InputFilterManager');
-        $inputFilter = $inputFilterManager->get($inputFilter);
+        $inputFilter        = $inputFilterManager->get($inputFilter);
 
         return $inputFilter;
     }
@@ -178,15 +221,16 @@ abstract class AbstractService implements
      * Gets hydrator from HydratorManager
      *
      * @param string|null $hydrator
-     * @return \Zend\Stdlib\Hydrator\HydratorInterface
+     * @return HydratorInterface
      */
     public function getHydrator($hydrator = null)
     {
-        $hydrator = ($hydrator) ?: $this->serviceAlias;
-        $sl = $this->getServiceLocator();
-        /* @var $hydratorManager \Zend\Stdlib\Hydrator\HydratorPluginManager */
-        $hydratorManager = $sl->get('HydratorManager');
-        $hydrator = $hydratorManager->get($hydrator);
+        $hydrator           = ($hydrator) ?: $this->serviceAlias;
+        $sl                 = $this->getServiceLocator();
+
+        /* @var $hydratorManager HydratorPluginManager */
+        $hydratorManager    = $sl->get('HydratorManager');
+        $hydrator           = $hydratorManager->get($hydrator);
 
         return $hydrator;
     }
@@ -197,9 +241,9 @@ abstract class AbstractService implements
      */
     public function prepareEventArguments($argv)
     {
-        /* @var $em \Zend\EventManager\EventManager */
-        $em = $this->getEventManager();
-        $argv = $em->prepareArgs($argv);
+        /* @var $em EventManager */
+        $em     = $this->getEventManager();
+        $argv   = $em->prepareArgs($argv);
         return $argv;
     }
 

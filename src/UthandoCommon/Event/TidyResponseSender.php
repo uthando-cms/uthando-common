@@ -44,7 +44,7 @@ class TidyResponseSender extends AbstractResponseSender
 
         $tidy = new \tidy();
         $tidy->parseString($response->getContent(), $this->config);
-        $tidy->cleanRepair();
+        //$tidy->cleanRepair();
 
         echo $tidy;
 
