@@ -28,14 +28,15 @@ class ServiceManager extends AbstractPluginManager
     //use ServiceLocatorAwareTrait;
 
     /**
-     * @param ConfigInterface $config
+     * @param null $configOrContainerInstance
+     * @param array $v3config
      */
-    public function __construct(ConfigInterface $config = null)
+    public function __construct($configOrContainerInstance = null, array $v3config = [])
     {
         $this->addInitializer([$this, 'callServiceInit']);
         $this->addInitializer([$this, 'callServiceEvents']);
 
-        parent::__construct($config);
+        parent::__construct($configOrContainerInstance, $v3config);
     }
 
     /**

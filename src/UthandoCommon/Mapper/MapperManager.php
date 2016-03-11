@@ -32,11 +32,12 @@ class MapperManager extends AbstractPluginManager
     protected $sqliteConstraints = false;
 
     /**
-     * @param ConfigInterface $configuration
+     * @param null $configOrContainerInstance
+     * @param array $v3config
      */
-    public function __construct(ConfigInterface $configuration = null)
+    public function __construct($configOrContainerInstance = null, array $v3config = [])
     {
-        parent::__construct($configuration);
+        parent::__construct($configOrContainerInstance, $v3config);
 
         $this->addInitializer([$this, 'injectDbAdapter']);
         $this->addInitializer([$this, 'injectHydrator']);
