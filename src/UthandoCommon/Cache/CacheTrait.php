@@ -108,4 +108,14 @@ trait CacheTrait
         $this->cache = $cache;
         return $this;
     }
+
+    /**
+     * @param $useCache
+     * @return $this
+     */
+    public function setUseCache($useCache)
+    {
+        $this->useCache = (bool) $useCache;
+        return $this;
+    }
 }
