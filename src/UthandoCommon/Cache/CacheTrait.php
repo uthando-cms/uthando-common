@@ -37,12 +37,16 @@ trait CacheTrait
 
     /**
      * @param $id
-     * @return mixed
+     * @return mixed|null
      */
     public function getCacheItem($id)
     {
-        $id = $this->getCacheKey($id);
-        return $this->getCache()->getItem($id);
+        if ($this->useCache) {
+            $id = $this->getCacheKey($id);
+            return $this->getCache()->getItem($id);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -66,18 +70,21 @@ trait CacheTrait
 
     /**
      * @param $id
-     * @return bool
+     * @return bool|null
      */
     public function removeCacheItem($id)
     {
-        $id = $this->getCacheKey($id);
-        $cache = $this->getCache();
+        if ($this->useCache) {
+            $id = $this->getCacheKey($id);
+            $cache = $this->getCache();
 
-        if ($this->tags && $cache instanceof TaggableInterface) {
-            $cache->clearByTags($this->tags);
+            if ($this->tags && $cache instanceof TaggableInterface) {
+                $cache->clearByTags($this->tags);
+            }
+            return $cache->removeItem($id);
+        } else {
+            return null;
         }
-
-        return $cache->removeItem($id);
     }
 
     /**
