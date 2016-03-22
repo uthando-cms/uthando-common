@@ -83,13 +83,15 @@ class Module implements ConsoleBannerProviderInterface, ConfigInterface
         $config = $app->getServiceManager()
             ->get('config');
 
-        $tidyConfig = (isset($config['tidy_config'])) ? $config['tidy_config'] : [];
+        $tidyConfig = (isset($config['tidy'])) ? $config['tidy'] : ['enable' => false];
 
-        $eventManager->getSharedManager()->attach(
-            'Zend\Mvc\SendResponseListener',
-            SendResponseEvent::EVENT_SEND_RESPONSE,
-            new TidyResponseSender($tidyConfig)
-        );
+        if ($tidyConfig['enable']) {
+            $eventManager->getSharedManager()->attach(
+                'Zend\Mvc\SendResponseListener',
+                SendResponseEvent::EVENT_SEND_RESPONSE,
+                new TidyResponseSender($tidyConfig['config'], $event->getRequest()->isXmlHttpRequest())
+            );
+        }
     }
 
     /**

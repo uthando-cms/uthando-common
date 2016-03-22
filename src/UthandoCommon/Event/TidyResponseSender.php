@@ -29,6 +29,11 @@ class TidyResponseSender extends AbstractResponseSender
     protected $config = [];
 
     /**
+     * @var bool
+     */
+    protected $xmlHttpRequest;
+
+    /**
      * Send content
      *
      * @param  SendResponseEvent $event
@@ -57,9 +62,11 @@ class TidyResponseSender extends AbstractResponseSender
      * TidyResponseSender constructor.
      *
      * @param array $config
+     * @param bool $xmlHttpRequest
      */
-    public function __construct(array $config)
+    public function __construct(array $config, $xmlHttpRequest = false)
     {
+        $this->xmlHttpRequest = $xmlHttpRequest;
         $this->config = $config;
     }
 
@@ -71,7 +78,7 @@ class TidyResponseSender extends AbstractResponseSender
     {
         $response = $event->getResponse();
 
-        if (!class_exists('tidy') || !$response instanceof Response || $response->getHeaders()->count() > 0) {
+        if (!class_exists('tidy') || !$response instanceof Response || $response->getHeaders()->count() > 0 || $this->xmlHttpRequest) {
             return $this;
         }
 
