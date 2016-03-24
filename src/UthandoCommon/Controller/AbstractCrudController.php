@@ -278,7 +278,7 @@ abstract class AbstractCrudController extends AbstractActionController
 
                 // primary key ids must match. If not throw exception.
 
-                if ($post[$pk] != $model->$modelMethod()) {
+                if (isset($post[$pk]) && $post[$pk] != $model->$modelMethod()) {
                     throw new Exception('Primary keys do not match.');
                 }
 
