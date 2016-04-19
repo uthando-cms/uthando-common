@@ -72,10 +72,10 @@ class AbstractTableFactory implements AbstractFactoryInterface
      */
     public function getHydratorOrModel($requestedName, $hydratorOrModel)
     {
-        $hydratorOrModel = str_replace('Db\Table', $hydratorOrModel, $requestedName);
-        $hydratorOrModel = str_replace('Table', '', $hydratorOrModel);
+        $class = str_replace('Db\Table', $hydratorOrModel, $requestedName);
+        $class = str_replace('Table', $hydratorOrModel, $class);
 
-        return (class_exists($hydratorOrModel)) ? new $hydratorOrModel() : null;
+        return (class_exists($class)) ? new $class() : null;
     }
 
     /**
