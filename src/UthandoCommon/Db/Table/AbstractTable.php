@@ -12,8 +12,10 @@ namespace UthandoCommon\Db\Table;
 
 use UthandoCommon\Hydrator\BaseHydrator;
 use UthandoCommon\Model\ModelInterface;
-use Zend\Db\Sql\Select;
+use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Paginator\Adapter\DbTableGateway;
+use Zend\Paginator\Paginator;
 
 /**
  * Class AbstractTable
@@ -62,12 +64,19 @@ class AbstractTable
     /**
      * Fetch all records.
      *
-     * @return \Zend\Db\ResultSet\ResultSet
+     * @param bool $paginated
+     * @return ResultSet
      */
-    public function fetchAll()
+    public function fetchAll($paginated=false)
     {
-        $resultSet = $this->getTableGateway()
-            ->select();
+        if ($paginated) {
+            $paginatorAdapter   = new DbTableGateway($this->tableGateway);
+            $paginator          = new Paginator($paginatorAdapter);
+
+            return $paginator;
+        }
+        
+        $resultSet = $this->getTableGateway()->select();
 
         return $resultSet;
     }
