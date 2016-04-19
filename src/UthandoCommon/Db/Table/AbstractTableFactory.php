@@ -27,11 +27,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class AbstractTableFactory implements AbstractFactoryInterface
 {
     /**
-     * @var array
-     */
-    protected $tableNamesMap;
-
-    /**
      * @param ServiceLocatorInterface $serviceLocator
      * @param $name
      * @param $requestedName
@@ -50,12 +45,15 @@ class AbstractTableFactory implements AbstractFactoryInterface
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        if (class_exists($requestedName)) {
+        $config = $serviceLocator->get('config');
+        $tableNamesMap = (isset($config['db_table_names_map'])) ? $config['table_names_map'] : null;
+
+        if (class_exists($requestedName) && is_array($tableNamesMap) && in_array($requestedName, $tableNamesMap)) {
 
             /* @var \Zend\Db\Adapter\Adapter $dbAdapter */
             $dbAdapter          = $serviceLocator->get('Zend\Db\Adapter\Adapter');
             $resultSetPrototype = $this->getHydrator($requestedName);
-            $tableGateway       = new TableGateway($this->tableNamesMap[$requestedName], $dbAdapter, null, $resultSetPrototype);
+            $tableGateway       = new TableGateway($tableNamesMap[$requestedName], $dbAdapter, null, $resultSetPrototype);
             /* @var AbstractTable $table */
             $table              = new $requestedName();
 
@@ -87,10 +85,10 @@ class AbstractTableFactory implements AbstractFactoryInterface
      */
     public function getModel($requestedName)
     {
-        $model  = $this->getHydratorOrModel($requestedName, 'Model');
+        $model  = $this->getHydratorOrModel($requestedName, 'Entity');
 
         if (null === $model) {
-            throw new UthandoException('model class:' .$requestedName .' does not exist');
+            throw new UthandoException('Entity class:' .$requestedName .' does not exist');
         }
 
         return $model;
