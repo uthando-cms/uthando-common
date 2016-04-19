@@ -46,7 +46,7 @@ class AbstractTableFactory implements AbstractFactoryInterface
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $config = $serviceLocator->get('config');
-        $tableNamesMap = (isset($config['db_table_names_map'])) ? $config['table_names_map'] : null;
+        $tableNamesMap = (isset($config['db_table_names_map'])) ? $config['db_table_names_map'] : null;
 
         if (class_exists($requestedName) && is_array($tableNamesMap) && in_array($requestedName, $tableNamesMap)) {
 
