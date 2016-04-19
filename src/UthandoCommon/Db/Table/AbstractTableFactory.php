@@ -27,6 +27,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class AbstractTableFactory implements AbstractFactoryInterface
 {
     /**
+     * @var array
+     */
+    protected $tableNamesMap;
+
+    /**
      * @param ServiceLocatorInterface $serviceLocator
      * @param $name
      * @param $requestedName
@@ -46,14 +51,14 @@ class AbstractTableFactory implements AbstractFactoryInterface
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $config = $serviceLocator->get('config');
-        $tableNamesMap = (isset($config['db_table_names_map'])) ? $config['db_table_names_map'] : null;
+        $this->tableNamesMap = (isset($config['db_table_names_map'])) ? $config['db_table_names_map'] : null;
 
-        if (class_exists($requestedName) && is_array($tableNamesMap) && array_key_exists($requestedName, $tableNamesMap)) {
+        if (class_exists($requestedName) && is_array($this->tableNamesMap) && array_key_exists($requestedName, $this->tableNamesMap)) {
 
             /* @var \Zend\Db\Adapter\Adapter $dbAdapter */
             $dbAdapter          = $serviceLocator->get('Zend\Db\Adapter\Adapter');
             $resultSetPrototype = $this->getHydrator($requestedName);
-            $tableGateway       = new TableGateway($tableNamesMap[$requestedName], $dbAdapter, null, $resultSetPrototype);
+            $tableGateway       = new TableGateway($this->tableNamesMap[$requestedName], $dbAdapter, null, $resultSetPrototype);
             /* @var AbstractTable $table */
             $table              = new $requestedName();
 
@@ -103,6 +108,7 @@ class AbstractTableFactory implements AbstractFactoryInterface
         $hydrator  = $this->getHydratorOrModel($requestedName, 'Hydrator');
 
         if ($hydrator) {
+            $hydrator->setTablePrefix($this->tableNamesMap[$requestedName]);
             $resultSetPrototype = new HydratingResultSet();
             $resultSetPrototype->setHydrator($hydrator);
             $resultSetPrototype->setObjectPrototype($this->getModel($requestedName));
