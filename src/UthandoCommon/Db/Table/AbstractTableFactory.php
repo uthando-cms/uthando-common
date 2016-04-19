@@ -48,7 +48,7 @@ class AbstractTableFactory implements AbstractFactoryInterface
         $config = $serviceLocator->get('config');
         $tableNamesMap = (isset($config['db_table_names_map'])) ? $config['db_table_names_map'] : null;
 
-        if (class_exists($requestedName) && is_array($tableNamesMap) && in_array($requestedName, $tableNamesMap)) {
+        if (class_exists($requestedName) && is_array($tableNamesMap) && array_key_exists($requestedName, $tableNamesMap)) {
 
             /* @var \Zend\Db\Adapter\Adapter $dbAdapter */
             $dbAdapter          = $serviceLocator->get('Zend\Db\Adapter\Adapter');
