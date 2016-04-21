@@ -12,7 +12,6 @@
 namespace UthandoCommon\View;
 
 use Zend\View\Helper\AbstractHelper;
-use Zend\Soap\Exception\InvalidArgumentException;
 
 /**
  * Class FormatDate
@@ -63,7 +62,7 @@ class FormatDate extends AbstractHelper
     public function render()
     {
         if (!$this->date instanceof \DateTime) {
-            throw new InvalidArgumentException('You need to set the date format.');
+            return '';
         }
         return $this->getDate()->format($this->getFormat());
     }
