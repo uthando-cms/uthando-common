@@ -37,9 +37,7 @@ class FormatDate extends AbstractHelper
      */
     public function __invoke($date = null, $format = null)
     {
-        if ($date) {
-            $this->setDate($date);
-        }
+        $this->setDate($date);
 
         if ($format) {
             $this->setFormat($format);
@@ -99,7 +97,7 @@ class FormatDate extends AbstractHelper
      */
     public function setDate($date)
     {
-        if (!$date instanceof \DateTime) {
+        if (is_string($date)) {
             $date = new \DateTime($date);
         }
 

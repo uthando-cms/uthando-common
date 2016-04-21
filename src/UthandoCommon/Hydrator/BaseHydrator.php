@@ -25,7 +25,7 @@ class BaseHydrator extends ZendAbstractHydrator
     /**
      * Array map of object to database names
      *
-     * <object_property> => <database_key>
+     * <database_key> => <object_property>
      *
      * @var array
      */
