@@ -66,7 +66,7 @@ class PhpToJsDateFormat
      * @param $format
      * @return mixed
      */
-    public static function convertPhpToJs(string $format) : string
+    public static function convertPhpToJs($format)
     {
         return strtr($format, self::$dateTokenMap);
     }
@@ -75,7 +75,7 @@ class PhpToJsDateFormat
      * @param $format
      * @return mixed
      */
-    public static function convertJsToPhp(string $format) : string
+    public static function convertJsToPhp($format)
     {
         return strtr($format, array_flip(self::$dateTokenMap));
     }
