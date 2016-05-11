@@ -151,9 +151,9 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         $this->getEventManager()->trigger('post.edit', $this, $argv);
 
-        if (isset($argv['result'])) $saved = $argv['result'];
+        $eventSaved = (isset($argv['result'])) ? $argv['result'] : false;
 
-        return $saved;
+        return (!$saved && !$eventSaved) ? false : true;
     }
 
     /**
