@@ -333,6 +333,7 @@ abstract class AbstractCrudController extends AbstractActionController
 
             return $viewModel->setVariables([
                 'form' => $this->getService()->prepareForm(null, $post),
+                'model' => $model,
                 'routeParams' => $this->params()->fromRoute(),
             ]);
         }
