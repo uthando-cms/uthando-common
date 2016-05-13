@@ -28,6 +28,10 @@ class Serialize implements StrategyInterface
 
     public function hydrate($value)
     {
+        if (!is_string($value)) {
+            return $value;
+        }
+        
         return Serializer::unserialize($value);
     }
 }
