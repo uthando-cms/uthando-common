@@ -85,8 +85,7 @@ class PhoneNumber extends AbstractValidator
             return false;
         }
 
-        $country = $this->getCountry();
-
+        $country            = $this->getCountry();
         $supportedCountries = $this->libPhoneNumber->getSupportedRegions();
 
         if (!in_array($country, $supportedCountries)) {
@@ -95,13 +94,20 @@ class PhoneNumber extends AbstractValidator
         }
 
         try {
-            $NumberProto = $this->libPhoneNumber->parse($value, $country);
+            $numberProto = $this->libPhoneNumber->parse($value, $country);
         } catch (NumberParseException $e) {
             $this->error(self::INVALID_NUMBER);
             return false;
         }
 
-        if ($this->libPhoneNumber->isValidNumberForRegion($NumberProto, $country)) {
+        if (!$this->libPhoneNumber->isValidNumber($numberProto)) {
+            $this->error(self::INVALID_NUMBER);
+            return false;
+        }
+
+        $region = $this->libPhoneNumber->getRegionCodeForNumber($numberProto);
+
+        if ($this->libPhoneNumber->isValidNumberForRegion($numberProto, $region)) {
             return true;
         }
 
