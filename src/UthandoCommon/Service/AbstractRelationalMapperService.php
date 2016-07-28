@@ -26,6 +26,29 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
     protected $referenceMap;
 
     /**
+     * @var bool
+     */
+    protected $populate = true;
+
+    /**
+     * @param bool $bool
+     * @return $this
+     */
+    public function setPopulate($bool)
+    {
+        $this->populate = (bool) $bool;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPopulate()
+    {
+        return $this->populate;
+    }
+
+    /**
      * @param array $post
      * @return \Zend\Db\ResultSet\HydratingResultSet|\Zend\Db\ResultSet\ResultSet|\Zend\Paginator\Paginator
      */
@@ -33,8 +56,10 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
     {
         $models = parent::search($post);
 
-        foreach ($models as $model) {
-            $this->populate($model, true);
+        if ($this->isPopulate()) {
+            foreach ($models as $model) {
+                $this->populate($model, true);
+            }
         }
 
         return $models;
