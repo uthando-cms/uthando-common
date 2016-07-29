@@ -108,7 +108,9 @@ class DateTime implements StrategyInterface
 
         if (is_string($value) && '' === $value) {
             $value = null;
-        } else {
+        }
+
+        if (!$value instanceof DateTimeClass) {
             $date       = DateTimeClass::createFromFormat($this->getHydrateFormat(), $value);
             $errors     = DateTimeClass::getLastErrors();
             $messages   = '';
