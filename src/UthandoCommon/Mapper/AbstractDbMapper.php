@@ -68,6 +68,11 @@ class AbstractDbMapper implements
     protected $paginatorOptions = [];
 
     /**
+     * @var bool
+     */
+    protected $mysql57Compatible = false;
+
+    /**
      * return an instance of Select
      *
      * @param string|null $tableName
@@ -434,5 +439,23 @@ class AbstractDbMapper implements
         $sqlString = $select->getSqlString($adapterPlatform);
 
         return $sqlString;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isMysql57Compatible()
+    {
+        return $this->mysql57Compatible;
+    }
+
+    /**
+     * @param boolean $mysql57Compatible
+     * @return $this
+     */
+    public function setMysql57Compatible($mysql57Compatible)
+    {
+        $this->mysql57Compatible = $mysql57Compatible;
+        return $this;
     }
 }

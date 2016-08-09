@@ -47,8 +47,10 @@ return [
             'UthandoMapperManager'                      => 'UthandoCommon\Mapper\MapperManagerFactory',
             'UthandoModelManager'                       => 'UthandoCommon\Model\ModelManagerFactory',
             'UthandoServiceManager'                     => 'UthandoCommon\Service\ServiceManagerFactory',
-            'Zend\Db\Adapter\Adapter'                   => 'Zend\Db\Adapter\AdapterServiceFactory',
+            Zend\Db\Adapter\Adapter::class              => UthandoCommon\Db\Adapter\AdapterServiceFactory::class,
             'Zend\Cache\Service\StorageCacheFactory'    => 'Zend\Cache\Service\StorageCacheFactory',
+
+            UthandoCommon\Options\DbOptions::class      => UthandoCommon\Service\Factory\DbOptionsFactory::class,
         ],
         'initializers' => [
             'UthandoCommon\Service\CacheStorageInitializer' => 'UthandoCommon\Service\Initializer\CacheStorageInitializer'

@@ -12,10 +12,10 @@
 namespace UthandoCommon\Mapper;
 
 use UthandoCommon\Model\ModelAwareInterface;
+use UthandoCommon\Options\DbOptions;
 use Zend\Db\Adapter\Adapter;
 use Zend\Mvc\Exception\InvalidPluginException;
 use Zend\ServiceManager\AbstractPluginManager;
-use Zend\ServiceManager\ConfigInterface;
 use Zend\Hydrator\ClassMethods;
 use Zend\Hydrator\HydratorAwareInterface;
 
@@ -45,23 +45,25 @@ class MapperManager extends AbstractPluginManager
     }
 
     /**
-     * @param $mapper
+     * @param AbstractDbMapper $mapper
      */
     public function injectDbAdapter($mapper)
     {
         if ($mapper instanceof DbAdapterAwareInterface) {
             /* @var $dbAdapter Adapter */
             $dbAdapter = (isset($this->creationOptions['dbAdapter'])) ? $this->creationOptions['dbAdapter'] :
-                $this->serviceLocator->get('Zend\Db\Adapter\Adapter');
-            $config = $this->serviceLocator->get('config');
+                $this->serviceLocator->get(Adapter::class);
+            /** @var  $dbOptions DbOptions */
+            $dbOptions = $this->serviceLocator->get(DbOptions::class);
 
             // enable foreign key constraints on sqlite.
-            if (isset($config['db']['sqlite_constraints']) && $config['db']['sqlite_constraints'] && !$this->sqliteConstraints) {
+            if ($dbOptions->isSqliteConstraints() && !$this->sqliteConstraints) {
                 $dbAdapter->query('PRAGMA FOREIGN_KEYS = ON', Adapter::QUERY_MODE_EXECUTE);
                 $this->sqliteConstraints = true;
             }
 
-            $mapper->setDbAdapter($dbAdapter);
+            $mapper->setMysql57Compatible($dbOptions->isMysql57Compatible())
+                ->setDbAdapter($dbAdapter);
         }
     }
 
