@@ -93,7 +93,7 @@ class AbstractDbMapper implements
         if (!$this->resultSetPrototype instanceof HydratingResultSet) {
             $resultSetPrototype = new HydratingResultSet;
             $resultSetPrototype->setHydrator($this->getHydrator());
-            $resultSetPrototype->setObjectPrototype(new $this->model());
+            $resultSetPrototype->setObjectPrototype($this->getModel());
             $this->resultSetPrototype = $resultSetPrototype;
         }
 

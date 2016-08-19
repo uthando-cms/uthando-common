@@ -135,7 +135,7 @@ abstract class AbstractNestedSet extends AbstractDbMapper
             $subTreeDepth = 'ANY_VALUE(' . $subTreeDepth . ')';
         }
 
-        $depth = new Expression('(COUNT(parent.' . $this->getPrimaryKey() . ') - ' . $subTreeDepth . ')');
+        $depth = new Expression('(COUNT(parent.' . $this->getPrimaryKey() . ') - ' . $subTreeDepth .  ')');
 
         $select = $this->getSql()->select()
             ->from(['child' => $this->getTable()])
