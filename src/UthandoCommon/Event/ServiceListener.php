@@ -27,9 +27,8 @@ class ServiceListener implements ListenerAggregateInterface
 
     /**
      * @param EventManagerInterface $events
-     * @param int $priority
      */
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events)
     {
         $events = $events->getSharedManager();
 
