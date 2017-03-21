@@ -78,6 +78,8 @@ return [
             'tbAlert'               => 'UthandoCommon\View\Alert',
             'tbFlashMessenger'      => 'UthandoCommon\View\FlashMessenger',
             'convertToJsDateFormat' => 'UthandoCommon\View\ConvertToJsDateFormat',
+
+            'formselect'            => 'UthandoCommon\Form\View\Helper\FormSelect',
         ],
     ],
     'view_manager' => [

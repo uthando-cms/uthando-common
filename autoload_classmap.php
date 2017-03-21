@@ -26,6 +26,7 @@ return array(
     'UthandoCommon\Controller\CaptchaFieldSet'                  => __DIR__ . '/src/UthandoCommon/Form/Settings/CaptchaFieldSet.php',
     'UthandoCommon\Form\Settings\DbFieldSet'                    => __DIR__ . '/src/UthandoCommon/Form/Settings/DbFieldSet.php',
     'UthandoCommon\Form\Settings\Settings'                      => __DIR__ . '/src/UthandoCommon/Form/Settings/Settings.php',
+    'UthandoCommon\Form\View\Helper\FormSelect'                 => __DIR__ . '/src/UthandoCommon/Form/View/Helper/FormSelect.php',
     'UthandoCommon\Hydrator\AbstractHydrator'                   => __DIR__ . '/src/UthandoCommon/Hydrator/AbstractHydrator.php',
     'UthandoCommon\Hydrator\BaseHydrator'                       => __DIR__ . '/src/UthandoCommon/Hydrator/BaseHydrator.php',
     'UthandoCommon\Hydrator\NestedSetInterface'                 => __DIR__ . '/src/UthandoCommon/Hydrator/NestedSetInterface.php',
