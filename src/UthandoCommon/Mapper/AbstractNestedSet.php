@@ -25,10 +25,11 @@ use Zend\Db\Sql\Expression;
  */
 abstract class AbstractNestedSet extends AbstractDbMapper
 {
-    const INSERT_NODE = 'insert';
-    const INSERT_CHILD = 'insertSub';
-    const COLUMN_LEFT = 'lft';
-    const COLUMN_RIGHT = 'rgt';
+    const INSERT_NO     = 'noInsert';
+    const INSERT_NODE   = 'insert';
+    const INSERT_CHILD  = 'insertSub';
+    const COLUMN_LEFT   = 'lft';
+    const COLUMN_RIGHT  = 'rgt';
 
     /**
      * Gets all items in tree.
