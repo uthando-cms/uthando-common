@@ -23,12 +23,38 @@ use ZendService\Akismet\Exception;
  */
 class Akismet extends AbstractValidator
 {
-    const INVALID = 'invalid';
-    const SPAM = 'isSpam';
+    const INVALID               = 'invalid';
+    const INVALID_COMMENT_TYPE  = 'invalidComment';
+    const SPAM                  = 'isSpam';
 
+    const COMMENT_TYPE_BLOG_POST    = 'blog-post';
+    const COMMENT_TYPE_COMMENT      = 'comment';
+    const COMMENT_TYPE_CONTACT_FORM = 'contact-form';
+    const COMMENT_TYPE_FORUM        = 'forum-post';
+    const COMMENT_TYPE_MESSAGE      = 'message';
+    const COMMENT_TYPE_REPLY        = 'reply';
+    const COMMENT_TYPE_SIGNUP       = 'signup';
+
+    /**
+     * @var array
+     */
     protected $messageTemplates = [
-        self::INVALID => 'Invalid input',
-        self::SPAM => 'The text seems to be spam',
+        self::INVALID               => 'Invalid input',
+        self::SPAM                  => 'The text seems to be spam',
+        self::INVALID_COMMENT_TYPE  => 'The comment type is not supported.'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $validCommentTypes = [
+        self::COMMENT_TYPE_BLOG_POST,
+        self::COMMENT_TYPE_COMMENT,
+        self::COMMENT_TYPE_CONTACT_FORM,
+        self::COMMENT_TYPE_FORUM,
+        self::COMMENT_TYPE_MESSAGE,
+        self::COMMENT_TYPE_REPLY,
+        self::COMMENT_TYPE_SIGNUP,
     ];
 
     /**
@@ -61,6 +87,13 @@ class Akismet extends AbstractValidator
     protected $commentAuthorEmail;
 
     /**
+     * URL submitted with the comment.
+     *
+     * @var string
+     */
+    protected $commentAuthorUrl = '';
+
+    /**
      * May be blank, comment, trackback, pingback, or a made up value like "registration".
      *
      * @var string
@@ -82,6 +115,11 @@ class Akismet extends AbstractValidator
      */
     protected $userIp;
 
+    /**
+     * Akismet constructor.
+     *
+     * @param array $options
+     */
     public function __construct($options = [])
     {
         if (array_key_exists('api_key', $options)) {
@@ -98,6 +136,10 @@ class Akismet extends AbstractValidator
 
         if (array_key_exists('comment_author_email', $options)) {
             $this->setCommentAuthorEmail($options['comment_author_email']);
+        }
+
+        if (array_key_exists('comment_author_url', $options)) {
+            $this->setCommentAuthorUrl($options['comment_author_url']);
         }
 
         if (array_key_exists('comment_type', $options)) {
@@ -118,16 +160,16 @@ class Akismet extends AbstractValidator
     /**
      * @return string
      */
-    public function getApiKey()
+    public function getApiKey(): string
     {
         return $this->apiKey;
     }
 
     /**
-     * @param $apiKey
-     * @return $this
+     * @param string $apiKey
+     * @return Akismet
      */
-    public function setApiKey($apiKey)
+    public function setApiKey(string $apiKey): Akismet
     {
         if (empty($apiKey)) {
             throw new Exception\InvalidArgumentException('API key cannot be empty');
@@ -140,16 +182,16 @@ class Akismet extends AbstractValidator
     /**
      * @return string
      */
-    public function getBlog()
+    public function getBlog(): string
     {
         return $this->blog;
     }
 
     /**
-     * @param $blog
-     * @return $this
+     * @param string $blog
+     * @return Akismet
      */
-    public function setBlog($blog)
+    public function setBlog(string $blog): Akismet
     {
         if (empty($blog)) {
             throw new Exception\InvalidArgumentException('The url cannot be empty');
@@ -162,16 +204,16 @@ class Akismet extends AbstractValidator
     /**
      * @return string
      */
-    public function getUserIp()
+    public function getUserIp(): string
     {
         return $this->userIp;
     }
 
     /**
      * @param string $userIp
-     * @return $this
+     * @return Akismet
      */
-    public function setUserIp($userIp)
+    public function setUserIp(string $userIp): Akismet
     {
         $this->userIp = $userIp;
         return $this;
@@ -180,16 +222,16 @@ class Akismet extends AbstractValidator
     /**
      * @return string
      */
-    public function getCommentAuthor()
+    public function getCommentAuthor(): string
     {
         return $this->commentAuthor;
     }
 
     /**
      * @param string $commentAuthor
-     * @return $this
+     * @return Akismet
      */
-    public function setCommentAuthor($commentAuthor)
+    public function setCommentAuthor(string $commentAuthor): Akismet
     {
         $this->commentAuthor = $commentAuthor;
         return $this;
@@ -198,34 +240,52 @@ class Akismet extends AbstractValidator
     /**
      * @return string
      */
-    public function getCommentAuthorEmail()
+    public function getCommentAuthorEmail(): string
     {
         return $this->commentAuthorEmail;
     }
 
     /**
      * @param string $commentAuthorEmail
-     * @return $this
+     * @return Akismet
      */
-    public function setCommentAuthorEmail($commentAuthorEmail)
+    public function setCommentAuthorEmail(string $commentAuthorEmail): Akismet
     {
         $this->commentAuthorEmail = $commentAuthorEmail;
         return $this;
     }
 
     /**
+     * @return string|null
+     */
+    public function getCommentAuthorUrl(): string
+    {
+        return $this->commentAuthorUrl;
+    }
+
+    /**
+     * @param string $commentAuthorUrl
+     * @return Akismet
+     */
+    public function setCommentAuthorUrl(string $commentAuthorUrl): Akismet
+    {
+        $this->commentAuthorUrl = $commentAuthorUrl;
+        return $this;
+    }
+
+    /**
      * @return string
      */
-    public function getCommentType()
+    public function getCommentType(): string
     {
         return $this->commentType;
     }
 
     /**
      * @param string $commentType
-     * @return $this
+     * @return Akismet
      */
-    public function setCommentType($commentType)
+    public function setCommentType(string $commentType): Akismet
     {
         $this->commentType = $commentType;
         return $this;
@@ -234,16 +294,16 @@ class Akismet extends AbstractValidator
     /**
      * @return string
      */
-    public function getUserAgent()
+    public function getUserAgent(): string
     {
         return $this->userAgent;
     }
 
     /**
      * @param string $userAgent
-     * @return $this
+     * @return Akismet
      */
-    public function setUserAgent($userAgent)
+    public function setUserAgent(string $userAgent): Akismet
     {
         $this->userAgent = $userAgent;
         return $this;
@@ -256,10 +316,15 @@ class Akismet extends AbstractValidator
      * @param null $context
      * @return bool
      */
-    public function isValid($value, $context = null)
+    public function isValid($value, $context = null): bool
     {
-        if (!is_array($value)) {
+        if (!is_array($context)) {
             $this->error(self::INVALID);
+            return false;
+        }
+
+        if (!in_array($this->getCommentType(), $this->validCommentTypes)) {
+            $this->error(self::INVALID_COMMENT_TYPE);
             return false;
         }
 
@@ -272,12 +337,13 @@ class Akismet extends AbstractValidator
         }
 
         $data = [
-            'comment_type' => $this->getCommentType(),
-            'comment_author' => $context[$this->getCommentAuthor()],
-            'comment_author_email' => $context[$this->getCommentAuthorEmail()],
-            'comment_content' => $value,
-            'user_agent' => $this->getUserAgent(),
-            'user_ip' => $this->getUserIp(),
+            'comment_type'          => $this->getCommentType(),
+            'comment_author'        => $context[$this->getCommentAuthor()],
+            'comment_author_email'  => $context[$this->getCommentAuthorEmail()],
+            'comment_author_url'    => $context[$this->getCommentAuthorUrl()] ?? '',
+            'comment_content'       => $value,
+            'user_agent'            => $this->getUserAgent(),
+            'user_ip'               => $this->getUserIp(),
         ];
 
         if ($akismet->isSpam($data)) {

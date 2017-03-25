@@ -6,6 +6,10 @@ return [
         'captcha' => [
             'class' => 'dumb'
         ],
+        'akismet' => [
+            'api_key' => '',
+            'blog'    => '',
+        ],
     ],
     'cache' => [
         'adapter' => [
