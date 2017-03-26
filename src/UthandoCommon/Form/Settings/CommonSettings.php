@@ -17,18 +17,21 @@ use Zend\Form\Form;
  *
  * @package UthandoCommon\Form\Settings
  */
-class Settings extends Form
+class CommonSettings extends Form
 {
+    /**
+     * Init
+     */
     public function init()
     {
         $this->add([
-            'type' => DbFieldSet::class,
-            'name' => 'db_options',
+            'type' => AkismetFieldSet::class,
+            'name' => 'akismet',
             'attributes' => [
                 'class' => 'col-sm-6',
             ],
             'options' => [
-                'label' => 'Database Options',
+                'label' => 'Akismet',
             ],
         ]);
     }

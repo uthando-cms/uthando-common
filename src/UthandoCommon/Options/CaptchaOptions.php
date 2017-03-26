@@ -10,8 +10,14 @@
 
 namespace UthandoCommon\Options;
 
+use Zend\Stdlib\AbstractOptions;
 
-class CaptchaOptions
+/**
+ * Class CaptchaOptions
+ *
+ * @package UthandoCommon\Options
+ */
+class CaptchaOptions extends AbstractOptions
 {
 
 }

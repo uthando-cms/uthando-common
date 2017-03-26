@@ -10,8 +10,14 @@
 
 namespace UthandoCommon\Options;
 
+use Zend\Stdlib\AbstractOptions;
 
-class TidyOptions
+/**
+ * Class TidyOptions
+ *
+ * @package UthandoCommon\Options
+ */
+class TidyOptions extends AbstractOptions
 {
 
 }

@@ -22,17 +22,17 @@ class DbOptions extends AbstractOptions
     /**
      * @var string
      */
-    protected $driver;
+    protected $driver = 'PDO_MYSQL';
 
     /**
      * @var string
      */
-    protected $host;
+    protected $host = 'localhost';
 
     /**
      * @var string
      */
-    protected $port;
+    protected $port = '3306';
 
     /**
      * @var string
@@ -52,12 +52,12 @@ class DbOptions extends AbstractOptions
     /**
      * @var array
      */
-    protected $driverOptions;
+    protected $driverOptions = [];
 
     /**
      * @var array
      */
-    protected $options;
+    protected $options = [];
 
     /**
      * @var bool
@@ -78,10 +78,10 @@ class DbOptions extends AbstractOptions
     }
 
     /**
-     * @param string $driver
-     * @return $this
+     * @param $driver
+     * @return DbOptions
      */
-    public function setDriver($driver)
+    public function setDriver($driver): DbOptions
     {
         $this->driver = $driver;
         return $this;
@@ -90,16 +90,16 @@ class DbOptions extends AbstractOptions
     /**
      * @return string
      */
-    public function getHost()
+    public function getHost(): string
     {
         return $this->host;
     }
 
     /**
-     * @param string $host
-     * @return $this
+     * @param $host
+     * @return DbOptions
      */
-    public function setHost($host)
+    public function setHost($host): DbOptions
     {
         $this->host = $host;
         return $this;
@@ -108,16 +108,16 @@ class DbOptions extends AbstractOptions
     /**
      * @return string
      */
-    public function getPort()
+    public function getPort(): string
     {
         return $this->port;
     }
 
     /**
-     * @param string $port
-     * @return $this
+     * @param $port
+     * @return DbOptions
      */
-    public function setPort($port)
+    public function setPort($port): DbOptions
     {
         $this->port = $port;
         return $this;
@@ -126,16 +126,16 @@ class DbOptions extends AbstractOptions
     /**
      * @return string
      */
-    public function getDatabase()
+    public function getDatabase(): string
     {
         return $this->database;
     }
 
     /**
-     * @param string $database
-     * @return $this
+     * @param $database
+     * @return DbOptions
      */
-    public function setDatabase($database)
+    public function setDatabase($database): DbOptions
     {
         $this->database = $database;
         return $this;
@@ -144,16 +144,16 @@ class DbOptions extends AbstractOptions
     /**
      * @return string
      */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
 
     /**
-     * @param string $username
-     * @return $this
+     * @param $username
+     * @return DbOptions
      */
-    public function setUsername($username)
+    public function setUsername($username): DbOptions
     {
         $this->username = $username;
         return $this;
@@ -162,16 +162,16 @@ class DbOptions extends AbstractOptions
     /**
      * @return string
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
 
     /**
-     * @param string $password
-     * @return $this
+     * @param $password
+     * @return DbOptions
      */
-    public function setPassword($password)
+    public function setPassword($password): DbOptions
     {
         $this->password = $password;
         return $this;
@@ -180,16 +180,16 @@ class DbOptions extends AbstractOptions
     /**
      * @return array
      */
-    public function getDriverOptions()
+    public function getDriverOptions(): array
     {
         return $this->driverOptions;
     }
 
     /**
-     * @param array $driverOptions
-     * @return $this
+     * @param $driverOptions
+     * @return DbOptions
      */
-    public function setDriverOptions($driverOptions)
+    public function setDriverOptions(array $driverOptions): DbOptions
     {
         $this->driverOptions = $driverOptions;
         return $this;
@@ -198,16 +198,16 @@ class DbOptions extends AbstractOptions
     /**
      * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
 
     /**
      * @param array $options
-     * @return $this
+     * @return DbOptions
      */
-    public function setOptions($options)
+    public function setOptions(array $options): DbOptions
     {
         $this->options = $options;
         return $this;
@@ -216,7 +216,7 @@ class DbOptions extends AbstractOptions
     /**
      * @return boolean
      */
-    public function isSqliteConstraints()
+    public function isSqliteConstraints(): bool
     {
         return $this->sqliteConstraints;
     }
@@ -224,16 +224,16 @@ class DbOptions extends AbstractOptions
     /**
      * @return bool
      */
-    public function getSqliteConstraints()
+    public function getSqliteConstraints(): bool
     {
         return $this->isSqliteConstraints();
     }
 
     /**
-     * @param boolean $sqliteConstraints
-     * @return $this
+     * @param bool $sqliteConstraints
+     * @return DbOptions
      */
-    public function setSqliteConstraints($sqliteConstraints)
+    public function setSqliteConstraints(bool $sqliteConstraints): DbOptions
     {
         $this->sqliteConstraints = $sqliteConstraints;
         return $this;
@@ -242,7 +242,7 @@ class DbOptions extends AbstractOptions
     /**
      * @return boolean
      */
-    public function isMysql57Compatible()
+    public function isMysql57Compatible(): bool
     {
         return $this->mysql57Compatible;
     }
@@ -250,16 +250,16 @@ class DbOptions extends AbstractOptions
     /**
      * @return bool
      */
-    public function getMysql57Compatible()
+    public function getMysql57Compatible(): bool
     {
         return $this->isMysql57Compatible();
     }
 
     /**
-     * @param boolean $mysql57Compatible
-     * @return $this
+     * @param bool $mysql57Compatible
+     * @return DbOptions
      */
-    public function setMysql57Compatible($mysql57Compatible)
+    public function setMysql57Compatible(bool $mysql57Compatible): DbOptions
     {
         $this->mysql57Compatible = $mysql57Compatible;
         return $this;

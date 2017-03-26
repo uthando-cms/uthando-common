@@ -11,6 +11,7 @@
 namespace UthandoCommon\Mvc\Controller;
 
 use UthandoCommon\Controller\SettingsTrait;
+use UthandoCommon\Form\Settings\CommonSettings;
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
@@ -24,7 +25,7 @@ class Settings extends AbstractActionController
 
     public function __construct()
     {
-        $this->setFormName('UthandoCommonSettings')
+        $this->setFormName(CommonSettings::class)
             ->setConfigKey('uthando_common');
     }
 }

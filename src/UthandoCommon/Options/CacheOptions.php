@@ -10,8 +10,14 @@
 
 namespace UthandoCommon\Options;
 
+use Zend\Stdlib\AbstractOptions;
 
-class CacheOptions
+/**
+ * Class CacheOptions
+ *
+ * @package UthandoCommon\Options
+ */
+class CacheOptions extends AbstractOptions
 {
 
 }

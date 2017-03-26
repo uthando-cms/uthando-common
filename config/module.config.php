@@ -26,7 +26,8 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'UthandoCommon\Controller\Captcha' => 'UthandoCommon\Controller\CaptchaController',
+            'UthandoCommon\Controller\Captcha'              => 'UthandoCommon\Controller\CaptchaController',
+            UthandoCommon\Mvc\Controller\Settings::class    => UthandoCommon\Mvc\Controller\Settings::class,
         ],
     ],
     'filters' => [
@@ -39,8 +40,11 @@ return [
     ],
     'form_elements' => [
         'invokables' => [
-            'UthandoCommonCaptcha'                      => 'UthandoCommon\Form\Element\Captcha',
-            'UthandoCommonLibPhoneNumberCountryList'    => 'UthandoCommon\Form\Element\LibPhoneNumberCountryList',
+            'UthandoCommonCaptcha'                              => 'UthandoCommon\Form\Element\Captcha',
+            'UthandoCommonLibPhoneNumberCountryList'            => 'UthandoCommon\Form\Element\LibPhoneNumberCountryList',
+
+            UthandoCommon\Form\Settings\CommonSettings::class   => UthandoCommon\Form\Settings\CommonSettings::class,
+            UthandoCommon\Form\Settings\AkismetFieldSet::class  => UthandoCommon\Form\Settings\AkismetFieldSet::class
         ],
     ],
     'service_manager' => [
@@ -54,6 +58,7 @@ return [
             Zend\Db\Adapter\Adapter::class              => UthandoCommon\Db\Adapter\AdapterServiceFactory::class,
             'Zend\Cache\Service\StorageCacheFactory'    => 'Zend\Cache\Service\StorageCacheFactory',
 
+            UthandoCommon\Options\AkismetOptions::class => UthandoCommon\Service\Factory\AkismetOptionsFactory::class,
             UthandoCommon\Options\DbOptions::class      => UthandoCommon\Service\Factory\DbOptionsFactory::class,
         ],
         'initializers' => [
@@ -67,7 +72,6 @@ return [
     ],
     'validators' => [
         'invokables' => [
-            'UthandoCommonAkismet'      => 'UthandoCommon\Validator\Akismet',
             'UthandoCommonPhoneNumber'  => 'UthandoCommon\I18n\Validator\PhoneNumber',
             'UthandoCommonPostCode'     => 'UthandoCommon\I18n\Validator\PostCode',
         ],

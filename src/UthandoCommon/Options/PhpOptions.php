@@ -10,8 +10,14 @@
 
 namespace UthandoCommon\Options;
 
+use Zend\Stdlib\AbstractOptions;
 
-class PhpOptions
+/**
+ * Class PhpOptions
+ *
+ * @package UthandoCommon\Options
+ */
+class PhpOptions extends AbstractOptions
 {
 
 }

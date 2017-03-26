@@ -9,6 +9,7 @@ return [
                         'allow' => [
                             'controllers' => [
                                 'UthandoCommon\Controller\Captcha' => ['action' => 'all'],
+                                UthandoCommon\Mvc\Controller\Settings::class => ['action' => 'all'],
                             ],
                         ],
                     ],
@@ -16,6 +17,7 @@ return [
             ],
             'resources' => [
                 'UthandoCommon\Controller\Captcha',
+                UthandoCommon\Mvc\Controller\Settings::class
             ],
         ],
     ],

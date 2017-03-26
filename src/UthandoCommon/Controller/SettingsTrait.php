@@ -110,6 +110,8 @@ trait SettingsTrait
             }
 
             $this->flashMessenger()->addSuccessMessage('Settings have been updated!');
+        } else {
+            $this->flashMessenger()->addErrorMessage('There is a wrong setting, please check all values are corect!');
         }
 
         return ['form' => $form,];
