@@ -16,6 +16,7 @@ use UthandoCommon\Model\ModelInterface;
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Db\ResultSet\AbstractResultSet;
 use Zend\Db\ResultSet\HydratingResultSet;
+use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
 use Zend\Paginator\Paginator;
@@ -133,6 +134,7 @@ class AbstractDbMapper implements
      */
     public function getPrevious($id)
     {
+
         $whereSelect = $this->getSql()->select();
         $whereSelect->from($this->getTable())
             ->columns([
