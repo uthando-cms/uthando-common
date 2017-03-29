@@ -128,6 +128,48 @@ class AbstractDbMapper implements
     }
 
     /**
+     * @param $id
+     * @return null|ModelInterface
+     */
+    public function getPrevious($id)
+    {
+        $whereSelect = $this->getSql()->select();
+        $whereSelect->from($this->getTable())
+            ->columns([
+                $this->getPrimaryKey() => new Expression('MAX(' . $this->getPrimaryKey() . ')')
+            ])->where->lessThan($this->getPrimaryKey() , $id);
+
+        $select = $this->getSelect();
+        $select->where([$this->getPrimaryKey() => $whereSelect]);
+
+        $result = $this->fetchResult($select);
+        $row = $result->current();
+
+        return $row;
+    }
+
+    /**
+     * @param $id
+     * @return null|ModelInterface
+     */
+    public function getNext($id)
+    {
+        $whereSelect = $this->getSql()->select();
+        $whereSelect->from($this->getTable())
+            ->columns([
+                $this->getPrimaryKey() => new Expression('MIN(' . $this->getPrimaryKey() . ')')
+            ])->where->greaterThan($this->getPrimaryKey() , $id);
+
+        $select = $this->getSelect();
+        $select->where([$this->getPrimaryKey() => $whereSelect]);
+
+        $result = $this->fetchResult($select);
+        $row = $result->current();
+
+        return $row;
+    }
+
+    /**
      * Fetches all rows from database table.
      *
      * @param null|string $sort
