@@ -74,15 +74,21 @@ class MvcListener implements ListenerAggregateInterface
             $response = $event->getResponse();
             $uri = $request->getUri();
 
-            if ('ssl' === $force && 'http' === $uri->getScheme()) {
-                $uri->setScheme('https');
-                return self::redirect($uri, $response);
+            switch ($force) {
+                case 'https':
+                    if ('http' === $uri->getScheme()) {
+                        $uri->setScheme('https');
+                        return self::redirect($uri, $response);
+                    }
+                    break;
+                case 'http':
+                    if ('https' === $uri->getScheme()) {
+                        $uri->setScheme('http');
+                        return self::redirect($uri, $response);
+                    }
+                    break;
             }
 
-            if ('http' === $force && 'https' === $uri->getScheme()) {
-                $uri->setScheme('http');
-                return self::redirect($uri, $response);
-            }
         }
 
         return;
