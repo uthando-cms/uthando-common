@@ -21,6 +21,7 @@ use UthandoCommon\Event\MvcListener;
 use UthandoCommon\Event\TidyResponseSender;
 use UthandoCommon\Event\ServiceListener;
 use Zend\Console\Adapter\AdapterInterface as Console;
+use Zend\Http\Request;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\MvcEvent;
@@ -80,17 +81,19 @@ class Module implements ConsoleBannerProviderInterface, ConfigInterface
         $eventManager->attach(new MvcListener());
         $eventManager->attach(new ServiceListener());
 
-        $config = $app->getServiceManager()
-            ->get('config');
+        if ($event->getRequest() instanceof Request) {
+            $config = $app->getServiceManager()
+                ->get('config');
 
-        $tidyConfig = (isset($config['tidy'])) ? $config['tidy'] : ['enable' => false];
+            $tidyConfig = (isset($config['tidy'])) ? $config['tidy'] : ['enable' => false];
 
-        if ($tidyConfig['enable']) {
-            $eventManager->getSharedManager()->attach(
-                'Zend\Mvc\SendResponseListener',
-                SendResponseEvent::EVENT_SEND_RESPONSE,
-                new TidyResponseSender($tidyConfig['config'], $event->getRequest()->isXmlHttpRequest())
-            );
+            if ($tidyConfig['enable']) {
+                $eventManager->getSharedManager()->attach(
+                    'Zend\Mvc\SendResponseListener',
+                    SendResponseEvent::EVENT_SEND_RESPONSE,
+                    new TidyResponseSender($tidyConfig['config'], $event->getRequest()->isXmlHttpRequest())
+                );
+            }
         }
     }
 
