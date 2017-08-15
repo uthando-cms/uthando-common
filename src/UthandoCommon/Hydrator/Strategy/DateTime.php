@@ -44,7 +44,7 @@ class DateTime implements StrategyInterface
         }
 
         if (isset($options['hydrateFormat'])) {
-            $this->extractFormat = $options['hydrateFormat'];
+            $this->hydrateFormat = $options['hydrateFormat'];
         }
     }
 
