@@ -23,9 +23,9 @@ use ZendService\Akismet\Exception;
  */
 class Akismet extends AbstractValidator
 {
-    const INVALID               = 'invalid';
-    const INVALID_COMMENT_TYPE  = 'invalidComment';
-    const SPAM                  = 'isSpam';
+    const INVALID                   = 'invalid';
+    const INVALID_COMMENT_TYPE      = 'invalidComment';
+    const SPAM                      = 'isSpam';
 
     const COMMENT_TYPE_BLOG_POST    = 'blog-post';
     const COMMENT_TYPE_COMMENT      = 'comment';
