@@ -82,6 +82,7 @@ return array(
     'JSMinException'                                            => __DIR__ . '/src/UthandoCommon/Filter/JsMin.php',
     'UthandoCommon\Filter\Slug'                                 => __DIR__ . '/src/UthandoCommon/Filter/Slug.php',
     'UthandoCommon\Filter\UcFirst'                              => __DIR__ . '/src/UthandoCommon/Filter/UcFirst.php',
+    'CssMin'                                                    => __DIR__ . '/src/UthandoCommon/Filter/CssMin.php',
     'UthandoCommon\UthandoException'                            => __DIR__ . '/src/UthandoCommon/UthandoException.php',
     'UthandoCommon\Model\NestedSetInterface'                    => __DIR__ . '/src/UthandoCommon/Model/NestedSetInterface.php',
     'UthandoCommon\Model\ModelAwareTrait'                       => __DIR__ . '/src/UthandoCommon/Model/ModelAwareTrait.php',
