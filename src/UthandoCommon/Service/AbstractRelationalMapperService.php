@@ -11,6 +11,7 @@
 
 namespace UthandoCommon\Service;
 
+use UthandoCommon\Model\Model;
 use Zend\Db\ResultSet\HydratingResultSet;
 
 /**
@@ -57,6 +58,7 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
         $models = parent::search($post);
 
         if ($this->isPopulate()) {
+            /** @var Model $model */
             foreach ($models as $model) {
                 $this->populate($model, true);
             }
@@ -80,13 +82,11 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
         foreach ($this->getReferenceMap() as $name => $options) {
             if ($allChildren || in_array($name, $children)) {
 
-                $service = $this->getRelatedService($name);
-
-                $getIdMethod = 'get' . ucfirst($options['refCol']);
-                $setMethod = 'set' . ucfirst($name);
-                $getMethod = (isset($options['getMethod'])) ? $options['getMethod'] : 'getById';
-
-                $childModel = $service->$getMethod($model->$getIdMethod(), $options['refCol']);
+                $service        = $this->getRelatedService($name);
+                $getIdMethod    = 'get' . ucfirst($options['refCol']);
+                $setMethod      = 'set' . ucfirst($name);
+                $getMethod      =  $options['getMethod'] ?? 'getById';
+                $childModel     = $service->$getMethod($model->$getIdMethod(), $options['refCol']);
 
                 if ($childModel instanceof HydratingResultSet) {
                     $childModelObjects = [];

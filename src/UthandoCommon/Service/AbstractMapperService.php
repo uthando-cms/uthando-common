@@ -14,7 +14,6 @@ namespace UthandoCommon\Service;
 use UthandoCommon\Cache\CacheStorageAwareInterface;
 use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Mapper\MapperInterface;
-use UthandoCommon\Mapper\MapperManager;
 use UthandoCommon\Model\ModelInterface;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\ResultSet\ResultSet;
@@ -29,6 +28,11 @@ use Zend\Paginator\Paginator;
 class AbstractMapperService extends AbstractService implements MapperServiceInterface, CacheStorageAwareInterface
 {
     use CacheTrait;
+
+    /**
+     * @var string
+     */
+    protected $mapper;
 
     /**
      * @var array
@@ -104,21 +108,23 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      */
     public function add(array $post, Form $form = null)
     {
-        $model = $this->getModel();
-        $form = ($form instanceof Form) ? $form->setData($post) : $this->prepareForm($model, $post, true, true);
+        $model  = $this->getModel();
+        $form   = ($form instanceof Form) ?
+            $form->setData($post) :
+            $this->prepareForm($model, $post, true, true);
+        $argv   = compact('post', 'form');
+        $argv   = $this->prepareEventArguments($argv);
 
-        $argv = compact('post', 'form');
-        $argv = $this->prepareEventArguments($argv);
         $this->getEventManager()->trigger('pre.add', $this, $argv);
 
         if (!$form->isValid()) {
             return $form;
         }
 
-        $saved = $this->save($form->getData());
+        $saved  = $this->save($form->getData());
+        $argv   = compact('post', 'form', 'saved');
+        $argv   = $this->prepareEventArguments($argv);
 
-        $argv = compact('post', 'form', 'saved');
-        $argv = $this->prepareEventArguments($argv);
         $this->getEventManager()->trigger('post.add', $this, $argv);
 
         return $saved;
@@ -130,24 +136,25 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      * @param ModelInterface $model
      * @param array $post
      * @param Form $form
-     * @return int results from self::save()
+     * @return Form|int results from self::save()
      */
     public function edit(ModelInterface $model, array $post, Form $form = null)
     {
-        $form = ($form instanceof From) ? $form->setData($post) : $this->prepareForm($model, $post, true, true);
-
+        $form = ($form instanceof Form) ?
+            $form->setData($post) :
+            $this->prepareForm($model, $post, true, true);
         $argv = compact('model', 'post', 'form');
         $argv = $this->prepareEventArguments($argv);
+
         $this->getEventManager()->trigger('pre.edit', $this, $argv);
 
         if (!$form->isValid()) {
             return $form;
         }
 
-        $saved = $this->save($form->getData());
-
-        $argv = compact('model', 'post', 'form', 'saved');
-        $argv = $this->prepareEventArguments($argv);
+        $saved  = $this->save($form->getData());
+        $argv   = compact('model', 'post', 'form', 'saved');
+        $argv   = $this->prepareEventArguments($argv);
 
         $this->getEventManager()->trigger('post.edit', $this, $argv);
 
@@ -167,7 +174,9 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
     {
         $argv = compact('data');
         $argv = $this->prepareEventArguments($argv);
+
         $this->getEventManager()->trigger('pre.save', $this, $argv);
+
         $data = $argv['data'];
 
         if ($data instanceof ModelInterface) {
@@ -177,14 +186,6 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         $pk = $this->getMapper()->getPrimaryKey();
         $id = $data[$pk];
         unset($data[$pk]);
-
-        // if values not set then don't save them.
-        // doesn't work so allow null values.
-        /*foreach ($data as $key => $value) {
-            if ($value == null) {
-                unset($data[$key]);
-            }
-        }*/
 
         if (0 === $id || null === $id || '' === $id) {
             $result = $this->getMapper()->insert($data);
@@ -237,7 +238,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      */
     public function getMapper($mapperClass = null, array $options = [])
     {
-        $mapperClass = ($mapperClass) ?: $this->serviceAlias;
+        $mapperClass = $mapperClass ?? $this->mapper ?? $this->serviceAlias;
 
         if (!array_key_exists($mapperClass, $this->mappers)) {
             $this->setMapper($mapperClass, $options);
@@ -255,18 +256,16 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      */
     public function setMapper($mapperClass, array $options = [])
     {
-        $sl = $this->getServiceLocator();
-        /* @var $mapperManager MapperManager */
-        $mapperManager = $sl->get('UthandoMapperManager');
+        $sl             = $this->getServiceLocator();
+        $mapperManager  = $sl->get('UthandoMapperManager');
 
         $defaultOptions = [
-            'model' => $this->serviceAlias,
-            'hydrator' => $this->serviceAlias,
+            'model' => $this->model ?? $this->serviceAlias,
+            'hydrator' => $this->hydrator ?? $this->serviceAlias,
         ];
 
-        $options = array_merge($defaultOptions, $options);
-
-        $mapper = $mapperManager->get($mapperClass, $options);
+        $options    = array_merge($defaultOptions, $options);
+        $mapper     = $mapperManager->get($mapperClass, $options);
 
         $this->mappers[$mapperClass] = $mapper;
 
