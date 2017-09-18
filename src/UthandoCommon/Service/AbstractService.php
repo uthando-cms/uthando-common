@@ -55,11 +55,6 @@ abstract class AbstractService implements
     protected $formOptions = [];
 
     /**
-     * @var string
-     */
-    protected $model;
-
-    /**
      * @var $form
      */
     protected $form;
@@ -73,6 +68,11 @@ abstract class AbstractService implements
      * @var string
      */
     protected $inputFilter;
+
+    /**
+     * @var string
+     */
+    protected $model;
 
     /**
      * events to set up. This should be overridden in parent class.
