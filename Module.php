@@ -11,6 +11,7 @@
 
 namespace UthandoCommon;
 
+// need as autoloader not loaded at this point
 require_once(__DIR__ . '/src/UthandoCommon/Config/ConfigInterface.php');
 require_once(__DIR__ . '/src/UthandoCommon/Config/ConfigTrait.php');
 
