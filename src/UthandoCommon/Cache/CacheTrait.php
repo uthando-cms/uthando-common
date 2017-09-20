@@ -41,12 +41,11 @@ trait CacheTrait
      */
     public function getCacheItem($id)
     {
-        if ($this->useCache) {
-            $id = $this->getCacheKey($id);
-            return $this->getCache()->getItem($id);
-        } else {
-            return null;
-        }
+        if (!$this->isUseCache()) return;
+
+        $id = $this->getCacheKey($id);
+
+        return $this->getCache()->getItem($id);
     }
 
     /**
@@ -56,6 +55,8 @@ trait CacheTrait
      */
     public function setCacheItem($id, $item)
     {
+        if (!$this->isUseCache()) return $this;
+
         $id = $this->getCacheKey($id);
         $cache = $this->getCache();
 
@@ -74,17 +75,16 @@ trait CacheTrait
      */
     public function removeCacheItem($id)
     {
-        if ($this->useCache) {
-            $id = $this->getCacheKey($id);
-            $cache = $this->getCache();
+        if (!$this->isUseCache()) return;
 
-            if ($this->tags && $cache instanceof TaggableInterface) {
-                $cache->clearByTags($this->tags);
-            }
-            return $cache->removeItem($id);
-        } else {
-            return null;
+        $id = $this->getCacheKey($id);
+        $cache = $this->getCache();
+
+        if ($this->tags && $cache instanceof TaggableInterface) {
+            $cache->clearByTags($this->tags);
         }
+
+        return $cache->removeItem($id);
     }
 
     /**
@@ -114,6 +114,11 @@ trait CacheTrait
     {
         $this->cache = $cache;
         return $this;
+    }
+
+    public function isUseCache()
+    {
+        return ($this->cache instanceof AbstractAdapter) ? $this->useCache : false;
     }
 
     /**

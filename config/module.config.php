@@ -11,19 +11,6 @@ return [
             'blog'    => '',
         ],
     ],
-    'cache' => [
-        'adapter' => [
-            'name' => 'filesystem',
-            'options' => [
-                'ttl'                   => 60*60, // one hour
-                'dirLevel'              => 0,
-                //'cacheDir'              => './data/cache/db',
-                'dirPermission'         => '700',
-                'filePermission'        => '600',
-            ],
-        ],
-        'plugins' => ['Serializer'],
-    ],
     'controllers' => [
         'invokables' => [
             'UthandoCommon\Controller\Captcha'              => 'UthandoCommon\Controller\CaptchaController',
