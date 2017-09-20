@@ -24,7 +24,7 @@ abstract class AbstractRelationalMapperService extends AbstractMapperService
     /**
      * @var array
      */
-    protected $referenceMap;
+    protected $referenceMap = [];
 
     /**
      * @var bool
