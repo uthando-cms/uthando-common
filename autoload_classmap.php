@@ -23,6 +23,7 @@ return array(
     'UthandoCommon\Options\AkismetOptions'                      => __DIR__ . '/src/UthandoCommon/Options/AkismetOptions.php',
     'UthandoCommon\Cache\CacheTrait'                            => __DIR__ . '/src/UthandoCommon/Cache/CacheTrait.php',
     'UthandoCommon\Cache\CacheStorageAwareInterface'            => __DIR__ . '/src/UthandoCommon/Cache/CacheStorageAwareInterface.php',
+    'UthandoCommon\InputFilter\NoRecordExistsTrait'             => __DIR__ . '/src/UthandoCommon/InputFilter/NoRecordExistsTrait.php',
     'UthandoCommon\Service\MapperServiceInterface'              => __DIR__ . '/src/UthandoCommon/Service/MapperServiceInterface.php',
     'UthandoCommon\Service\ServiceException'                    => __DIR__ . '/src/UthandoCommon/Service/ServiceException.php',
     'UthandoCommon\Service\Factory\AkismetOptionsFactory'       => __DIR__ . '/src/UthandoCommon/Service/Factory/AkismetOptionsFactory.php',
