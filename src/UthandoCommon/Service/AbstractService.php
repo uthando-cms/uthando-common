@@ -34,6 +34,11 @@ abstract class AbstractService implements
     use ServiceLocatorAwareTrait,
         EventManagerAwareTrait;
 
+    const EVENT_PRE_PREPARE_FORM    = 'pre.form';
+    const EVENT_POST_PREPARE_FORM   = 'form.init';
+    const EVENT_PRE_FORM_INIT       = 'pre.form.init';
+    const EVENT_POST_FORM_INIT      = 'post.form.init';
+
     /**
      * @var array
      */
@@ -117,7 +122,7 @@ abstract class AbstractService implements
     {
         $argv = compact('model', 'data');
         $argv = $this->prepareEventArguments($argv);
-        $this->getEventManager()->trigger('pre.form', $this, $argv);
+        $this->getEventManager()->trigger(self::EVENT_PRE_PREPARE_FORM, $this, $argv);
         $data = $argv['data'];
 
         /* @var $form Form */
@@ -140,8 +145,9 @@ abstract class AbstractService implements
         }
 
         $argv = compact('form', 'model', 'data');
+        $argv = $this->prepareEventArguments($argv);
 
-        $this->getEventManager()->trigger('form.init', $this, $this->prepareEventArguments($argv));
+        $this->getEventManager()->trigger(self::EVENT_POST_PREPARE_FORM, $argv);
 
         return $form;
     }
@@ -159,14 +165,16 @@ abstract class AbstractService implements
         $sl                 = $this->getServiceLocator();
         $formElementManager = $sl->get('FormElementManager');
         $argv               = compact('options');
+        $argv               = $this->prepareEventArguments($argv);
 
-        $this->getEventManager()->trigger('pre.form.init', $this, $this->prepareEventArguments($argv));
+        $this->getEventManager()->trigger(self::EVENT_PRE_FORM_INIT, $this, $argv);
 
         /* @var $form Form */
         $form = $formElementManager->get($name, $options);
         $argv = compact('form', 'options');
+        $argv = $this->prepareEventArguments($argv);
 
-        $this->getEventManager()->trigger('post.form.init', $this, $this->prepareEventArguments($argv));
+        $this->getEventManager()->trigger(self::EVENT_POST_FORM_INIT, $this, $argv);
 
         return $form;
     }

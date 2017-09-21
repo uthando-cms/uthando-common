@@ -29,6 +29,15 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 {
     use CacheTrait;
 
+    const EVENT_PRE_ADD     = 'pre.add';
+    const EVENT_POST_ADD    = 'post.add';
+    const EVENT_PRE_EDIT    = 'pre.edit';
+    const EVENT_POST_EDIT   = 'post.edit';
+    const EVENT_PRE_SAVE    = 'pre.save';
+    const EVENT_POST_SAVE   = 'post.save';
+    const EVENT_PRE_DELETE  = 'pre.delete';
+    const EVENT_POST_DELETE = 'post.delete';
+
     /**
      * @var string
      */
@@ -115,7 +124,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         $argv   = compact('post', 'form');
         $argv   = $this->prepareEventArguments($argv);
 
-        $this->getEventManager()->trigger('pre.add', $this, $argv);
+        $this->getEventManager()->trigger(self::EVENT_PRE_ADD, $this, $argv);
 
         if (!$form->isValid()) {
             return $form;
@@ -125,7 +134,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         $argv   = compact('post', 'form', 'saved');
         $argv   = $this->prepareEventArguments($argv);
 
-        $this->getEventManager()->trigger('post.add', $this, $argv);
+        $this->getEventManager()->trigger(self::EVENT_POST_ADD, $this, $argv);
 
         return $saved;
     }
@@ -146,7 +155,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         $argv = compact('model', 'post', 'form');
         $argv = $this->prepareEventArguments($argv);
 
-        $this->getEventManager()->trigger('pre.edit', $this, $argv);
+        $this->getEventManager()->trigger(self::EVENT_PRE_EDIT, $this, $argv);
 
         if (!$form->isValid()) {
             return $form;
@@ -156,7 +165,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         $argv   = compact('model', 'post', 'form', 'saved');
         $argv   = $this->prepareEventArguments($argv);
 
-        $this->getEventManager()->trigger('post.edit', $this, $argv);
+        $this->getEventManager()->trigger(self::EVENT_POST_EDIT, $this, $argv);
 
         $eventSaved = (isset($argv['result'])) ? $argv['result'] : false;
 
@@ -175,7 +184,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         $argv = compact('data');
         $argv = $this->prepareEventArguments($argv);
 
-        $this->getEventManager()->trigger('pre.save', $this, $argv);
+        $this->getEventManager()->trigger(self::EVENT_PRE_SAVE, $this, $argv);
 
         $data = $argv['data'];
 
@@ -199,6 +208,11 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         $this->removeCacheItem($id);
 
+        $argv = compact('data');
+        $argv = $this->prepareEventArguments($argv);
+
+        $this->getEventManager()->trigger(self::EVENT_POST_SAVE, $this, $argv);
+
         return $result;
     }
 
@@ -215,7 +229,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
         $argv = compact('id', 'model');
         $argv = $this->prepareEventArguments($argv);
 
-        $this->getEventManager()->trigger('pre.delete', $this, $argv);
+        $this->getEventManager()->trigger(self::EVENT_PRE_DELETE, $this, $argv);
 
         $result = $this->getMapper()->delete([
             $this->getMapper()->getPrimaryKey() => $id
@@ -223,7 +237,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         if ($result) {
             $this->removeCacheItem($id);
-            $this->getEventManager()->trigger('post.delete', $this, $argv);
+            $this->getEventManager()->trigger(self::EVENT_POST_DELETE, $this, $argv);
         }
 
         return $result;

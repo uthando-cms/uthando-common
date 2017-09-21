@@ -32,7 +32,11 @@ class ServiceListener implements ListenerAggregateInterface
     {
         $events = $events->getSharedManager();
 
-        $this->listeners[] = $events->attach('UthandoCommon\Service\AbstractService', 'pre.edit', [$this, 'edit']);
+        $this->listeners[] = $events->attach(
+            'UthandoCommon\Service\AbstractService',
+            'pre.edit',
+            [$this, 'edit']
+        );
     }
 
     /**

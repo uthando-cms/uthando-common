@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
  *
@@ -16,7 +16,7 @@ use Zend\Validator\Db\NoRecordExists;
 
 trait NoRecordExistsTrait
 {
-    public function noRecordExists(string $name, string $table, string $field, string $exclude): InputFilter
+    public function noRecordExists($name, $table, $field, $exclude)
     {
         $exclude = (!$exclude) ?: [
             'field' => $field,
