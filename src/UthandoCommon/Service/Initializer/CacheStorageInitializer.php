@@ -11,8 +11,8 @@
 
 namespace UthandoCommon\Service\Initializer;
 
-use Zend\Cache\Service\PluginManagerLookupTrait;
-use Zend\Cache\StorageFactory;
+use UthandoCommon\Options\CacheOptions;
+use Zend\Cache\Storage\Adapter\AbstractAdapter;
 use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use UthandoCommon\Cache\CacheStorageAwareInterface;
@@ -24,8 +24,6 @@ use UthandoCommon\Cache\CacheStorageAwareInterface;
  */
 class CacheStorageInitializer implements InitializerInterface
 {
-    use PluginManagerLookupTrait;
-
     /**
      * @param $instance
      * @param ServiceLocatorInterface $serviceLocator
@@ -35,12 +33,19 @@ class CacheStorageInitializer implements InitializerInterface
     {
         if ($instance instanceof CacheStorageAwareInterface ) {
 
-            $config     = $serviceLocator->get('config');
-            $options    = $config['uthando_common']['cache'] ?: [];
+            $cacheOptions = $serviceLocator->get(CacheOptions::class);
 
-            if (!empty($options)) {
-                $this->prepareStorageFactory($serviceLocator);
-                $cache = StorageFactory::factory($options);
+            if ($cacheOptions instanceof CacheOptions && $cacheOptions->isEnabled()) {
+
+                $adapter = $cacheOptions->getAdapter();
+                $cache = new $adapter;
+
+                $cache->setOptions($cacheOptions->getOptions()->toArray());
+
+                foreach ($cacheOptions->getPlugins() as $plugin) {
+                    $pluginClass = new $plugin;
+                    $cache->addPlugin($pluginClass);
+                }
                 $instance->setCache($cache);
             }
         }

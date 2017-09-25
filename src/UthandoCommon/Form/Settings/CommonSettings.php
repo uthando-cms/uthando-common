@@ -34,5 +34,16 @@ class CommonSettings extends Form
                 'label' => 'Akismet',
             ],
         ]);
+
+        $this->add([
+            'type' => CacheFieldSet::class,
+            'name' => 'cache',
+            'attributes' => [
+                'class' => 'col-sm-6',
+            ],
+            'options' => [
+                'label' => 'Cache',
+            ],
+        ]);
     }
 }

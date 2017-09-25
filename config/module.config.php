@@ -30,8 +30,14 @@ return [
             'UthandoCommonCaptcha'                              => 'UthandoCommon\Form\Element\Captcha',
             'UthandoCommonLibPhoneNumberCountryList'            => 'UthandoCommon\Form\Element\LibPhoneNumberCountryList',
 
+            \UthandoCommon\Form\Element\CacheAdapterSelect::class => \UthandoCommon\Form\Element\CacheAdapterSelect::class,
+            \UthandoCommon\Form\Element\CachePluginsSelect::class => \UthandoCommon\Form\Element\CachePluginsSelect::class,
+
             UthandoCommon\Form\Settings\CommonSettings::class   => UthandoCommon\Form\Settings\CommonSettings::class,
-            UthandoCommon\Form\Settings\AkismetFieldSet::class  => UthandoCommon\Form\Settings\AkismetFieldSet::class
+
+            UthandoCommon\Form\Settings\AkismetFieldSet::class  => UthandoCommon\Form\Settings\AkismetFieldSet::class,
+            \UthandoCommon\Form\Settings\CacheFieldSet::class   => \UthandoCommon\Form\Settings\CacheFieldSet::class,
+            \UthandoCommon\Form\Settings\Cache\FileSystemFieldSet::class => \UthandoCommon\Form\Settings\Cache\FileSystemFieldSet::class,
         ],
     ],
     'service_manager' => [
@@ -46,6 +52,7 @@ return [
             'Zend\Cache\Service\StorageCacheFactory'    => 'Zend\Cache\Service\StorageCacheFactory',
 
             UthandoCommon\Options\AkismetOptions::class => UthandoCommon\Service\Factory\AkismetOptionsFactory::class,
+            \UthandoCommon\Options\CacheOptions::class  => \UthandoCommon\Service\Factory\CacheOptionsFactory::class,
             UthandoCommon\Options\DbOptions::class      => UthandoCommon\Service\Factory\DbOptionsFactory::class,
         ],
         'initializers' => [
