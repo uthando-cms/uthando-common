@@ -23,7 +23,12 @@ return [
             'UthandoSlug'               => 'UthandoCommon\Filter\Slug',
             'UthandoUcFirst'            => 'UthandoCommon\Filter\UcFirst',
             'UthandoUcwords'            => 'UthandoCommon\Filter\Ucwords',
+
+
         ],
+        'factories' => [
+            \UthandoCommon\Filter\HtmlPurifierFilter::class => \UthandoCommon\Filter\Service\HtmlPurifierFactory::class,
+        ]
     ],
     'form_elements' => [
         'invokables' => [

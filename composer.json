@@ -34,7 +34,8 @@
     "zendframework/zend-form": "2.*",
     "zendframework/zendservice-akismet": "2.*",
     "giggsey/libphonenumber-for-php": "7.*",
-    "neilime/zf2-twb-bundle": "2.*@stable"
+    "neilime/zf2-twb-bundle": "2.*@stable",
+    "ezyang/htmlpurifier": "^4.9"
   },
   "autoload": {
     "psr-0": {
