@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
  *
@@ -12,33 +12,22 @@ namespace UthandoCommon\Config;
 
 use ReflectionClass;
 
-/**
- * Class ConfigTrait
- *
- * @package UthandoCommon\Config
- */
 trait ConfigTrait
 {
     /**
      * Name of the module config directory
-     *
-     * @var string
      */
     protected $configDirectory = 'config';
 
     /**
      * File pattern for uthando configs
-     * 
-     * @var string
      */
     protected $filePattern = 'uthando-*.config.php';
 
     /**
      * Get all uthando configs for this module.
-     *
-     * @return array
      */
-    public function getUthandoConfig()
+    public function getUthandoConfig(): array
     {
         $config             = [];
         $configFilePattern  = join('/', [
@@ -58,10 +47,8 @@ trait ConfigTrait
 
     /**
      * Get the directory the module is in.
-     *
-     * @return string
      */
-    public function getModulePath()
+    public function getModulePath(): string
     {
         $reflector = new ReflectionClass(get_class($this));
         $fn = $reflector->getFileName();

@@ -481,7 +481,7 @@ class AbstractDbMapper implements
     {
         $adapterPlatform = $this->getAdapter()->getPlatform();
         $sqlString = $select->getSqlString($adapterPlatform);
-        \ChromePhp::info($this->getSqlString($select));
+        \ChromePhp::info($sqlString);
 
         return $sqlString;
     }

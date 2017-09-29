@@ -11,9 +11,12 @@
 namespace UthandoCommon\Filter\Service;
 
 use HTMLPurifier;
+use HTMLPurifier_Config;
+use HTMLPurifier_HTMLDefinition;
 use Interop\Container\ContainerInterface;
 use Traversable;
 use UthandoCommon\Filter\HtmlPurifierFilter;
+use UthandoCommon\Options\HtmlPurifierOptions;
 use Zend\Filter\FilterPluginManager;
 use Zend\ServiceManager\Exception\InvalidServiceException;
 use Zend\ServiceManager\FactoryInterface;
@@ -52,15 +55,31 @@ class HtmlPurifierFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): HtmlPurifierFilter
     {
         /** @var FilterPluginManager $container */
-        $config = $container->getServiceLocator()->get('config');
+        //$config = $container->getServiceLocator()->get('config');
 
-        $config = (isset($config['uthando_common']['html_purifier'])) ? $config['uthando_common']['html_purifier'] : [];
+        $htmlPurifierOptions = new HtmlPurifierOptions();
 
-        if ($options) {
-            $config = array_merge($config, $options);
+        $config = array_merge($htmlPurifierOptions->getConfig(), $options);
+
+        $defaultConfig = HTMLPurifier_Config::createDefault();
+
+        foreach ($config as $key => $value) {
+            $defaultConfig->set($key, $value);
         }
 
-        $htmlPurifier = new HTMLPurifier($config);
+        if ($def = $defaultConfig->maybeGetRawHTMLDefinition()) {
+            $htmlDefinitions = $htmlPurifierOptions->getHtmlDefinition();
+
+            foreach ($htmlDefinitions['elements'] as $el) {
+                $def->addElement($el[0], $el[1], $el[2], $el[3], $el[4]);
+            }
+
+            foreach ($htmlDefinitions['attributes'] as $attr) {
+                $def->addAttribute($attr[0], $attr[1], $attr[2]);
+            }
+        }
+
+        $htmlPurifier = new HTMLPurifier($defaultConfig);
 
         return new HtmlPurifierFilter($htmlPurifier);
     }

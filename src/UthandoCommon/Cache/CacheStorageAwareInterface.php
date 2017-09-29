@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
  *
@@ -23,7 +23,7 @@ interface CacheStorageAwareInterface
     /**
      * @return mixed
      */
-    public function getCache();
+    public function getCache(): AbstractAdapter;
 
     /**
      * @param AbstractAdapter $cache

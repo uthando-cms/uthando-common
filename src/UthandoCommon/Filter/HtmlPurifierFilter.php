@@ -17,6 +17,7 @@ class HtmlPurifierFilter extends AbstractFilter
 {
     /**
      * @var HTMLPurifier
+     *
      */
     protected $instance;
 

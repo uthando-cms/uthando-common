@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
  *
@@ -20,40 +20,22 @@ use Zend\Cache\Storage\TaggableInterface;
  */
 trait CacheTrait
 {
-    /**
-     * @var AbstractAdapter
-     */
     protected $cache;
 
-    /**
-     * @var bool
-     */
     protected $useCache = true;
 
-    /**
-     * @var array
-     */
-    protected $tags;
+    protected $tags = [];
 
-    /**
-     * @param $id
-     * @return mixed|null
-     */
-    public function getCacheItem($id)
+    public function getCacheItem(string $id)
     {
-        if (!$this->isUseCache()) return;
+        if (!$this->isUseCache()) return null;
 
         $id = $this->getCacheKey($id);
 
         return $this->getCache()->getItem($id);
     }
 
-    /**
-     * @param $id
-     * @param $item
-     * @return $this
-     */
-    public function setCacheItem($id, $item)
+    public function setCacheItem(string $id, $item): self
     {
         if (!$this->isUseCache()) return $this;
 
@@ -69,13 +51,9 @@ trait CacheTrait
         return $this;
     }
 
-    /**
-     * @param $id
-     * @return bool|null
-     */
-    public function removeCacheItem($id)
+    public function removeCacheItem(string $id)
     {
-        if (!$this->isUseCache()) return;
+        if (!$this->isUseCache()) return null;
 
         $id = $this->getCacheKey($id);
         $cache = $this->getCache();
@@ -87,47 +65,31 @@ trait CacheTrait
         return $cache->removeItem($id);
     }
 
-    /**
-     * @param string $id
-     * @return string
-     */
-    public function getCacheKey($id)
+    public function getCacheKey(string $id): string
     {
-        $id = (string) $id;
         $key = str_replace('\\', '-', get_class($this)) . '-' . md5($id);
         return $key;
     }
 
-    /**
-     * @return \Zend\Cache\Storage\Adapter\AbstractAdapter
-     */
-    public function getCache()
+    public function getCache(): AbstractAdapter
     {
         return $this->cache;
     }
 
-    /**
-     * @param AbstractAdapter $cache
-     * @return \UthandoCommon\Cache\CacheTrait
-     */
-    public function setCache(AbstractAdapter $cache)
+    public function setCache(AbstractAdapter $cache): CacheStorageAwareInterface
     {
         $this->cache = $cache;
         return $this;
     }
 
-    public function isUseCache()
+    public function isUseCache(): bool
     {
         return ($this->cache instanceof AbstractAdapter) ? $this->useCache : false;
     }
 
-    /**
-     * @param $useCache
-     * @return $this
-     */
-    public function setUseCache($useCache)
+    public function setUseCache(bool $useCache): CacheStorageAwareInterface
     {
-        $this->useCache = (bool) $useCache;
+        $this->useCache = $useCache;
         return $this;
     }
 }

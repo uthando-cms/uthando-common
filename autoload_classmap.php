@@ -18,6 +18,7 @@ return array(
     'UthandoCommon\Options\CaptchaOptions'                      => __DIR__ . '/src/UthandoCommon/Options/CaptchaOptions.php',
     'UthandoCommon\Options\DbOptions'                           => __DIR__ . '/src/UthandoCommon/Options/DbOptions.php',
     'UthandoCommon\Options\PhpOptions'                          => __DIR__ . '/src/UthandoCommon/Options/PhpOptions.php',
+    'UthandoCommon\Options\HtmlPurifierOptions'                 => __DIR__ . '/src/UthandoCommon/Options/HtmlPurifierOptions.php',
     'UthandoCommon\Options\CacheOptions'                        => __DIR__ . '/src/UthandoCommon/Options/CacheOptions.php',
     'UthandoCommon\Options\TidyOptions'                         => __DIR__ . '/src/UthandoCommon/Options/TidyOptions.php',
     'UthandoCommon\Options\AkismetOptions'                      => __DIR__ . '/src/UthandoCommon/Options/AkismetOptions.php',

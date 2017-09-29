@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
  *
@@ -10,20 +10,9 @@
 
 namespace UthandoCommon\Config;
 
-/**
- * Interface UthandoModuleConfigInterface
- *
- * @package UthandoCommon\Config
- */
 interface ConfigInterface
 {
-    /**
-     * @return array
-     */
-    public function getUthandoConfig();
+    public function getUthandoConfig(): array;
 
-    /**
-     * @return string
-     */
-    public function getModulePath();
+    public function getModulePath(): string;
 }
