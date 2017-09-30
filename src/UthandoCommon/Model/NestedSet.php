@@ -45,7 +45,7 @@ abstract class NestedSet implements ModelInterface, NestedSetInterface
      * @param $lft
      * @return $this
      */
-    public function setLft($lft)
+    public function setLft(int $lft)
     {
         $this->lft = $lft;
         return $this;
@@ -63,7 +63,7 @@ abstract class NestedSet implements ModelInterface, NestedSetInterface
      * @param $rgt
      * @return $this
      */
-    public function setRgt($rgt)
+    public function setRgt(int $rgt)
     {
         $this->rgt = $rgt;
         return $this;
@@ -72,7 +72,7 @@ abstract class NestedSet implements ModelInterface, NestedSetInterface
     /**
      * @return int
      */
-    public function getDepth()
+    public function getDepth(): int
     {
         return $this->depth;
     }
@@ -81,7 +81,7 @@ abstract class NestedSet implements ModelInterface, NestedSetInterface
      * @param $depth
      * @return $this
      */
-    public function setDepth($depth)
+    public function setDepth(int $depth)
     {
         $this->depth = $depth;
         return $this;
@@ -90,7 +90,7 @@ abstract class NestedSet implements ModelInterface, NestedSetInterface
     /**
      * @return int
      */
-    public function width()
+    public function width(): int
     {
         return ($this->getRgt() - $this->getLft()) + 1;
     }
@@ -100,7 +100,7 @@ abstract class NestedSet implements ModelInterface, NestedSetInterface
      *
      * @return bool
      */
-    public function hasChildren()
+    public function hasChildren(): bool
     {
         $children = (($this->getRgt() - $this->getLft()) - 1) / 2;
         return (0 === $children) ? false : true;

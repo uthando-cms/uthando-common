@@ -27,7 +27,7 @@ interface NestedSetInterface
      * @param int $lft
      * @return $this
      */
-    public function setLft($lft);
+    public function setLft(int $lft);
 
     /**
      * @return int
@@ -38,26 +38,26 @@ interface NestedSetInterface
      * @param int $rgt
      * @return $this
      */
-    public function setRgt($rgt);
+    public function setRgt(int $rgt);
 
     /**
      * @return int
      */
-    public function getDepth();
+    public function getDepth(): int;
 
     /**
      * @param int $depth
      * @return $this
      */
-    public function setDepth($depth);
+    public function setDepth(int $depth);
 
     /**
      * @return int
      */
-    public function width();
+    public function width(): int;
 
     /**
      * @return bool
      */
-    public function hasChildren();
+    public function hasChildren(): bool;
 }
