@@ -208,7 +208,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         $this->removeCacheItem($id);
 
-        $argv = compact('data');
+        $argv = compact('data', 'result');
         $argv = $this->prepareEventArguments($argv);
 
         $this->getEventManager()->trigger(self::EVENT_POST_SAVE, $this, $argv);
@@ -237,6 +237,8 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         if ($result) {
             $this->removeCacheItem($id);
+            $argv = compact('id', 'model', 'result');
+            $argv = $this->prepareEventArguments($argv);
             $this->getEventManager()->trigger(self::EVENT_POST_DELETE, $this, $argv);
         }
 

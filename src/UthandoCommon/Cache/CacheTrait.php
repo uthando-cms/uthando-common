@@ -59,7 +59,7 @@ trait CacheTrait
         $cache = $this->getCache();
 
         if ($this->tags && $cache instanceof TaggableInterface) {
-            $cache->clearByTags($this->tags);
+            $cache->clearByTags($this->tags, true);
         }
 
         return $cache->removeItem($id);
