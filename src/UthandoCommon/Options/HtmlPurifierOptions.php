@@ -23,6 +23,9 @@ class HtmlPurifierOptions
     protected $HtmlDefinition = [
         // allow html5 elements
         'elements'      => [
+            // allow <a> to be block level
+            ['a', 'Block', 'Flow', 'Common', []],
+            // new elements
             ['section', 'Block', 'Flow', 'Common', []],
             ['nav',     'Block', 'Flow', 'Common', []],
             ['article', 'Block', 'Flow', 'Common', []],
