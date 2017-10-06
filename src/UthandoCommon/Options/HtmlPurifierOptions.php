@@ -17,7 +17,9 @@ class HtmlPurifierOptions
         //'Cache.SerializerPath'  => null,
         'Attr.ID.HTML5'         => true,
         'HTML.DefinitionID'     => 'html5-definitions',
-        'HTML.DefinitionRev'     => 1,
+        'HTML.DefinitionRev'    => 1,
+        'HTML.SafeIframe'       => true,
+        'URI.SafeIframeRegexp'  =>  '%^(http:|https:)?//(www.youtube(?:-nocookie)?.com/embed/|player.vimeo.com/video/)%',
     ];
 
     protected $HtmlDefinition = [
