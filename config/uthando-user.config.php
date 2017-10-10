@@ -9,11 +9,19 @@ return [
                         'allow' => [
                             'controllers' => [
                                 'UthandoCommon\Controller\Captcha' => ['action' => 'all'],
-                                UthandoCommon\Mvc\Controller\Settings::class => ['action' => 'all'],
                             ],
                         ],
                     ],
                 ],
+                'admin' => [
+                    'privileges' => [
+                        'allow' => [
+                            'controllers' => [
+                                UthandoCommon\Mvc\Controller\Settings::class => ['action' => 'all'],
+                            ]
+                        ]
+                    ]
+                ]
             ],
             'resources' => [
                 'UthandoCommon\Controller\Captcha',
