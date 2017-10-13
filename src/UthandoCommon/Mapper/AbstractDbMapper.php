@@ -130,12 +130,13 @@ class AbstractDbMapper implements
 
     /**
      * @param $id
+     * @param Select|null $select
      * @return null|ModelInterface
      */
-    public function getPrevious($id)
+    public function getPrevious($id, Select $select = null)
     {
 
-        $whereSelect = $this->getSql()->select();
+        $whereSelect = $select ?? $this->getSql()->select();
         $whereSelect->from($this->getTable())
             ->columns([
                 $this->getPrimaryKey() => new Expression('MAX(' . $this->getPrimaryKey() . ')')
@@ -152,11 +153,12 @@ class AbstractDbMapper implements
 
     /**
      * @param $id
+     * @param null|Select $select
      * @return null|ModelInterface
      */
-    public function getNext($id)
+    public function getNext($id, Select $select = null)
     {
-        $whereSelect = $this->getSql()->select();
+        $whereSelect = $select ?? $this->getSql()->select();
         $whereSelect->from($this->getTable())
             ->columns([
                 $this->getPrimaryKey() => new Expression('MIN(' . $this->getPrimaryKey() . ')')
