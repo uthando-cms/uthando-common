@@ -20,6 +20,11 @@ class GeneralOptions extends AbstractOptions
      */
     protected $ssl = false;
 
+    /**
+     * @var bool
+     */
+    protected $maintenanceMode = false;
+
     public function isSsl(): bool
     {
         return $this->ssl;
@@ -33,6 +38,22 @@ class GeneralOptions extends AbstractOptions
     public function setSsl(bool $ssl): GeneralOptions
     {
         $this->ssl = $ssl;
+        return $this;
+    }
+
+    public function isMaintenanceMode(): bool
+    {
+        return $this->maintenanceMode;
+    }
+
+    public function getMaintenanceMode(): bool
+    {
+        return $this->isMaintenanceMode();
+    }
+
+    public function setMaintenanceMode(bool $maintenanceMode): GeneralOptions
+    {
+        $this->maintenanceMode = $maintenanceMode;
         return $this;
     }
 }

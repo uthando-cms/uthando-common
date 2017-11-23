@@ -47,12 +47,36 @@ class GeneralFieldSet extends Fieldset implements InputFilterProviderInterface
                 'help-block' => 'Enable/Disable SSL.',
             ],
         ]);
+
+        $this->add([
+            'type' => Checkbox::class,
+            'name' => 'maintenance_mode',
+            'options' => [
+                'label' => 'Maintenance Mode',
+                'twb-layout' => TwbBundleForm::LAYOUT_HORIZONTAL,
+                'use_hidden_element' => true,
+                'required' => false,
+                'checked_value' => '1',
+                'unchecked_value' => '0',
+                'column-size' => 'md-8 col-md-offset-4',
+                'help-block' => 'Enable/Disable maintenance mode.',
+            ],
+        ]);
     }
 
     public function getInputFilterSpecification(): array
     {
         return [
             'ssl' => [
+                'required' => true,
+                'allow_empty' => true,
+                'filters' => [
+                    ['name' => StringTrim::class],
+                    ['name' => StripTags::class,],
+                    ['name' => Boolean::class],
+                ],
+            ],
+            'maintenance_mode' => [
                 'required' => true,
                 'allow_empty' => true,
                 'filters' => [

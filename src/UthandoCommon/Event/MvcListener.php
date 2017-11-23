@@ -16,8 +16,11 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\Http\Request;
+use Zend\Http\Response;
 use Zend\Mvc\Application as MvcApplication;
+use Zend\Mvc\Controller\AbstractController;
 use Zend\Mvc\MvcEvent;
+use Zend\Uri\Http as HttpUri;
 
 /**
  * Class MvcListener
@@ -34,6 +37,25 @@ class MvcListener implements ListenerAggregateInterface
     public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'requireSsl'], -10000);
+        $this->listeners[] = $events->getSharedManager()
+            ->attach(AbstractController::class,MvcEvent::EVENT_DISPATCH, [$this, 'maintenanceMode'], 100);
+    }
+
+    public function maintenanceMode(MvcEvent $e): bool
+    {
+        $routeMatch = $e->getRouteMatch();
+        $controller = $e->getTarget();
+        $options    = $e->getApplication()->getServiceManager()->get(GeneralOptions::class);
+
+        if (!$routeMatch->getParam('is-admin') && $options->isMaintenanceMode()) {
+            $controller->layout('layout/maintenance');
+
+            //$router = $e->getRouter();
+            //$router->assemble([], ['name' => 'home']);
+            $e->stopPropagation();
+        }
+
+        return true;
     }
 
     /**
@@ -49,16 +71,16 @@ class MvcListener implements ListenerAggregateInterface
         $uri            = $request->getUri();
 
         if (false === $options->isSsl()) {
-            return;
+            return true;
         }
 
         if (!$request instanceof Request) {
-            return;
+            return true;
         }
 
         if ($event->isError() && $event->getError() === MvcApplication::ERROR_ROUTER_NO_MATCH) {
             // No matched route has been found - don't do anything
-            return;
+            return true;
         }
 
         // only redirect to SSL if on HTTP
@@ -67,15 +89,10 @@ class MvcListener implements ListenerAggregateInterface
             return self::redirect($uri, $response);
         }
 
-        return;
+        return true;
     }
 
-    /**
-     * @param $uri
-     * @param $response
-     * @return mixed
-     */
-    private function redirect($uri, $response)
+    private function redirect(HttpUri $uri, Response $response): Response
     {
         $response->getHeaders()->addHeaderLine('Location', $uri->toString());
         $response->setStatusCode(302);
