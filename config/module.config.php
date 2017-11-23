@@ -1,20 +1,48 @@
 <?php
 
+use UthandoCommon\Db\Adapter\AdapterServiceFactory as DbAdapterServiceFactory;
+use UthandoCommon\Db\Table\AbstractTableFactory;
+use UthandoCommon\Filter\HtmlPurifierFilter;
+use UthandoCommon\Filter\Service\HtmlPurifierFactory;
+use UthandoCommon\Form\Element\CacheAdapterSelect;
+use UthandoCommon\Form\Element\CachePluginsSelect;
+use UthandoCommon\Form\Settings\AkismetFieldSet;
+use UthandoCommon\Form\Settings\Cache\FileSystemFieldSet;
+use UthandoCommon\Form\Settings\CacheFieldSet;
+use UthandoCommon\Form\Settings\CommonSettings;
+use UthandoCommon\Form\Settings\GeneralFieldSet;
+use UthandoCommon\Form\View\Helper\FormSelect;
+use UthandoCommon\I18n\View\Helper\LibPhoneNumber;
+use UthandoCommon\Mvc\Controller\Settings;
+use UthandoCommon\Options\AkismetOptions;
+use UthandoCommon\Options\CacheOptions;
+use UthandoCommon\Options\DbOptions;
+use UthandoCommon\Options\GeneralOptions;
+use UthandoCommon\Service\Factory\AkismetOptionsFactory;
+use UthandoCommon\Service\Factory\CacheOptionsFactory;
+use UthandoCommon\Service\Factory\DbOptionsFactory;
+use UthandoCommon\Service\Factory\GeneralOptionsFactory;
+use UthandoCommon\View\Alert;
+use UthandoCommon\View\ConvertToJsDateFormat;
+use UthandoCommon\View\Enabled;
+use UthandoCommon\View\FlashMessenger;
+use UthandoCommon\View\FormatDate;
+use UthandoCommon\View\FormManager;
+use UthandoCommon\View\OptionsHelper;
+use UthandoCommon\View\Request;
+use Zend\Db\Adapter\Adapter as DbAdapter;
+
 return [
     'uthando_common' => [
         'ssl' => false,
         'captcha' => [
             'class' => 'dumb'
         ],
-        'akismet' => [
-            'api_key' => '',
-            'blog'    => '',
-        ],
     ],
     'controllers' => [
         'invokables' => [
-            'UthandoCommon\Controller\Captcha'              => 'UthandoCommon\Controller\CaptchaController',
-            UthandoCommon\Mvc\Controller\Settings::class    => UthandoCommon\Mvc\Controller\Settings::class,
+            'UthandoCommon\Controller\Captcha'  => 'UthandoCommon\Controller\CaptchaController',
+            Settings::class                     => Settings::class,
         ],
     ],
     'filters' => [
@@ -27,7 +55,7 @@ return [
 
         ],
         'factories' => [
-            \UthandoCommon\Filter\HtmlPurifierFilter::class => \UthandoCommon\Filter\Service\HtmlPurifierFactory::class,
+            HtmlPurifierFilter::class => HtmlPurifierFactory::class,
         ]
     ],
     'form_elements' => [
@@ -35,30 +63,34 @@ return [
             'UthandoCommonCaptcha'                              => 'UthandoCommon\Form\Element\Captcha',
             'UthandoCommonLibPhoneNumberCountryList'            => 'UthandoCommon\Form\Element\LibPhoneNumberCountryList',
 
-            \UthandoCommon\Form\Element\CacheAdapterSelect::class => \UthandoCommon\Form\Element\CacheAdapterSelect::class,
-            \UthandoCommon\Form\Element\CachePluginsSelect::class => \UthandoCommon\Form\Element\CachePluginsSelect::class,
+            CacheAdapterSelect::class   => CacheAdapterSelect::class,
+            CachePluginsSelect::class   => CachePluginsSelect::class,
 
-            UthandoCommon\Form\Settings\CommonSettings::class   => UthandoCommon\Form\Settings\CommonSettings::class,
+            CommonSettings::class       => CommonSettings::class,
 
-            UthandoCommon\Form\Settings\AkismetFieldSet::class  => UthandoCommon\Form\Settings\AkismetFieldSet::class,
-            \UthandoCommon\Form\Settings\CacheFieldSet::class   => \UthandoCommon\Form\Settings\CacheFieldSet::class,
-            \UthandoCommon\Form\Settings\Cache\FileSystemFieldSet::class => \UthandoCommon\Form\Settings\Cache\FileSystemFieldSet::class,
+            AkismetFieldSet::class      => AkismetFieldSet::class,
+            CacheFieldSet::class        => CacheFieldSet::class,
+            FileSystemFieldSet::class   => FileSystemFieldSet::class,
+            GeneralFieldSet::class      => GeneralFieldSet::class,
         ],
     ],
     'service_manager' => [
+        'aliases' => [
+        ],
         'abstract_factories' => [
-            'UthandoCommon\Db\Table\AbstractTableFactory',
+            AbstractTableFactory::class,
         ],
         'factories' => [
             'UthandoMapperManager'                      => 'UthandoCommon\Mapper\MapperManagerFactory',
             'UthandoModelManager'                       => 'UthandoCommon\Model\ModelManagerFactory',
             'UthandoServiceManager'                     => 'UthandoCommon\Service\ServiceManagerFactory',
-            Zend\Db\Adapter\Adapter::class              => UthandoCommon\Db\Adapter\AdapterServiceFactory::class,
+            DbAdapter::class                            => DbAdapterServiceFactory::class,
             'Zend\Cache\Service\StorageCacheFactory'    => 'Zend\Cache\Service\StorageCacheFactory',
 
-            UthandoCommon\Options\AkismetOptions::class => UthandoCommon\Service\Factory\AkismetOptionsFactory::class,
-            \UthandoCommon\Options\CacheOptions::class  => \UthandoCommon\Service\Factory\CacheOptionsFactory::class,
-            UthandoCommon\Options\DbOptions::class      => UthandoCommon\Service\Factory\DbOptionsFactory::class,
+            AkismetOptions::class   => AkismetOptionsFactory::class,
+            CacheOptions::class     => CacheOptionsFactory::class,
+            DbOptions::class        => DbOptionsFactory::class,
+            GeneralOptions::class   => GeneralOptionsFactory::class
         ],
         'initializers' => [
             'UthandoCommon\Service\CacheStorageInitializer' => 'UthandoCommon\Service\Initializer\CacheStorageInitializer'
@@ -76,17 +108,29 @@ return [
         ],
     ],
     'view_helpers' => [
+        'aliases' => [
+            'convertToJsDateFormat' => ConvertToJsDateFormat::class,
+            'enabled'               => Enabled::class,
+            'formatDate'            => FormatDate::class,
+            'formManager'           => FormManager::class,
+            'formSelect'            => FormSelect::class,
+            'libPhoneNumber'        => LibPhoneNumber::class,
+            'optionsHelper'         => OptionsHelper::class,
+            'request'               => Request::class,
+            'tbAlert'               => Alert::class,
+            'tbFlashMessenger'      => FlashMessenger::class,
+        ],
         'invokables' => [
-            'Enabled'               => 'UthandoCommon\View\Enabled',
-            'FormatDate'            => 'UthandoCommon\View\FormatDate',
-            'FormManager'           => 'UthandoCommon\View\FormManager',
-            'LibPhoneNumber'        => 'UthandoCommon\I18n\View\Helper\LibPhoneNumber',
-            'Request'               => 'UthandoCommon\View\Request',
-            'tbAlert'               => 'UthandoCommon\View\Alert',
-            'tbFlashMessenger'      => 'UthandoCommon\View\FlashMessenger',
-            'convertToJsDateFormat' => 'UthandoCommon\View\ConvertToJsDateFormat',
-
-            'formselect'            => 'UthandoCommon\Form\View\Helper\FormSelect',
+            Alert::class                    => Alert::class,
+            ConvertToJsDateFormat::class    => ConvertToJsDateFormat::class,
+            Enabled::class                  => Enabled::class,
+            FlashMessenger::class           => FlashMessenger::class,
+            FormatDate::class               => FormatDate::class,
+            FormManager::class              => FormManager::class,
+            FormSelect::class               => FormSelect::class,
+            LibPhoneNumber::class           => LibPhoneNumber::class,
+            OptionsHelper::class            => OptionsHelper::class,
+            Request::class                  => Request::class,
         ],
     ],
     'view_manager' => [

@@ -11,6 +11,7 @@
 
 namespace UthandoCommon\Event;
 
+use UthandoCommon\Options\GeneralOptions;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
@@ -41,13 +42,15 @@ class MvcListener implements ListenerAggregateInterface
      */
     public function requireSsl(MvcEvent $event)
     {
-        $config = $event->getApplication()->getConfig();
+        $application    = $event->getApplication();
+        $options        = $application->getServiceManager()->get(GeneralOptions::class);
+        $request        = $event->getRequest();
+        $response       = $event->getResponse();
+        $uri            = $request->getUri();
 
-        if (false === $config['uthando_common']['ssl']) {
+        if (false === $options->isSsl()) {
             return;
         }
-
-        $request = $event->getRequest();
 
         if (!$request instanceof Request) {
             return;
@@ -58,37 +61,10 @@ class MvcListener implements ListenerAggregateInterface
             return;
         }
 
-        $match = $event->getRouteMatch();
-        $params = $match->getParams();
-
-        /**
-         * If we have a route that defines 'force-ssl' prefer that instruction above
-         * anything else and redirect if appropriate
-         *
-         * Possible values of 'force-ssl' param are:
-         *   'ssl'      : Force SSL
-         *   'http'     : Force Non-SSL
-         */
-        if (isset($params['force-ssl'])) {
-            $force = strtolower($params['force-ssl']);
-            $response = $event->getResponse();
-            $uri = $request->getUri();
-
-            switch ($force) {
-                case 'https':
-                    if ('http' === $uri->getScheme()) {
-                        $uri->setScheme('https');
-                        return self::redirect($uri, $response);
-                    }
-                    break;
-                case 'http':
-                    if ('https' === $uri->getScheme()) {
-                        $uri->setScheme('http');
-                        return self::redirect($uri, $response);
-                    }
-                    break;
-            }
-
+        // only redirect to SSL if on HTTP
+        if ('http' === $uri->getScheme()) {
+            $uri->setScheme('https');
+            return self::redirect($uri, $response);
         }
 
         return;

@@ -25,6 +25,17 @@ class CommonSettings extends Form
     public function init()
     {
         $this->add([
+            'type' => GeneralFieldSet::class,
+            'name' => 'general',
+            'attributes' => [
+                'class' => 'col-sm-6',
+            ],
+            'options' => [
+                'label' => 'General',
+            ],
+        ]);
+
+        $this->add([
             'type' => AkismetFieldSet::class,
             'name' => 'akismet',
             'attributes' => [
