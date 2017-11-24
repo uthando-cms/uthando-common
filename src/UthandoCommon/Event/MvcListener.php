@@ -49,9 +49,6 @@ class MvcListener implements ListenerAggregateInterface
 
         if (!$routeMatch->getParam('is-admin') && $options->isMaintenanceMode()) {
             $controller->layout('layout/maintenance');
-
-            //$router = $e->getRouter();
-            //$router->assemble([], ['name' => 'home']);
             $e->stopPropagation();
         }
 
