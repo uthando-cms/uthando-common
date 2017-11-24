@@ -13,6 +13,7 @@ namespace UthandoCommon\Db\Table;
 use UthandoCommon\Hydrator\BaseHydrator;
 use UthandoCommon\Model\ModelInterface;
 use UthandoCommon\UthandoException;
+use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
@@ -56,7 +57,7 @@ class AbstractTableFactory implements AbstractFactoryInterface
         if (class_exists($requestedName) && is_array($this->tableNamesMap) && array_key_exists($requestedName, $this->tableNamesMap)) {
 
             /* @var \Zend\Db\Adapter\Adapter $dbAdapter */
-            $dbAdapter          = $serviceLocator->get('Zend\Db\Adapter\Adapter');
+            $dbAdapter          = $serviceLocator->get(Adapter::class);
             $resultSetPrototype = $this->getHydrator($requestedName);
             $tableGateway       = new TableGateway($this->tableNamesMap[$requestedName], $dbAdapter, null, $resultSetPrototype);
             /* @var AbstractTable $table */

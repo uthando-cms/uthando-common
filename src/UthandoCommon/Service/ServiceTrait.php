@@ -57,7 +57,7 @@ trait ServiceTrait
         $service = $service ?? $this->getServiceName();
 
         if (!isset($this->service[$service])) {
-            $sl = $this->getServiceLocator()->get('UthandoServiceManager');
+            $sl = $this->getServiceLocator()->get(ServiceManager::class);
             $this->service[$service] = $sl->get($service, $options);
         }
 

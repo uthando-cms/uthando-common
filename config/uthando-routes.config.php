@@ -11,7 +11,7 @@ return [
         					'route'    => '/common',
         					'defaults' => [
         						'__NAMESPACE__' => 'UthandoCommon\Mvc\Controller',
-        						'controller'    => 'Settings',
+        						'controller'    => \UthandoCommon\Mvc\Controller\Settings::class,
         						'action'        => 'index',
         					],
         				],

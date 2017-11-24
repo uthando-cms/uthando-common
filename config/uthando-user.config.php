@@ -8,7 +8,7 @@ return [
                     'privileges' => [
                         'allow' => [
                             'controllers' => [
-                                'UthandoCommon\Controller\Captcha' => ['action' => 'all'],
+                                \UthandoCommon\Controller\CaptchaController::class => ['action' => 'all'],
                             ],
                         ],
                     ],
@@ -17,15 +17,15 @@ return [
                     'privileges' => [
                         'allow' => [
                             'controllers' => [
-                                UthandoCommon\Mvc\Controller\Settings::class => ['action' => 'all'],
+                                \UthandoCommon\Mvc\Controller\Settings::class => ['action' => 'all'],
                             ]
                         ]
                     ]
                 ]
             ],
             'resources' => [
-                'UthandoCommon\Controller\Captcha',
-                UthandoCommon\Mvc\Controller\Settings::class
+                \UthandoCommon\Controller\CaptchaController::class,
+                \UthandoCommon\Mvc\Controller\Settings::class
             ],
         ],
     ],

@@ -12,6 +12,7 @@
 namespace UthandoCommon\Service;
 
 use UthandoCommon\Model\ModelInterface;
+use UthandoCommon\Model\ModelManager;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerAwareTrait;
@@ -207,7 +208,7 @@ abstract class AbstractService implements
     {
         $model          = $model ?? $this->model ?? $this->serviceAlias;
         $sl             = $this->getServiceLocator();
-        $modelManager   = $sl->get('UthandoModelManager');
+        $modelManager   = $sl->get(ModelManager::class);
         $model          = $modelManager->get($model);
 
         return $model;

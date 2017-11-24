@@ -12,6 +12,7 @@
 namespace UthandoCommon\Mapper;
 
 use UthandoCommon\Model\ModelAwareInterface;
+use UthandoCommon\Model\ModelManager;
 use UthandoCommon\Options\DbOptions;
 use Zend\Db\Adapter\Adapter;
 use Zend\Mvc\Exception\InvalidPluginException;
@@ -89,7 +90,7 @@ class MapperManager extends AbstractPluginManager
     {
         if ($mapper instanceof ModelAwareInterface) {
             if (isset($this->creationOptions['model'])) {
-                $modelManager = $this->serviceLocator->get('UthandoModelManager');
+                $modelManager = $this->serviceLocator->get(ModelManager::class);
                 $mapper->setModel($modelManager->get($this->creationOptions['model']));
             }
         }

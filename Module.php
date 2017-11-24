@@ -21,6 +21,12 @@ use UthandoCommon\Event\ConfigListener;
 use UthandoCommon\Event\MvcListener;
 use UthandoCommon\Event\TidyResponseSender;
 use UthandoCommon\Event\ServiceListener;
+use UthandoCommon\Mapper\MapperInterface;
+use UthandoCommon\Mapper\MapperManager;
+use UthandoCommon\Model\ModelInterface;
+use UthandoCommon\Model\ModelManager;
+use UthandoCommon\Service\ServiceInterface;
+use UthandoCommon\Service\ServiceManager;
 use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\Http\Request;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
@@ -48,23 +54,23 @@ class Module implements ConsoleBannerProviderInterface, ConfigInterface
         $events = $moduleManager->getEventManager();
 
         $serviceListener->addServiceManager(
-            'UthandoMapperManager',
+            MapperManager::class,
             'uthando_mappers',
-            'UthandoCommon\Mapper\MapperInterface',
+            MapperInterface::class,
             'getUthandoMapperConfig'
         );
 
         $serviceListener->addServiceManager(
-            'UthandoModelManager',
+            ModelManager::class,
             'uthando_models',
-            'UthandoCommon\Model\ModelInterface',
+            ModelInterface::class,
             'getUthandoModelConfig'
         );
 
         $serviceListener->addServiceManager(
-            'UthandoServiceManager',
+            ServiceManager::class,
             'uthando_services',
-            'UthandoCommon\Service\ServiceInterface',
+            ServiceInterface::class,
             'getUthandoServiceConfig'
         );
 

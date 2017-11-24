@@ -11,6 +11,7 @@
 
 namespace UthandoCommon\Event;
 
+use UthandoCommon\Service\AbstractService;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
@@ -33,7 +34,7 @@ class ServiceListener implements ListenerAggregateInterface
         $events = $events->getSharedManager();
 
         $this->listeners[] = $events->attach(
-            'UthandoCommon\Service\AbstractService',
+            AbstractService::class,
             'pre.edit',
             [$this, 'edit']
         );
