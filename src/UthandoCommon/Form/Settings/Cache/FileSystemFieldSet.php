@@ -230,7 +230,9 @@ class FileSystemFieldSet extends BaseOptionsFieldSet
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class,],
-                    ['name' => Boolean::class],
+                    ['name' => Boolean::class, 'options' => [
+                        'type' => Boolean::TYPE_ZERO_STRING,
+                    ]],
                 ],
             ],
             'dir_level' => [
@@ -264,7 +266,9 @@ class FileSystemFieldSet extends BaseOptionsFieldSet
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class,],
-                    ['name' => Boolean::class],
+                    ['name' => Boolean::class, 'options' => [
+                        'type' => Boolean::TYPE_ZERO_STRING,
+                    ]],
                 ],
             ],
             'file_permission' => [
@@ -287,7 +291,9 @@ class FileSystemFieldSet extends BaseOptionsFieldSet
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class,],
-                    ['name' => Boolean::class],
+                    ['name' => Boolean::class, 'options' => [
+                        'type' => Boolean::TYPE_ZERO_STRING,
+                    ]],
                 ],
             ],
             'no_ctime' => [
@@ -296,7 +302,9 @@ class FileSystemFieldSet extends BaseOptionsFieldSet
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class,],
-                    ['name' => Boolean::class],
+                    ['name' => Boolean::class, 'options' => [
+                        'type' => Boolean::TYPE_ZERO_STRING,
+                    ]],
                 ],
             ],
             'umask' => [
@@ -305,7 +313,9 @@ class FileSystemFieldSet extends BaseOptionsFieldSet
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class,],
-                    ['name' => Boolean::class],
+                    ['name' => Boolean::class, 'options' => [
+                        'type' => Boolean::TYPE_ZERO_STRING,
+                    ]],
                 ],
             ],
         ];

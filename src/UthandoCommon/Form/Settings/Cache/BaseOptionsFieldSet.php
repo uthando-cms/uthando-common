@@ -139,7 +139,9 @@ abstract class BaseOptionsFieldSet extends Fieldset implements InputFilterProvid
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class,],
-                    ['name' => Boolean::class],
+                    ['name' => Boolean::class, 'options' => [
+                        'type' => Boolean::TYPE_ZERO_STRING,
+                    ]],
                 ],
             ],
         ];

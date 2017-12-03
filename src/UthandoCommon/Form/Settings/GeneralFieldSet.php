@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
  *
@@ -16,6 +16,7 @@ use UthandoCommon\Options\GeneralOptions;
 use Zend\Filter\Boolean;
 use Zend\Filter\StringTrim;
 use Zend\Filter\StripTags;
+use Zend\Filter\ToInt;
 use Zend\Form\Element\Checkbox;
 use Zend\Form\Fieldset;
 use Zend\Hydrator\ClassMethods;
@@ -73,7 +74,9 @@ class GeneralFieldSet extends Fieldset implements InputFilterProviderInterface
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class,],
-                    ['name' => Boolean::class],
+                    ['name' => Boolean::class, 'options' => [
+                        'type' => Boolean::TYPE_ZERO_STRING,
+                    ]],
                 ],
             ],
             'maintenance_mode' => [
@@ -82,7 +85,9 @@ class GeneralFieldSet extends Fieldset implements InputFilterProviderInterface
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class,],
-                    ['name' => Boolean::class],
+                    ['name' => Boolean::class, 'options' => [
+                        'type' => Boolean::TYPE_ZERO_STRING,
+                    ]],
                 ],
             ],
         ];

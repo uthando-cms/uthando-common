@@ -114,6 +114,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      * @param array $post
      * @param Form $form
      * @return int|Form
+     * @throws ServiceException
      */
     public function add(array $post, Form $form = null)
     {
@@ -146,6 +147,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
      * @param array $post
      * @param Form $form
      * @return Form|int results from self::save()
+     * @throws ServiceException
      */
     public function edit(ModelInterface $model, array $post, Form $form = null)
     {
@@ -204,9 +206,9 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
             } else {
                 throw new ServiceException('ID ' . $id . ' does not exist');
             }
-        }
 
-        $this->removeCacheItem($id);
+            $this->removeCacheItem($id);
+        }
 
         $argv = compact('data', 'result');
         $argv = $this->prepareEventArguments($argv);

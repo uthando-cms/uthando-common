@@ -87,7 +87,7 @@ abstract class AbstractService implements
 
     /**
      * @param $service
-     * @return AbstractService
+     * @return AbstractService|ServiceManager
      */
     public function getService($service)
     {
