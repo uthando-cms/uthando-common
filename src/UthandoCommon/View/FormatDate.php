@@ -101,6 +101,12 @@ class FormatDate extends AbstractHelper
             $date = new \DateTime($date);
         }
 
+        if (is_int($date)) {
+            $timestamp = $date;
+            $date = new \DateTime();
+            $date->setTimestamp($timestamp);
+        }
+
         $this->date = $date;
         return $this;
     }
