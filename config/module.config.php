@@ -51,7 +51,6 @@ use Zend\Db\Adapter\Adapter as DbAdapter;
 
 return [
     'uthando_common' => [
-        'ssl' => false,
         'captcha' => [
             'class' => 'dumb'
         ],

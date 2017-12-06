@@ -54,7 +54,7 @@ trait SettingsTrait
         $prg = $this->prg();
 
         $config = $this->getService('config');
-        $settings = (isset($config[$this->getConfigKey()])) ? $config[$this->getConfigKey()] : [];
+        $settings = $config[$this->getConfigKey()] ?? [];
 
         if ($prg instanceof Response) {
             return $prg;
@@ -64,11 +64,10 @@ trait SettingsTrait
             foreach ($settings as $key => $value) {
                 // this needs moving to the form to set defaults there.
                 if ($form->has($key) && $form->get($key) instanceof Fieldset) {
-                    if (!array_key_exists($key, $defaults)) {
-                        $defaults[$key] = $form->get($key)->getObject()->toArray();
-                    } else {
-                        $defaults[$key] = ArrayUtils::merge($form->get($key)->getObject()->toArray(), $defaults[$key]);
-                    }
+                    $object         = $form->get($key)->getObject();
+                    $hydrator       = $form->get($key)->getHydrator();
+                    $object         = $hydrator->hydrate($defaults[$key], $object);
+                    $defaults[$key] = $hydrator->extract($object);
                 }
             }
 
@@ -83,8 +82,19 @@ trait SettingsTrait
 
             $arrayOrObject = $form->getData();
 
+
             if (is_array($arrayOrObject)) {
                 unset($arrayOrObject['button-submit']);
+
+                foreach ($arrayOrObject as $key => $value) {
+                    // this needs moving to the form to set defaults there.
+                    if ($form->has($key) && $form->get($key) instanceof Fieldset) {
+                        $object                 = $form->get($key)->getObject();
+                        $hydrator               = $form->get($key)->getHydrator();
+                        $object                 = $hydrator->hydrate($arrayOrObject[$key], $object);
+                        $arrayOrObject[$key]    = $object->toArray();
+                    }
+                }
             }
 
             if ($arrayOrObject instanceof AbstractOptions) {
