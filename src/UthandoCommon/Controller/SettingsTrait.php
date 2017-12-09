@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Uthando CMS (http://www.shaunfreeman.co.uk/)
  *
@@ -16,10 +16,10 @@ use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Zend\Http\PhpEnvironment\Response;
 use Zend\Config\Writer\PhpArray;
+use Zend\Hydrator\AbstractHydrator;
 use Zend\Mvc\Controller\Plugin\FlashMessenger;
 use Zend\Mvc\Controller\Plugin\PostRedirectGet;
 use Zend\Stdlib\AbstractOptions;
-use Zend\Stdlib\ArrayUtils;
 
 /**
  * Class SettingsTrait
@@ -45,7 +45,7 @@ trait SettingsTrait
     /**
      * @return array
      */
-    public function indexAction()
+    public function indexAction(): array
     {
         /* @var $form Form */
         $form = $this->getService('FormElementManager')
@@ -62,10 +62,15 @@ trait SettingsTrait
             $defaults = $settings;
 
             foreach ($settings as $key => $value) {
+
                 // this needs moving to the form to set defaults there.
                 if ($form->has($key) && $form->get($key) instanceof Fieldset) {
-                    $object         = $form->get($key)->getObject();
-                    $hydrator       = $form->get($key)->getHydrator();
+                    /** @var Fieldset $fieldSet */
+                    $fieldSet       = $form->get($key);
+                    /** @var AbstractOptions $object */
+                    $object         = $fieldSet->getObject();
+                    /** @var AbstractHydrator $hydrator */
+                    $hydrator       = $fieldSet->getHydrator();
                     $object         = $hydrator->hydrate($defaults[$key], $object);
                     $defaults[$key] = $hydrator->extract($object);
                 }
@@ -82,17 +87,21 @@ trait SettingsTrait
 
             $arrayOrObject = $form->getData();
 
-
             if (is_array($arrayOrObject)) {
                 unset($arrayOrObject['button-submit']);
 
                 foreach ($arrayOrObject as $key => $value) {
                     // this needs moving to the form to set defaults there.
+                    \ChromePhp::info($value);
                     if ($form->has($key) && $form->get($key) instanceof Fieldset) {
-                        $object                 = $form->get($key)->getObject();
-                        $hydrator               = $form->get($key)->getHydrator();
+                        /** @var Fieldset $fieldSet */
+                        $fieldSet               = $form->get($key);
+                        /** @var AbstractOptions $object */
+                        $object                 = $fieldSet->getObject();
+                        /** @var AbstractHydrator $hydrator */;
                         $object                 = $hydrator->hydrate($arrayOrObject[$key], $object);
                         $arrayOrObject[$key]    = $object->toArray();
+                        //$arrayOrObject[$key]    = $hydrator->extract($object);
                     }
                 }
             }
@@ -130,7 +139,7 @@ trait SettingsTrait
     /**
      * @return string
      */
-    public function getFormName()
+    public function getFormName(): string
     {
         return $this->formName;
     }
@@ -139,7 +148,7 @@ trait SettingsTrait
      * @param string $formName
      * @return $this
      */
-    public function setFormName($formName)
+    public function setFormName(string $formName)
     {
         $this->formName = $formName;
         return $this;
@@ -148,7 +157,7 @@ trait SettingsTrait
     /**
      * @return string
      */
-    public function getConfigKey()
+    public function getConfigKey(): string
     {
         return $this->configKey;
     }
@@ -157,7 +166,7 @@ trait SettingsTrait
      * @param string $configKey
      * @return $this
      */
-    public function setConfigKey($configKey)
+    public function setConfigKey(string $configKey)
     {
         $this->configKey = $configKey;
         return $this;

@@ -10,7 +10,6 @@
 
 namespace UthandoCommon\Form\Settings\Cache;
 
-
 use TwbBundle\Form\View\Helper\TwbBundleForm;
 use Zend\Cache\Storage\Adapter\FilesystemOptions;
 use Zend\Filter\Boolean;
@@ -19,6 +18,7 @@ use Zend\Filter\StripTags;
 use Zend\Filter\ToInt;
 use Zend\Form\Element\Checkbox;
 use Zend\Form\Element\Number;
+use Zend\Form\Element\Select;
 use Zend\Form\Element\Text;
 use Zend\Hydrator\ClassMethods;
 use Zend\I18n\Validator\IsInt;
@@ -96,7 +96,7 @@ class FileSystemFieldSet extends BaseOptionsFieldSet
         ]);
 
         $this->add([
-            'type' => Text::class,
+            'type' => Select::class,
             'name' => 'dir_permission',
             'options' => [
                 'label' => 'Directory Permission',
@@ -106,6 +106,21 @@ class FileSystemFieldSet extends BaseOptionsFieldSet
                     'class' => 'col-md-4',
                 ],
                 'help-block' => 'Set explicit permission on creating new directories.',
+                'value_options' => [
+                    0700 => '700 -rwx------',
+                    0701 => '701 -rwx-----x',
+                    0703 => '703 -rwx----wx',
+                    0705 => '705 -rwxr----x',
+                    0707 => '707 -rwx---rwx',
+                    0710 => '710 -rwx--x---',
+                    0711 => '711 -rwx--x--x',
+                    0730 => '730 -rwx-wx---',
+                    0733 => '733 -rwx-wx-wx',
+                    0750 => '750 -rwxr-x---',
+                    0755 => '755 -rwxr-xr-x',
+                    0770 => '770 -rwxrwx---',
+                    0777 => '777 -rwxrwxrwx',
+                ],
             ],
         ]);
 
@@ -125,7 +140,7 @@ class FileSystemFieldSet extends BaseOptionsFieldSet
         ]);
 
         $this->add([
-            'type' => Text::class,
+            'type' => Select::class,
             'name' => 'file_permission',
             'options' => [
                 'label' => 'File Permission',
@@ -135,6 +150,18 @@ class FileSystemFieldSet extends BaseOptionsFieldSet
                     'class' => 'col-md-4',
                 ],
                 'help-block' => 'Set explicit permission on creating new files.',
+                'value_options' => [
+                    0600 => '600 -rw-------',
+                    0602 => '622 -rw-----w-',
+                    0604 => '644 -rw----r--',
+                    0606 => '666 -rw----rw-',
+                    0620 => '620 -rw--w----',
+                    0622 => '622 -rw--w--w-',
+                    0640 => '640 -rw-r-----',
+                    0644 => '644 -rw-r--r--',
+                    0660 => '660 -rw-rw----',
+                    0666 => '666 -rw-rw-rw-',
+                ],
             ],
         ]);
 
@@ -251,13 +278,14 @@ class FileSystemFieldSet extends BaseOptionsFieldSet
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class,],
+                    ['name' => ToInt::class],
                 ],
                 'validators' => [
-                    ['name' => StringLength::class, 'options' => [
+                    /*['name' => StringLength::class, 'options' => [
                         'encoding' => 'UTF-8',
                         'min'      => 3,
                         'max'      => 3,
-                    ]],
+                    ]],*/
                 ],
             ],
             'file_locking' => [
@@ -276,14 +304,15 @@ class FileSystemFieldSet extends BaseOptionsFieldSet
                 'filters' => [
                     ['name' => StringTrim::class],
                     ['name' => StripTags::class,],
+                    ['name' => ToInt::class],
                 ],
-                'validators' => [
+                /*'validators' => [
                     ['name' => StringLength::class, 'options' => [
                         'encoding' => 'UTF-8',
                         'min'      => 3,
                         'max'      => 3,
                     ]],
-                ],
+                ],*/
             ],
             'no_atime' => [
                 'required' => false,

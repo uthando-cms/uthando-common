@@ -63,6 +63,11 @@ class CacheOptions extends AbstractOptions
         return $this->enabled;
     }
 
+    public function getEnabled(): bool
+    {
+        return $this->isEnabled();
+    }
+
     public function setEnabled(bool $enabled): CacheOptions
     {
         $this->enabled = $enabled;
@@ -101,5 +106,22 @@ class CacheOptions extends AbstractOptions
     {
         $this->plugins = $plugins;
         return $this;
+    }
+
+    public function toArray()
+    {
+        $array = parent::toArray();
+        $returnArray = [];
+
+        foreach ($array as $key => $value) {
+
+            if ($value instanceof AbstractOptions) {
+                $returnArray[$key] = $value->toArray();
+            } else {
+                $returnArray[$key] = $value;
+            }
+        }
+
+        return $returnArray;
     }
 }

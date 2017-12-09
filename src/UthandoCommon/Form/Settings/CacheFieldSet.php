@@ -9,20 +9,20 @@
  */
 
 namespace UthandoCommon\Form\Settings;
+
 use TwbBundle\Form\View\Helper\TwbBundleForm;
 use UthandoCommon\Form\Element\CacheAdapterSelect;
 use UthandoCommon\Form\Element\CachePluginsSelect;
 use UthandoCommon\Form\Settings\Cache\FileSystemFieldSet;
+use UthandoCommon\Hydrator\Strategy\OptionsStrategy;
 use UthandoCommon\Options\CacheOptions;
 use Zend\Filter\Boolean;
 use Zend\Filter\StringTrim;
 use Zend\Filter\StripTags;
 use Zend\Form\Element\Checkbox;
-use Zend\Form\Element\Select;
 use Zend\Form\Fieldset;
 use Zend\Hydrator\ClassMethods;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\Validator\InArray;
 
 
 /**
@@ -36,7 +36,10 @@ class CacheFieldSet extends Fieldset implements InputFilterProviderInterface
     {
         parent::__construct($name, $options);
 
-        $this->setHydrator(new ClassMethods());
+        $hydrator = new ClassMethods();
+        $hydrator->addStrategy('options', new OptionsStrategy());
+
+        $this->setHydrator($hydrator);
         $this->setObject(new CacheOptions());
     }
 

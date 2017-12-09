@@ -76,6 +76,8 @@ return array(
     'UthandoCommon\Hydrator\NestedSetInterface'                 => __DIR__ . '/src/UthandoCommon/Hydrator/NestedSetInterface.php',
     'UthandoCommon\Hydrator\AbstractHydrator'                   => __DIR__ . '/src/UthandoCommon/Hydrator/AbstractHydrator.php',
     'UthandoCommon\Hydrator\BaseHydrator'                       => __DIR__ . '/src/UthandoCommon/Hydrator/BaseHydrator.php',
+    'UthandoCommon\Hydrator\Strategy\CollectionToArrayStrategy' => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/CollectionToArrayStrategy.php',
+    'UthandoCommon\Hydrator\Strategy\OptionsStrategy'           => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/OptionsStrategy.php',
     'UthandoCommon\Hydrator\Strategy\NullStrategy'              => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/NullStrategy.php',
     'UthandoCommon\Hydrator\Strategy\TrueFalse'                 => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/TrueFalse.php',
     'UthandoCommon\Hydrator\Strategy\DateTime'                  => __DIR__ . '/src/UthandoCommon/Hydrator/Strategy/DateTime.php',
