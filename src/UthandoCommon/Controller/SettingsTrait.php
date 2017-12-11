@@ -99,6 +99,7 @@ trait SettingsTrait
                         /** @var AbstractOptions $object */
                         $object                 = $fieldSet->getObject();
                         /** @var AbstractHydrator $hydrator */;
+                        $hydrator               = $fieldSet->getHydrator();
                         $object                 = $hydrator->hydrate($arrayOrObject[$key], $object);
                         $arrayOrObject[$key]    = $object->toArray();
                         //$arrayOrObject[$key]    = $hydrator->extract($object);
