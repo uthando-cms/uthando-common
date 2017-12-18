@@ -33,7 +33,7 @@
     "Zendframework/zend-captcha": "2.*",
     "zendframework/zend-form": "2.*",
     "zendframework/zendservice-akismet": "2.*",
-    "giggsey/libphonenumber-for-php": "7.*",
+    "giggsey/libphonenumber-for-php": "*",
     "neilime/zf2-twb-bundle": "2.*@stable",
     "ezyang/htmlpurifier": "^4.9"
   },
