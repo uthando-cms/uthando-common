@@ -92,7 +92,7 @@ trait SettingsTrait
 
                 foreach ($arrayOrObject as $key => $value) {
                     // this needs moving to the form to set defaults there.
-                    \ChromePhp::info($value);
+
                     if ($form->has($key) && $form->get($key) instanceof Fieldset) {
                         /** @var Fieldset $fieldSet */
                         $fieldSet               = $form->get($key);
