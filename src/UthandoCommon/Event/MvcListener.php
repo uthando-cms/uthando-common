@@ -61,17 +61,18 @@ class MvcListener implements ListenerAggregateInterface
      */
     public function requireSsl(MvcEvent $event)
     {
+        $request        = $event->getRequest();
+
+        if (!$request instanceof Request) {
+            return true;
+        }
+
         $application    = $event->getApplication();
         $options        = $application->getServiceManager()->get(GeneralOptions::class);
-        $request        = $event->getRequest();
         $response       = $event->getResponse();
         $uri            = $request->getUri();
 
         if (false === $options->isSsl()) {
-            return true;
-        }
-
-        if (!$request instanceof Request) {
             return true;
         }
 
