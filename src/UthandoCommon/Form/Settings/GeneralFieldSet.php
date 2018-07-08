@@ -10,13 +10,11 @@
 
 namespace UthandoCommon\Form\Settings;
 
-
 use TwbBundle\Form\View\Helper\TwbBundleForm;
 use UthandoCommon\Options\GeneralOptions;
 use Zend\Filter\Boolean;
 use Zend\Filter\StringTrim;
 use Zend\Filter\StripTags;
-use Zend\Filter\ToInt;
 use Zend\Form\Element\Checkbox;
 use Zend\Form\Fieldset;
 use Zend\Hydrator\ClassMethods;
