@@ -20,7 +20,6 @@ use Zend\Hydrator\ClassMethods;
 use Zend\I18n\Validator\Alnum;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Uri\Http;
-use Zend\Validator\Hostname;
 use Zend\Validator\StringLength;
 use Zend\Validator\Uri;
 
@@ -87,7 +86,7 @@ class AkismetFieldSet extends Fieldset implements InputFilterProviderInterface
     {
         return [
             'api_key' => [
-                'required' => true,
+                'required' => false,
                 'filters' => [
                     ['name' => StripTags::class],
                     ['name' => StringTrim::class],
