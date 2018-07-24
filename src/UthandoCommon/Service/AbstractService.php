@@ -148,7 +148,7 @@ abstract class AbstractService implements
         $argv = compact('form', 'model', 'data');
         $argv = $this->prepareEventArguments($argv);
 
-        $this->getEventManager()->trigger(self::EVENT_POST_PREPARE_FORM, $argv);
+        $this->getEventManager()->trigger(self::EVENT_POST_PREPARE_FORM, $this, $argv);
 
         return $form;
     }
