@@ -45,7 +45,7 @@ trait SettingsTrait
     /**
      * @return array
      */
-    public function indexAction(): array
+    public function indexAction()
     {
         /* @var $form Form */
         $form = $this->getService('FormElementManager')
