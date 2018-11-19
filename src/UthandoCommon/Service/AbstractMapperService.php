@@ -14,6 +14,7 @@ namespace UthandoCommon\Service;
 use UthandoCommon\Cache\CacheStorageAwareInterface;
 use UthandoCommon\Cache\CacheTrait;
 use UthandoCommon\Mapper\MapperInterface;
+use UthandoCommon\Mapper\MapperManager;
 use UthandoCommon\Model\ModelInterface;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\ResultSet\ResultSet;
@@ -275,7 +276,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
     public function setMapper($mapperClass, array $options = [])
     {
         $sl             = $this->getServiceLocator();
-        $mapperManager  = $sl->get('UthandoMapperManager');
+        $mapperManager  = $sl->get(MapperManager::class);
 
         $defaultOptions = [
             'model' => $this->model ?? $this->serviceAlias,
