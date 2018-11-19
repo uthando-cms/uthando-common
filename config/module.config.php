@@ -62,50 +62,13 @@ return [
         ],
     ],
     'filters' => [
-        'aliases' => [
-            'UthandoCommonPhoneNumber'  => PhoneNumber::class,
-            'UthandoSlug'               => Slug::class,
-            'UthandoUcFirst'            => UcFirst::class,
-            'UthandoUcwords'            => Ucwords::class,
-        ],
-        'invokables' => [
-            PhoneNumber::class  => PhoneNumber::class,
-            Slug::class         => Slug::class,
-            UcFirst::class      => UcFirst::class,
-            Ucwords::class      => Ucwords::class,
-        ],
         'factories' => [
             HtmlPurifierFilter::class => HtmlPurifierFactory::class,
         ]
     ],
-    'form_elements' => [
-        'aliases' => [
-            'UthandoCommonCaptcha'                      => Captcha::class,
-            'UthandoCommonLibPhoneNumberCountryList'    => LibPhoneNumberCountryList::class,
-        ],
-        'invokables' => [
-            Captcha::class                      => Captcha::class,
-            LibPhoneNumberCountryList::class    => LibPhoneNumberCountryList::class,
-
-            CacheAdapterSelect::class           => CacheAdapterSelect::class,
-            CachePluginsSelect::class           => CachePluginsSelect::class,
-
-            CommonSettings::class               => CommonSettings::class,
-
-            AkismetFieldSet::class              => AkismetFieldSet::class,
-            CacheFieldSet::class                => CacheFieldSet::class,
-            FileSystemFieldSet::class           => FileSystemFieldSet::class,
-            GeneralFieldSet::class              => GeneralFieldSet::class,
-        ],
-    ],
     'service_manager' => [
         'abstract_factories' => [
             AbstractTableFactory::class,
-        ],
-        'aliases' => [
-            'UthandoMapperManager'  => MapperManager::class,
-            'UthandoModelManager'   => ModelManager::class,
-            'UthandoServiceManager' => ServiceManager::class,
         ],
         'factories' => [
             MapperManager::class        => MapperManagerFactory::class,
@@ -123,16 +86,6 @@ return [
     'uthando_services' => [
         'initializers' => [
             CacheStorageInitializer::class => CacheStorageInitializer::class,
-        ],
-    ],
-    'validators' => [
-        'aliases' => [
-            'UthandoCommonPhoneNumber'  => PhoneNumberValidator::class,
-            'UthandoCommonPostCode'     => PostCode::class,
-        ],
-        'invokables' => [
-            PhoneNumberValidator::class => PhoneNumberValidator::class,
-            PostCode::class             => PostCode::class,
         ],
     ],
     'view_helpers' => [
