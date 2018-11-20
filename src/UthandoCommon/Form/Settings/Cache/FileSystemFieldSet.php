@@ -303,7 +303,7 @@ class FileSystemFieldSet extends BaseOptionsFieldSet
                 'required' => true,
                 'filters' => [
                     ['name' => StringTrim::class],
-                    ['name' => StripTags::class,],
+                    ['name' => StripTags::class],
                     ['name' => ToInt::class],
                 ],
                 /*'validators' => [
