@@ -8,6 +8,8 @@
  * @license     see LICENSE
  */
 
+namespace UthandoCommon\Filter;
+
 class CssMin
 {
     public function minify($content, $filters, $plugins)

@@ -8,6 +8,7 @@
  * @license     see LICENSE
  */
 
+namespace UthandoCommon\Filter;
 
 class JSMin
 {
@@ -253,4 +254,4 @@ class JSMin
 }
 
 // -- Exceptions ---------------------------------------------------------------
-class JSMinException extends Exception {}
+class JSMinException extends \Exception {}
