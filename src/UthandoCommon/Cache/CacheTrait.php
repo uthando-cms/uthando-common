@@ -58,11 +58,18 @@ trait CacheTrait
         $id = $this->getCacheKey($id);
         $cache = $this->getCache();
 
+        $this->clearCacheTags();
+
+        return $cache->removeItem($id);
+    }
+
+    public function clearCacheTags()
+    {
+        $cache = $this->getCache();
+
         if ($this->tags && $cache instanceof TaggableInterface) {
             $cache->clearByTags($this->tags, true);
         }
-
-        return $cache->removeItem($id);
     }
 
     public function getCacheKey(string $id): string

@@ -201,6 +201,7 @@ class AbstractMapperService extends AbstractService implements MapperServiceInte
 
         if (0 === $id || null === $id || '' === $id) {
             $result = $this->getMapper()->insert($data);
+            $this->clearCacheTags();
         } else {
             if ($this->getById($id)) {
                 $result = $this->getMapper()->update($data, [$pk => $id]);
