@@ -23,7 +23,7 @@ interface CacheStorageAwareInterface
     /**
      * @return mixed
      */
-    public function getCache(): AbstractAdapter;
+    public function getCache(): ?AbstractAdapter;
 
     /**
      * @param AbstractAdapter $cache

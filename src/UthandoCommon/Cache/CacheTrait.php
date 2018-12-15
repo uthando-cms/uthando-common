@@ -78,7 +78,7 @@ trait CacheTrait
         return $key;
     }
 
-    public function getCache(): AbstractAdapter
+    public function getCache(): ?AbstractAdapter
     {
         return $this->cache;
     }
